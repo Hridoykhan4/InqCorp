@@ -1,0 +1,20 @@
+{
+  "name": "SafetyPlus | Fire Safety Equipment Bangladesh",
+  "short_name": "SafetyPlus",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#B91C1C",
+  "icons": [
+    {
+      "src": "/Icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
