@@ -1,19 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFacebookF,
-  faInstagram,
-  faLinkedinIn,
-  faXTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import {
-  faArrowRight,
-  faEnvelope,
-  faFileShield,
   faLocationDot,
+  faEnvelope,
   faPhone,
-  faShieldHalved,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFacebookF,
+  faWhatsapp,
+} from "@fortawesome/free-brands-svg-icons";
 import map from "../assets/image/Footer/worldMap.png";
 import { useSelector } from "react-redux";
 import { COMPANY } from "../SEO/companyInfo";
@@ -25,204 +21,357 @@ import {
   openCategoryDestination,
 } from "../config/navigation";
 
-const socialLinks = [
-  { key: "facebook", icon: faFacebookF, href: "https://www.facebook.com/safetyplusindustry" },
-  { key: "x", icon: faXTwitter, href: "#" },
-  { key: "linkedin", icon: faLinkedinIn, href: "#" },
-  { key: "instagram", icon: faInstagram, href: "#" },
+// ── Fallback product list (shown until real categories load) ──────────────────
+const FALLBACK_PRODUCTS = [
+  { name: "Fine Sand" },
+  { name: "Medium Sand" },
+  { name: "Coarse Sand" },
+  { name: "Stone Chips 5–10mm" },
+  { name: "Stone Chips 10–20mm" },
+  { name: "Boulder / Pathor" },
 ];
 
+// ── Social links ──────────────────────────────────────────────────────────────
+const SOCIAL_LINKS = [
+  {
+    key: "facebook",
+    icon: faFacebookF,
+    href: COMPANY.social.facebook,
+    label: "Facebook",
+  },
+  {
+    key: "whatsapp",
+    icon: faWhatsapp,
+    href: `https://wa.me/${COMPANY.social.whatsapp}`,
+    label: "WhatsApp",
+  },
+];
+
+// ── Footer component ──────────────────────────────────────────────────────────
 const Footer = ({ categories }) => {
   const navigate = useNavigate();
   const logo = useSelector((state) => state.hvac.logo);
 
-  // Real categories drive the Products column; fall back to the static list
-  // until they load. Each links straight to its category page.
-  const configuredProductNav = getCategoryList(categories, { limit: 6 }).map((c) => ({
-    label: capitalizeWords(c?.label || c?.name),
+  // Build product nav list — real categories if available, fallback otherwise
+  const rawList = getCategoryList(categories && categories.length > 0 ? categories : FALLBACK_PRODUCTS, { limit: 6 });
+  const productNav = rawList.map((c) => ({
+    label: capitalizeWords(c?.label || c?.name) || "",
     to: getCategoryHref(c),
     item: c,
   }));
-  const productNav = configuredProductNav;
 
   return (
-    <footer className="relative overflow-hidden bg-safety-ink text-white">
+    <footer
+      className="relative overflow-hidden text-white"
+      style={{ background: "#0A1628" }}
+    >
+      {/* ── World map background ─────────────────────────────────────────── */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06]"
-        style={{ backgroundImage: `url(${map})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: `url(${map})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.06,
+        }}
       />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/10" />
 
-      <div className="container-page relative">
-        <section className="grid gap-4 py-8 md:grid-cols-3">
-          <div className="rounded-lg border border-white/10 bg-white/5 p-5">
-            <FontAwesomeIcon icon={faShieldHalved} className="text-2xl text-safety-amber" />
-            <h3 className="mt-4 text-xl font-extrabold">Fire Safety Equipment</h3>
-            <p className="mt-2 text-sm leading-6 text-white/65">
-              Focused products for Bangladesh factories, buildings, and industrial teams.
-            </p>
-          </div>
-          <div className="rounded-lg border border-white/10 bg-white/5 p-5">
-            <FontAwesomeIcon icon={faFileShield} className="text-2xl text-safety-amber" />
-            <h3 className="mt-4 text-xl font-extrabold">Datasheet Ready</h3>
-            <p className="mt-2 text-sm leading-6 text-white/65">
-              Product documentation can be uploaded as technical sheets become available.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigate("/contact")}
-            className="rounded-lg bg-safety-red p-5 text-left shadow-lg transition hover:bg-safety-red-dark"
-          >
-            <span className="block text-sm font-bold uppercase tracking-[0.16em] text-red-100">
-              Need pricing?
-            </span>
-            <span className="mt-3 flex items-center justify-between text-xl font-extrabold">
-              Request a quote
-              <FontAwesomeIcon icon={faArrowRight} />
-            </span>
-          </button>
-        </section>
+      {/* ── Top border line ──────────────────────────────────────────────── */}
+      <div
+        className="absolute inset-x-0 top-0 h-[2px]"
+        style={{
+          background: "linear-gradient(90deg, transparent, #C49B2B 30%, #C49B2B 70%, transparent)",
+          opacity: 0.6,
+        }}
+      />
 
-        <div className="h-px w-full bg-white/10" />
-
-        <section className="grid gap-10 py-12 lg:grid-cols-[1.1fr_0.8fr_0.8fr_1fr]">
-          <div>
-            <button
-              type="button"
-              className="flex items-center gap-3 text-left"
-              onClick={() => navigate("/")}
-            >
-              <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-md bg-white p-1">
-                {logo ? (
-                  <img src={logo} alt="SafetyPlus logo" className="h-full w-full object-contain" />
-                ) : (
-                  <FontAwesomeIcon icon={faShieldHalved} className="text-safety-red" />
-                )}
-              </span>
-              <span>
-                <span className="block text-xl font-black">SafetyPlus</span>
-                <span className="block text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                  Fire Safety Bangladesh
-                </span>
-              </span>
-            </button>
-
-            <p className="mt-5 max-w-md text-sm leading-7 text-white/68">
-              SafetyPlus manufactures and supplies fire safety equipment for the
-              Bangladesh market, including DB boxes, hose cabinets, fire doors,
-              industrial racks, furniture, and protective garments.
-            </p>
-
-            <div className="mt-5 flex items-center gap-3">
-              {socialLinks.map((item) => (
-                <a
-                  key={item.key}
-                  href={item.href}
-                  className="grid h-10 w-10 place-items-center rounded-md border border-white/12 text-white/70 transition hover:border-safety-amber hover:text-safety-amber"
-                  aria-label={item.key}
-                >
-                  <FontAwesomeIcon icon={item.icon} className="h-4 w-4" />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-extrabold uppercase tracking-[0.16em] text-white">
-              Company
-            </h4>
-            <ul className="mt-5 space-y-3 text-sm text-white/68">
-              {COMPANY_NAV_ITEMS.map(({ label, path }) => (
-                <li key={path}>
-                  <button
-                    type="button"
-                    onClick={() => navigate(path)}
-                    className="transition hover:text-safety-amber"
-                  >
-                    {label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-extrabold uppercase tracking-[0.16em] text-white">
-              Products
-            </h4>
-            <ul className="mt-5 space-y-3 text-sm text-white/68">
-              {productNav.map((item) => (
-                <li key={item.label}>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      item.item ? openCategoryDestination(item.item, navigate) : navigate(item.to)
-                    }
-                    className="group inline-flex items-center gap-1.5 text-left transition hover:text-safety-amber"
-                  >
-                    <span className="h-px w-0 bg-safety-amber transition-all duration-300 group-hover:w-3" />
-                    {item.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-extrabold uppercase tracking-[0.16em] text-white">
-              Contact
-            </h4>
-            <div className="mt-5 space-y-4 text-sm text-white/68">
-              <a
-                href={COMPANY.mapDirectionsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 transition hover:text-safety-amber"
+      {/* ── CTA strip ────────────────────────────────────────────────────── */}
+      <div className="relative border-b" style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+        <div className="container mx-auto px-4 py-6 sm:px-8 lg:px-12">
+          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <div>
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.22em]"
+                style={{ color: "#C49B2B" }}
               >
-                <FontAwesomeIcon icon={faLocationDot} className="mt-1 text-safety-amber" />
-                {COMPANY.addressFull}
-              </a>
-              <div className="flex items-start gap-3">
-                <FontAwesomeIcon icon={faEnvelope} className="mt-1 text-safety-amber" />
-                <span className="flex flex-col gap-1">
-                  {COMPANY.emails.map((mail) => (
-                    <a
-                      key={mail}
-                      href={`mailto:${mail}`}
-                      className="break-all transition hover:text-safety-amber"
-                    >
-                      {mail}
-                    </a>
-                  ))}
-                </span>
-              </div>
-              <a
-                href={`tel:${COMPANY.phoneTel}`}
-                className="flex items-start gap-3 transition hover:text-safety-amber"
-              >
-                <FontAwesomeIcon icon={faPhone} className="mt-1 text-safety-amber" />
-                {COMPANY.phone}
-              </a>
+                Ready to start your project?
+              </p>
+              <p className="mt-1 text-[15px] font-semibold text-white/80">
+                Get premium aggregates delivered to your site — Chattogram &amp; beyond.
+              </p>
             </div>
-
             <button
               type="button"
               onClick={() => navigate("/contact")}
-              className="mt-6 inline-flex min-h-11 items-center rounded-md bg-white px-5 py-3 text-sm font-extrabold text-safety-ink transition hover:bg-red-50 hover:text-safety-red"
+              className="footer-cta-btn group inline-flex shrink-0 items-center gap-2.5 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-300"
+              style={{
+                background: "linear-gradient(135deg, #1B3A8A, #2a50b8)",
+                border: "1px solid rgba(196,155,43,0.3)",
+              }}
             >
-              Talk to SafetyPlus
+              Request a Quote
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1"
+              />
             </button>
           </div>
-        </section>
-
-        <div className="h-px w-full bg-white/10" />
-
-        <div className="flex flex-col items-center justify-between gap-4 py-6 text-sm text-white/55 md:flex-row">
-          <p>© {new Date().getFullYear()} SafetyPlus. All rights reserved.</p>
-          <p>Fire safety equipment manufacturer and supplier in Bangladesh.</p>
         </div>
       </div>
+
+      {/* ── Main footer columns ───────────────────────────────────────────── */}
+      <div className="relative">
+        <div className="container mx-auto px-4 py-14 sm:px-8 lg:px-12">
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.9fr_0.9fr_1.1fr]">
+
+            {/* ── COLUMN 1: Brand ──────────────────────────────────────────── */}
+            <div>
+              {/* Logo + name */}
+              <button
+                type="button"
+                onClick={() => navigate("/")}
+                className="flex items-center gap-3 text-left"
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-lg">
+                  {logo ? (
+                    <img
+                      src={logo}
+                      alt="Kawsar Anher logo"
+                      className="h-full w-full object-contain"
+                    />
+                  ) : (
+                    <img
+                      src="/inqcorpLogo.jpeg"
+                      alt="Inqilab Trading Corporation"
+                      className="h-full w-full object-contain"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                        e.currentTarget.parentElement.textContent = "KA";
+                        e.currentTarget.parentElement.style.color = "#1B3A8A";
+                        e.currentTarget.parentElement.style.fontWeight = "900";
+                        e.currentTarget.parentElement.style.fontSize = "14px";
+                      }}
+                    />
+                  )}
+                </span>
+                <span>
+                  <span className="block text-[18px] font-black leading-tight text-white">
+                    {COMPANY.name}
+                  </span>
+                  <span
+                    className="block text-[10px] font-bold uppercase tracking-[0.2em]"
+                    style={{ color: "#C49B2B" }}
+                  >
+                    {COMPANY.legalName}
+                  </span>
+                </span>
+              </button>
+
+              {/* Tagline */}
+              <p
+                className="mt-4 text-[12px] font-bold uppercase tracking-[0.22em]"
+                style={{ color: "#C49B2B" }}
+              >
+                "{COMPANY.tagline}"
+              </p>
+
+              {/* Description */}
+              <p className="mt-3 max-w-xs text-[13px] leading-6 text-white/55">
+                Bangladesh's premium sand &amp; stone aggregate supplier — fine
+                sands, stone chips, and boulders for every construction scale.
+                Sourced from quality quarries, delivered on time.
+              </p>
+
+              {/* Social links */}
+              <div className="mt-5 flex items-center gap-2.5">
+                {SOCIAL_LINKS.map((item) => (
+                  <a
+                    key={item.key}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.label}
+                    className="footer-social-btn flex h-10 w-10 items-center justify-center rounded-xl border text-white/60 transition-all duration-300"
+                    style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                  >
+                    <FontAwesomeIcon icon={item.icon} className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* ── COLUMN 2: Products ───────────────────────────────────────── */}
+            <div>
+              <h4
+                className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white"
+              >
+                Products
+              </h4>
+              <ul className="mt-5 space-y-3">
+                {productNav.map((item) => (
+                  <li key={item.label}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        item.item
+                          ? openCategoryDestination(item.item, navigate)
+                          : navigate(item.to)
+                      }
+                      className="footer-link group inline-flex items-center gap-2 text-[13px] text-white/55 transition-colors duration-200"
+                    >
+                      <span
+                        className="block h-px w-0 rounded-full transition-all duration-300 group-hover:w-4"
+                        style={{ background: "#C49B2B" }}
+                      />
+                      {item.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* ── COLUMN 3: Quick Links ────────────────────────────────────── */}
+            <div>
+              <h4
+                className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white"
+              >
+                Quick Links
+              </h4>
+              <ul className="mt-5 space-y-3">
+                {COMPANY_NAV_ITEMS.map(({ label, path }) => (
+                  <li key={path}>
+                    <button
+                      type="button"
+                      onClick={() => navigate(path)}
+                      className="footer-link group inline-flex items-center gap-2 text-[13px] text-white/55 transition-colors duration-200"
+                    >
+                      <span
+                        className="block h-px w-0 rounded-full transition-all duration-300 group-hover:w-4"
+                        style={{ background: "#C49B2B" }}
+                      />
+                      {label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* ── COLUMN 4: Contact ────────────────────────────────────────── */}
+            <div>
+              <h4
+                className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white"
+              >
+                Contact Us
+              </h4>
+              <div className="mt-5 space-y-4">
+                {/* Location */}
+                <a
+                  href={COMPANY.mapDirectionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-contact-link flex items-start gap-3 text-[13px] text-white/55 transition-colors duration-200"
+                >
+                  <FontAwesomeIcon
+                    icon={faLocationDot}
+                    className="mt-0.5 shrink-0 text-[14px]"
+                    style={{ color: "#C49B2B" }}
+                  />
+                  <span>{COMPANY.addressFull}</span>
+                </a>
+
+                {/* Phone */}
+                <a
+                  href={`tel:${COMPANY.phoneTel}`}
+                  className="footer-contact-link flex items-start gap-3 text-[13px] text-white/55 transition-colors duration-200"
+                >
+                  <FontAwesomeIcon
+                    icon={faPhone}
+                    className="mt-0.5 shrink-0 text-[14px]"
+                    style={{ color: "#C49B2B" }}
+                  />
+                  <span>{COMPANY.phone}</span>
+                </a>
+
+                {/* Email */}
+                <div className="flex items-start gap-3">
+                  <FontAwesomeIcon
+                    icon={faEnvelope}
+                    className="mt-0.5 shrink-0 text-[14px]"
+                    style={{ color: "#C49B2B" }}
+                  />
+                  <span className="flex flex-col gap-1">
+                    {COMPANY.emails.map((mail) => (
+                      <a
+                        key={mail}
+                        href={`mailto:${mail}`}
+                        className="footer-contact-link break-all text-[13px] text-white/55 transition-colors duration-200"
+                      >
+                        {mail}
+                      </a>
+                    ))}
+                  </span>
+                </div>
+              </div>
+
+              {/* Talk to us button */}
+              <button
+                type="button"
+                onClick={() => navigate("/contact")}
+                className="footer-talk-btn mt-6 inline-flex items-center gap-2 rounded-xl border border-white/15 px-5 py-3 text-[13px] font-bold text-white/75 transition-all duration-300 hover:border-[#C49B2B] hover:text-[#C49B2B]"
+              >
+                Talk to Us
+                <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Divider ─────────────────────────────────────────────────────── */}
+      <div
+        className="relative mx-4 h-px sm:mx-8 lg:mx-12"
+        style={{ background: "rgba(255,255,255,0.07)" }}
+      />
+
+      {/* ── Bottom bar ───────────────────────────────────────────────────── */}
+      <div className="relative">
+        <div className="container mx-auto px-4 py-5 sm:px-8 lg:px-12">
+          <div className="flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
+            <p className="text-[12px] text-white/40">
+              © {new Date().getFullYear()} {COMPANY.legalName}. All rights
+              reserved.
+            </p>
+            <p
+              className="text-[12px] font-semibold"
+              style={{ color: "rgba(196,155,43,0.6)" }}
+            >
+              {COMPANY.name}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        .footer-link:hover {
+          color: #C49B2B !important;
+        }
+        .footer-contact-link:hover {
+          color: #C49B2B !important;
+        }
+        .footer-social-btn:hover {
+          border-color: #C49B2B !important;
+          color: #C49B2B !important;
+          background: rgba(196,155,43,0.08);
+        }
+        .footer-cta-btn:hover {
+          filter: brightness(1.12);
+          transform: translateY(-1px);
+          box-shadow: 0 8px 24px rgba(27,58,138,0.5);
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .footer-cta-btn { transform: none !important; }
+        }
+      `}</style>
     </footer>
   );
 };

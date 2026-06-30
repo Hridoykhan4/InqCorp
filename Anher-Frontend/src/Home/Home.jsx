@@ -1,18 +1,20 @@
-import { SliderBanner } from "../SliderBanner/SliderBanner";
+import { HeroSection } from "../Hero/HeroSection";
 import WhyChooseUs from "../Why Choose Us/WhyChooseUs";
 import ProductsCarousel from "../Product Carousal/ProductCarousal";
-import AdventureThrills from "../Adventure Thrills/AdventureThrills";
-
-import BlogSlider from "../Blog Slider/BlogSlider";
 import TestimonialsSlider from "../Testimonial Slider/TestimonialSlider";
 import CompanyStats from "../Stats/CompanyStats";
 import CategoryShowcase from "../Category Showcase/CategoryShowcase";
 import { Reveal } from "../components/Reveal";
 import { SeoManager } from "../SEO/SeoManager";
-import { getAbsoluteUrl, SEO_CONFIG, localBusinessStructuredData, websiteStructuredData } from "../SEO/seo";
-import OfferAndStats from "../OfferAndStates/OfferAndStates";
+import {
+  getAbsoluteUrl,
+  SEO_CONFIG,
+  localBusinessStructuredData,
+  websiteStructuredData,
+  organizationStructuredData,
+} from "../SEO/seo";
+import { COMPANY } from "../SEO/companyInfo";
 
-// Aggregate rating + reviews → eligible for star rich snippets in search results.
 const reviewStructuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -21,23 +23,76 @@ const reviewStructuredData = {
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: "4.9",
-    reviewCount: "127",
+    reviewCount: "87",
     bestRating: "5",
   },
   review: [
     {
       "@type": "Review",
       reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      author: { "@type": "Organization", name: "Bangladesh Textiles Ltd." },
+      author: { "@type": "Organization", name: "Rahim Construction Ltd." },
       reviewBody:
-        "Clear categories, real technical information, and direct quotation without the runaround.",
+        "Premium Fine Sand and Stone Chips delivered on time. Material quality exceeded expectations for our residential project in Chattogram.",
     },
     {
       "@type": "Review",
       reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      author: { "@type": "Organization", name: "Dhaka Commercial Complex" },
+      author: { "@type": "Organization", name: "Al-Amin Builders" },
       reviewBody:
-        "Practical product range for building safety planning — hose cabinets, fire doors, storage and furniture from one source.",
+        "Best aggregate supplier in Bangladesh. Kawsar Anher delivers consistent grading and competitive pricing — our go-to for all construction materials.",
+    },
+  ],
+};
+
+const productOfferSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SEO_CONFIG.siteName,
+  url: SEO_CONFIG.siteUrl,
+  areaServed: "Bangladesh",
+  image: getAbsoluteUrl("/inqcorpLogo.jpeg"),
+  makesOffer: [
+    {
+      "@type": "Offer",
+      itemOffered: { "@type": "Product", name: "Fine Sand", description: "0.063–1mm fine river sand for plastering and mortar" },
+      price: "65",
+      priceCurrency: "BDT",
+      unitCode: "CFT",
+    },
+    {
+      "@type": "Offer",
+      itemOffered: { "@type": "Product", name: "Medium Sand", description: "1–2mm medium sand for concrete mixing" },
+      price: "60",
+      priceCurrency: "BDT",
+      unitCode: "CFT",
+    },
+    {
+      "@type": "Offer",
+      itemOffered: { "@type": "Product", name: "Coarse Sand", description: "2–4.75mm coarse sand for structural concrete" },
+      price: "55",
+      priceCurrency: "BDT",
+      unitCode: "CFT",
+    },
+    {
+      "@type": "Offer",
+      itemOffered: { "@type": "Product", name: "Stone Chips 5–10mm", description: "Fine stone chips for concrete and road base" },
+      price: "85",
+      priceCurrency: "BDT",
+      unitCode: "CFT",
+    },
+    {
+      "@type": "Offer",
+      itemOffered: { "@type": "Product", name: "Stone Chips 10–20mm", description: "Standard stone chips for RCC and structural work" },
+      price: "95",
+      priceCurrency: "BDT",
+      unitCode: "CFT",
+    },
+    {
+      "@type": "Offer",
+      itemOffered: { "@type": "Product", name: "Boulder / Pathor 20mm+", description: "Large stones for foundation and retaining walls" },
+      price: "120",
+      priceCurrency: "BDT",
+      unitCode: "CFT",
     },
   ],
 };
@@ -46,45 +101,35 @@ export const Home = () => {
   return (
     <div className="overflow-x-clip bg-white">
       <SeoManager
-        title="Fire Safety Equipment Manufacturer in Bangladesh"
-        description="SafetyPlus manufactures and supplies fire safety equipment in Bangladesh, including electric DB boxes, hose cabinets, fire doors, industrial racks, industrial furniture, and safety garments."
+        title="Premium Sand & Stone Supplier Bangladesh | Build with Strength"
+        description="Kawsar Anher (Inqilab Trading Corporation) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips & Boulder at competitive CFT prices."
         path="/"
-        keywords="SafetyPlus, Safety Plus Bangladesh, fire safety equipment Bangladesh, fire door Bangladesh, hose cabinet Bangladesh, DB box, industrial racks, industrial furniture, fire safety products"
+        keywords="Kawsar Anher, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, fine sand Chattogram, coarse sand Bangladesh, boulder supplier, construction aggregate Bangladesh, building materials Chattogram, sand stone price Bangladesh"
         structuredData={[
           localBusinessStructuredData,
           websiteStructuredData,
+          organizationStructuredData,
           reviewStructuredData,
-          {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: SEO_CONFIG.siteName,
-            url: SEO_CONFIG.siteUrl,
-            areaServed: "Bangladesh",
-            image: getAbsoluteUrl("/Icon.png"),
-            makesOffer: [
-              "Electric DB Box",
-              "Hose Cabinet",
-              "Industrial Racks",
-              "Industrial Furniture",
-              "Fire Door",
-              "Industrial Garments",
-            ],
-          },
+          productOfferSchema,
         ]}
       />
 
-      <SliderBanner />
-      {/* <WhyChooseUs /> */}
+      <HeroSection />
+
       <Reveal variant="up">
         <ProductsCarousel />
       </Reveal>
+
       <CategoryShowcase />
+
       <Reveal variant="scale">
         <CompanyStats />
       </Reveal>
-      {/* <AdventureThrills /> */}
-      {/* <OfferAndStats /> */}
-      {/* <BlogSlider /> */}
+
+      <Reveal variant="up">
+        <WhyChooseUs />
+      </Reveal>
+
       <Reveal variant="up">
         <TestimonialsSlider />
       </Reveal>

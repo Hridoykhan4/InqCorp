@@ -11,9 +11,9 @@
   default: true;
   prefersdark: false;
   color-scheme: light;
-  --color-primary: #b91c1c;
+  --color-primary: #1B3A8A;
   --color-secondary: #111827;
-  --color-accent: #f59e0b;
+  --color-accent: #C49B2B;
   --color-neutral: #111827;
   --color-base-100: #ffffff;
   --color-base-200: #f8fafc;
@@ -24,33 +24,49 @@
   --font-sans:
     "Sora", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --color-safety-red: #b91c1c;
-  --color-safety-red-dark: #7f1d1d;
-  --color-safety-amber: #f59e0b;
+  --font-display:
+    "Playfair Display", Georgia, "Times New Roman", serif;
+
+  /* Navy blue (brand primary — matches ITC logo) */
+  --color-safety-red: #1B3A8A;
+  --color-safety-red-dark: #0F2257;
+  /* Gold (brand accent — sand/stone warmth) */
+  --color-safety-amber: #C49B2B;
+  --color-safety-amber-light: #F0C055;
+  /* Neutrals */
   --color-safety-ink: #111827;
   --color-safety-muted: #475569;
   --color-safety-border: #e5e7eb;
   --color-safety-surface: #f8fafc;
+  /* Extra brand tokens */
+  --color-inq-navy: #1B3A8A;
+  --color-inq-navy-dark: #0F2257;
+  --color-inq-navy-light: #2952CC;
+  --color-inq-gold: #C49B2B;
+  --color-inq-gold-light: #F0C055;
+  --color-inq-stone: #57534E;
+  --color-inq-sand: #FEF3C7;
 }
 
 @layer base {
   :root {
-    --brand-primary: #b91c1c;
-    --brand-primary-dark: #7f1d1d;
-    --brand-accent: #f59e0b;
+    --brand-primary: #1B3A8A;
+    --brand-primary-dark: #0F2257;
+    --brand-primary-light: #2952CC;
+    --brand-accent: #C49B2B;
+    --brand-accent-light: #F0C055;
     --brand-ink: #111827;
     --brand-muted: #475569;
     --brand-border: #e5e7eb;
     --brand-surface: #f8fafc;
-    --brand-surface-warm: #fff7ed;
+    --brand-surface-warm: #EFF3FF;
+    --brand-surface-gold: #FFFBEB;
     --page-max-width: 1340px;
     --section-y: clamp(3.5rem, 7vw, 6.5rem);
     --radius-card: 8px;
   }
 
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   html {
     scroll-behavior: smooth;
@@ -70,30 +86,22 @@
     font-optical-sizing: auto;
   }
 
-  img,
-  picture,
-  video,
-  canvas,
-  svg {
+  img, picture, video, canvas, svg {
     display: block;
     max-width: 100%;
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+  a { color: inherit; text-decoration: none; }
 
-  button,
-  input,
-  textarea,
-  select {
-    font: inherit;
-  }
+  button, input, textarea, select { font: inherit; }
 
   ::selection {
     background: var(--brand-primary);
     color: white;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
   }
 }
 
@@ -187,24 +195,30 @@
   .text-shadow-xl {
     text-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   }
+
+  /* Gold accent button */
+  .btn-gold {
+    @apply inline-flex items-center justify-center rounded-full bg-inq-gold px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:brightness-110;
+  }
+
+  /* Glass morphism card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: saturate(160%) blur(20px);
+    -webkit-backdrop-filter: saturate(160%) blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .text-pretty {
-    text-wrap: pretty;
-  }
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
 
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 
   .glass-panel {
     background: rgba(255, 255, 255, 0.85);
@@ -230,17 +244,38 @@
     background-size: 200% 100%;
     animation: shimmer 1.4s linear infinite;
   }
+
+  /* Grain texture overlay for hero */
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Gold gradient text */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #F0C055 0%, #C49B2B 50%, #A07C1A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Navy gradient text */
+  .text-navy-gradient {
+    background: linear-gradient(135deg, #2952CC 0%, #1B3A8A 60%, #0F2257 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
 @keyframes riseIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.985);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes fadeIn {
@@ -254,18 +289,30 @@
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-  100% {
-    transform: rotate(360deg);
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(196, 155, 43, 0.4); }
+  50% { box-shadow: 0 0 0 16px rgba(196, 155, 43, 0); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-gold {
+  animation: pulse-gold 2.5s ease-in-out infinite;
 }
 
 /* ============================================================
-   Scroll-reveal choreography — sections rise/scale in on view.
-   Driven by <Reveal> (IntersectionObserver). GPU transforms only.
+   Scroll-reveal choreography
    ============================================================ */
 .sp-reveal {
   opacity: 0;
@@ -285,4 +332,24 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .sp-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ============================================================
+   Dashboard sidebar — InqCorp navy theme
+   ============================================================ */
+.dashboard-sidebar {
+  background: linear-gradient(180deg, #0F2257 0%, #1B3A8A 100%);
+}
+
+/* ============================================================
+   3D tilt card utility
+   ============================================================ */
+.sp-tilt {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.12s ease-out, box-shadow 0.3s ease;
+}
+
+.sp-tilt-glow {
+  left: var(--mx, 50%);
+  top: var(--my, 50%);
 }

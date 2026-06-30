@@ -9,7 +9,7 @@ export const MAIN_NAV_ITEMS = [
 
 export const COMPANY_NAV_ITEMS = [
   { label: "Home", path: "/" },
-  { label: "About SafetyPlus", path: "/about" },
+  { label: "About Us", path: "/about" },
   { label: "All Products", path: "/all-products" },
   { label: "Catalogue", path: "/catalogue" },
   { label: "Contact", path: "/contact" },
@@ -39,7 +39,6 @@ export const getCategoryList = (categories = [], options = {}) => {
     seen.add(key);
     return true;
   });
-
   return typeof limit === "number" ? unique.slice(0, limit) : unique;
 };
 

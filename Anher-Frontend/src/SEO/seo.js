@@ -1,20 +1,20 @@
 import { COMPANY, postalAddressSchema } from "./companyInfo";
 
 export const SEO_CONFIG = {
-  siteName: "SafetyPlus",
+  siteName: "Kawsar Anher",
   siteUrl: (
-    import.meta.env.VITE_SITE_URL || "https://safetyplusbd.com"
+    import.meta.env.VITE_SITE_URL || "https://kawsaranher.com"
   ).replace(/\/+$/, ""),
-  defaultTitle: "SafetyPlus | Fire Safety Equipment & Solutions in Bangladesh",
-  titleSuffix: "SafetyPlus",
+  defaultTitle:
+    "Kawsar Anher | Premium Sand & Stone Supplier in Bangladesh",
+  titleSuffix: "Kawsar Anher",
   defaultDescription:
-    "SafetyPlus manufactures and supplies fire safety equipment for the Bangladesh market, including DB boxes, hose cabinets, fire doors, industrial racks, lockers, cabinets, custom tables, and safety garments.",
+    "Kawsar Anher (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — Fine Sand, Medium Sand, Coarse Sand, Stone Chips, and Boulder from Chattogram.",
   defaultKeywords:
-    "SafetyPlus, Safety Plus Bangladesh, fire safety Bangladesh, fire safety equipment, fire door Bangladesh, hose cabinet, electric DB box, industrial racks, industrial furniture, personnel locker, safety garments, safetyplusbd.com",
-  defaultImage: "/Icon.png",
-  themeColor: "#B91C1C",
+    "Kawsar Anher, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, construction aggregate Chattogram, fine sand Bangladesh, coarse sand, boulder supplier, building materials Bangladesh, kawsaranher.com",
+  defaultImage: "/inqcorpLogo.jpeg",
+  themeColor: "#1B3A8A",
   locale: "en_BD",
-  // Pulled from the single source of truth (companyInfo.js).
   contact: {
     phone: COMPANY.phone,
     phoneTel: COMPANY.phoneTel,
@@ -25,64 +25,51 @@ export const SEO_CONFIG = {
 };
 
 export const getAbsoluteUrl = (value = "/") => {
-  if (!value) {
-    return SEO_CONFIG.siteUrl;
-  }
-
-  if (/^https?:\/\//i.test(value)) {
-    return value;
-  }
-
+  if (!value) return SEO_CONFIG.siteUrl;
+  if (/^https?:\/\//i.test(value)) return value;
   const normalizedPath = value.startsWith("/") ? value : `/${value}`;
   return `${SEO_CONFIG.siteUrl}${normalizedPath}`;
 };
 
 export const createTitle = (title) => {
-  if (!title) {
-    return SEO_CONFIG.defaultTitle;
-  }
-
-  if (title.includes(SEO_CONFIG.titleSuffix)) {
-    return title;
-  }
-
+  if (!title) return SEO_CONFIG.defaultTitle;
+  if (title.includes(SEO_CONFIG.titleSuffix)) return title;
   return `${title} | ${SEO_CONFIG.titleSuffix}`;
 };
 
 export const stripHtml = (value = "") =>
   value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 
-export const truncate = (value = "", limit = 160) => {
-  if (value.length <= limit) {
-    return value;
-  }
-
-  return `${value.slice(0, limit - 1).trim()}…`;
-};
+export const truncate = (value = "", limit = 160) =>
+  value.length <= limit ? value : `${value.slice(0, limit - 1).trim()}…`;
 
 export const organizationStructuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: SEO_CONFIG.siteName,
   legalName: COMPANY.legalName,
-  alternateName: ["Safety Plus", "Safety Plus Industry"],
+  alternateName: ["Inqilab Trading", "ITC Bangladesh", "Kawsar Anher Sand Stone"],
   url: SEO_CONFIG.siteUrl,
   email: COMPANY.email,
   telephone: COMPANY.phoneTel,
   address: postalAddressSchema,
   areaServed: "Bangladesh",
   image: getAbsoluteUrl(SEO_CONFIG.defaultImage),
+  foundingDate: "2020",
+  founder: {
+    "@type": "Person",
+    name: COMPANY.ceo.name,
+    jobTitle: COMPANY.ceo.title,
+  },
 };
 
-// Rich LocalBusiness payload — helps Google show address, phone, map pin,
-// and a knowledge panel when users search "SafetyPlus".
 export const localBusinessStructuredData = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "@id": `${SEO_CONFIG.siteUrl}/#localbusiness`,
   name: SEO_CONFIG.siteName,
   legalName: COMPANY.legalName,
-  alternateName: ["Safety Plus", "Safety Plus Industry"],
+  alternateName: ["Inqilab Trading Corporation", "ITC"],
   description: SEO_CONFIG.defaultDescription,
   url: SEO_CONFIG.siteUrl,
   email: COMPANY.email,
@@ -98,6 +85,15 @@ export const localBusinessStructuredData = {
   },
   hasMap: COMPANY.mapDirectionsUrl,
   areaServed: "Bangladesh",
+  knowsAbout: [
+    "Fine Sand",
+    "Medium Sand",
+    "Coarse Sand",
+    "Stone Chips",
+    "Boulder",
+    "Construction Aggregates",
+    "Building Materials",
+  ],
 };
 
 export const websiteStructuredData = {

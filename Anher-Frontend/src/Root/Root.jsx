@@ -244,16 +244,16 @@ export const Root = () => {
       <FloatingWhatsApp
         phoneNumber={COMPANY.phoneTel}
         accountName={SEO_CONFIG.siteName}
-        avatar="/Icon.png"
+        avatar="/inqcorpLogo.jpeg"
         statusMessage="Typically replies within 30 Minutes"
-        placeholder="Type Your Message Here"
+        placeholder="Type your message here..."
         messageDelay={1}
         allowClickAway={true}
         allowEsc={true}
         notification={true}
         notificationDelay={10}
         notificationSound={true}
-        chatMessage="How can i help you Sir?"
+        chatMessage="Hello! How can we help you? Ask us about our sand, stone chips, or boulder pricing."
         buttonStyle={{
           backgroundColor: "#25D366",
           color: "white",
