@@ -56,7 +56,7 @@ const CEOPhoto = () => {
 
   return (
     <img
-      src="/kawsar-alam.jpg"
+      src="/kawsar-alam.jpeg"
       alt="Kawsar Alam — Founder & CEO, Inqilab Trading Corporation"
       onError={() => setImgError(true)}
       className="h-full w-full rounded-2xl object-cover object-top"

@@ -246,10 +246,10 @@ export const AllProducts = () => {
                         <div className='max-w-2xl'>
                             <p className='section-tagline text-[11px] sm:text-sm'>Complete Product Catalogue</p>
                             <h1 className='mt-1.5 text-2xl font-extrabold leading-tight text-safety-ink sm:mt-2 sm:text-4xl md:text-5xl'>
-                                Professional Safety Equipment & Industrial Solutions
+                                Premium Sand, Stone Chips & Construction Aggregates
                             </h1>
                             <p className='mt-2 text-sm text-safety-muted sm:mt-3 sm:text-base sm:leading-7'>
-                                Filter by category, search by model, and request a quote.
+                                Filter by category, search by product, and request a quote.
                             </p>
                         </div>
                         <div className='inline-flex shrink-0 items-center gap-3 self-start rounded-xl bg-safety-red/10 px-4 py-2.5 sm:gap-4 sm:px-5 sm:py-4'>

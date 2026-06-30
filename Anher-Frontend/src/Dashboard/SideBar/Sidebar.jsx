@@ -16,6 +16,7 @@ import {
     faImages,
     faRightFromBracket,
     faUserCircle,
+    faTag,
 } from '@fortawesome/free-solid-svg-icons'
 import { removeUser } from '../../Redux/hvac'
 
@@ -35,6 +36,7 @@ const NAV_ITEMS = [
     { to: '/dashboard/certificate',label: 'Certificate',icon: faAward                   },
     { to: '/dashboard/catalogue',  label: 'Catalogues', icon: faBookOpen                },
     { to: '/dashboard/country',    label: 'Country',    icon: faGlobe                   },
+    { to: '/dashboard/pricelist',  label: 'Price List', icon: faTag                     },
 ]
 
 // ─── Sidebar inner ────────────────────────────────────────────────────────────

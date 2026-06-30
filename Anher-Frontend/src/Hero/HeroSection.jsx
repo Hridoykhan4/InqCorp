@@ -12,8 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 
-// ── Product ticker items ──────────────────────────────────────────────────────
-const TICKER_ITEMS = [
+// ── Static ticker fallback ────────────────────────────────────────────────────
+const TICKER_FALLBACK = [
   "Fine Sand · ৳65/CFT",
   "Stone Chips 5–10mm · ৳85/CFT",
   "Boulder · ৳120/CFT",
@@ -38,7 +38,7 @@ const getFirstImage = (banner) => {
 
 export const HeroSection = () => {
   const navigate = useNavigate();
-  const { banners = [] } = useOutletContext() || {};
+  const { banners = [], priceList = [] } = useOutletContext() || {};
   const logo = useSelector((s) => s.hvac.logo);
 
   const [bannerIdx, setBannerIdx] = useState(0);
@@ -98,6 +98,10 @@ export const HeroSection = () => {
 
   const currentBanner = banners[bannerIdx];
   const bannerImg = getFirstImage(currentBanner);
+
+  const tickerItems = priceList.length
+    ? priceList.map((p) => `${p.name} · ৳${p.price}/${p.unit || "CFT"}`)
+    : TICKER_FALLBACK;
 
   return (
     <section
@@ -189,28 +193,76 @@ export const HeroSection = () => {
                     )}
                   </>
                 ) : (
-                  /* No banners: Logo + live price grid */
-                  <div className="flex h-full flex-col items-center justify-center gap-6 p-8">
-                    {/* Logo */}
-                    <div className="flex h-32 w-32 items-center justify-center rounded-full p-1 shadow-2xl" style={{ background: "linear-gradient(135deg, #C49B2B, rgba(196,155,43,0.3))", boxShadow: "0 0 0 8px rgba(196,155,43,0.1), 0 20px 60px rgba(0,0,0,0.4)" }}>
-                      <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
-                        <img src={logo || "/inqcorpLogo.jpeg"} alt="Kawsar Anher" className="h-24 w-24 object-contain" onError={(e) => { e.currentTarget.src = "/inqcorpLogo.jpeg"; }} />
-                      </div>
+                  /* No banners: Dynamic Price List Table */
+                  <div className="flex h-full flex-col p-5">
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-black text-white">Today's Price List</p>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/all-products")}
+                        className="rounded-lg border px-3 py-1 text-[11px] font-bold transition-colors"
+                        style={{ borderColor: "rgba(196,155,43,0.5)", color: "#C49B2B" }}
+                      >
+                        View All
+                      </button>
                     </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-black text-white">Kawsar Anher</p>
-                      <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.25em]" style={{ color: "#C49B2B" }}>Inqilab Trading Corporation</p>
+
+                    {/* Column headers */}
+                    <div
+                      className="grid pb-2 text-[9px] font-bold uppercase tracking-widest text-white/35 border-b"
+                      style={{ gridTemplateColumns: "1fr 70px 72px", borderColor: "rgba(255,255,255,0.1)" }}
+                    >
+                      <span>Product</span>
+                      <span>Size</span>
+                      <span className="text-right">Price (৳/CFT)</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 w-full">
-                      {[
-                        { n: "Fine Sand", p: "৳65/CFT" },
-                        { n: "Stone Chips", p: "৳85/CFT" },
-                        { n: "Coarse Sand", p: "৳55/CFT" },
-                        { n: "Boulder", p: "৳120/CFT" },
-                      ].map((item) => (
-                        <div key={item.n} className="rounded-xl px-3 py-2.5 text-center" style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(196,155,43,0.2)" }}>
-                          <p className="text-[11px] font-semibold text-white/70">{item.n}</p>
-                          <p className="text-sm font-black" style={{ color: "#C49B2B" }}>{item.p}</p>
+
+                    {/* Rows */}
+                    <div className="flex-1 overflow-y-auto scrollbar-hide">
+                      {(priceList.length
+                        ? priceList
+                        : [
+                            { _id: "1", name: "Fine Sand",    size: "0.063–1mm",   price: 65,  imageUrl: "" },
+                            { _id: "2", name: "Medium Sand",  size: "1mm–2mm",     price: 60,  imageUrl: "" },
+                            { _id: "3", name: "Coarse Sand",  size: "2mm–4.75mm",  price: 55,  imageUrl: "" },
+                            { _id: "4", name: "Stone Chips",  size: "5mm–10mm",    price: 85,  imageUrl: "" },
+                            { _id: "5", name: "Stone Chips",  size: "10mm–20mm",   price: 95,  imageUrl: "" },
+                            { _id: "6", name: "Boulder",      size: "20mm+",       price: 120, imageUrl: "" },
+                          ]
+                      ).map((item) => (
+                        <div
+                          key={item._id}
+                          className="grid items-center py-2.5 border-b"
+                          style={{ gridTemplateColumns: "1fr 70px 72px", borderColor: "rgba(255,255,255,0.06)" }}
+                        >
+                          {/* Product col */}
+                          <div className="flex items-center gap-2 min-w-0">
+                            {item.imageUrl ? (
+                              <img
+                                src={item.imageUrl}
+                                alt={item.name}
+                                className="h-8 w-8 shrink-0 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div
+                                className="h-8 w-8 shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold"
+                                style={{ background: "rgba(196,155,43,0.18)", color: "#C49B2B" }}
+                              >
+                                {item.name.charAt(0)}
+                              </div>
+                            )}
+                            <span className="truncate text-[11px] font-semibold text-white">{item.name}</span>
+                          </div>
+                          {/* Size col */}
+                          <span className="text-[10px] text-white/55">{item.size}</span>
+                          {/* Price col */}
+                          <span
+                            className="text-right text-[12px] font-black"
+                            style={{ color: "#C49B2B" }}
+                          >
+                            ৳ {item.price}.00
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -247,7 +299,7 @@ export const HeroSection = () => {
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24" style={{ background: "linear-gradient(to right, #050d1f, transparent)" }} />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24" style={{ background: "linear-gradient(to left, #050d1f, transparent)" }} />
         <div className="ticker-track flex items-center whitespace-nowrap">
-          {[...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+          {[...tickerItems, ...tickerItems, ...tickerItems].map((item, i) => (
             <span key={i} className="inline-flex items-center gap-4 px-6 text-[13px] font-semibold uppercase tracking-[0.18em] text-white/50">
               {item}
               <span className="inline-block h-1 w-1 rounded-full" style={{ background: "#C49B2B", opacity: 0.7 }} />

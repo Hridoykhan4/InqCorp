@@ -1,9 +1,10 @@
 const { mongoose } = require("mongoose")
 const { cloudinary } = require("../Cloudinary/cloudinary")
 
-// 
+//
 const { Categories } = require("../Model/Categories")
 const { Products } = require("../Model/Prodcuts")
+const { PriceList } = require("../Model/PriceList")
 const { Logo } = require("../Model/logo")
 const { Banners } = require("../Model/Banners")
 const { Blogs } = require("../Model/Blogs")
@@ -1152,6 +1153,61 @@ const deleteCatalogue = async (req, res) => {
 };
 
 
+// ── PriceList CRUD ────────────────────────────────────────────────────────────
+const getPriceList = async (req, res) => {
+    try {
+        const data = await PriceList.find({}).sort({ order: 1, createdAt: 1 }).lean()
+        res.send({ data })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+const addPriceItem = async (req, res) => {
+    try {
+        let info = JSON.parse(req.body.info)
+        const files = req.files
+        if (files && files.length) {
+            const urls = await uploadImages(files)
+            if (urls[0]) info.imageUrl = urls[0]
+        }
+        const item = new PriceList(info)
+        await item.save()
+        const data = await PriceList.find({}).sort({ order: 1, createdAt: 1 }).lean()
+        res.send({ message: 'Added successfully', data })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+const updatePriceItem = async (req, res) => {
+    try {
+        const { id } = req.params
+        let info = JSON.parse(req.body.info)
+        const files = req.files
+        if (files && files.length) {
+            const urls = await uploadImages(files)
+            if (urls[0]) info.imageUrl = urls[0]
+        }
+        await PriceList.findByIdAndUpdate(id, info, { new: true })
+        const data = await PriceList.find({}).sort({ order: 1, createdAt: 1 }).lean()
+        res.send({ message: 'Updated successfully', data })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+const deletePriceItem = async (req, res) => {
+    try {
+        const { id } = req.body
+        await PriceList.deleteOne({ _id: id })
+        const data = await PriceList.find({}).sort({ order: 1, createdAt: 1 }).lean()
+        res.send({ message: 'Deleted successfully', data })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
 // ── Seed: insert default categories + products if DB is empty ─────────────────
 const seedDatabase = async (req, res) => {
     try {
@@ -1188,5 +1244,6 @@ const seedDatabase = async (req, res) => {
 };
 
 module.exports = {
-    seedDatabase, deleteCertificate, deleteCountry, addCountry, addCertificate, getCountry, businessProducts, deleteService, updateService, getServices, addService, deleteBlog, getBlogs, AddBlog, deleteBanner, updateBanner, uploadBanner, getBanners, pdfUpload, getLogo, downloadPdfFiles, getProducts, addProduct, deleteProduct, getCategories, getCertificate, addCategory, deleteCategory, updateProduct, updateCategory, addCatalogue, getCatalogues, deleteCatalogue
+    seedDatabase, deleteCertificate, deleteCountry, addCountry, addCertificate, getCountry, businessProducts, deleteService, updateService, getServices, addService, deleteBlog, getBlogs, AddBlog, deleteBanner, updateBanner, uploadBanner, getBanners, pdfUpload, getLogo, downloadPdfFiles, getProducts, addProduct, deleteProduct, getCategories, getCertificate, addCategory, deleteCategory, updateProduct, updateCategory, addCatalogue, getCatalogues, deleteCatalogue,
+    getPriceList, addPriceItem, updatePriceItem, deletePriceItem
 }

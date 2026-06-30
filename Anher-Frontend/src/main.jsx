@@ -30,6 +30,7 @@ import { ServicePage } from './Service Page/ServicePage.jsx'
 import { Catelogue } from './Catelog/Catelogue.jsx'
 import { DashboardCatalogue } from './Dashboard/Dashboard Catalogue/DashboardCatalogue.jsx'
 import { Projects } from './Projects/Projects.jsx'
+import { DashboardPriceList } from './Dashboard/Dashboard PriceList/DashboardPriceList.jsx'
 
 // import { Product } from './Product/Product.jsx'
 const router = createBrowserRouter([
@@ -126,6 +127,10 @@ const router = createBrowserRouter([
           {
             path: '/dashboard/catalogue',
             element: <DashboardCatalogue></DashboardCatalogue>
+          },
+          {
+            path: '/dashboard/pricelist',
+            element: <DashboardPriceList></DashboardPriceList>
           },
 
 

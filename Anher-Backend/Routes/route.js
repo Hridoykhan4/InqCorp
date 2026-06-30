@@ -1,7 +1,7 @@
 
 
 const express = require('express')
-const { seedDatabase, getProducts, addProduct, deleteProduct, getCategories, addCategory, deleteCategory, updateProduct, updateCategory, downloadPdfFiles, getLogo, pdfUpload, uploadBanner, getBanners, deleteBanner, updateBanner, AddBlog, getBlogs, deleteBlog, addService, getServices, updateService, deleteService, businessProducts, addCertificate, deleteCertificate, getCertificate, addCountry, getCountry, deleteCountry, addCatalogue, getCatalogues, deleteCatalogue } = require('../Controller/Controller')
+const { seedDatabase, getProducts, addProduct, deleteProduct, getCategories, addCategory, deleteCategory, updateProduct, updateCategory, downloadPdfFiles, getLogo, pdfUpload, uploadBanner, getBanners, deleteBanner, updateBanner, AddBlog, getBlogs, deleteBlog, addService, getServices, updateService, deleteService, businessProducts, addCertificate, deleteCertificate, getCertificate, addCountry, getCountry, deleteCountry, addCatalogue, getCatalogues, deleteCatalogue, getPriceList, addPriceItem, updatePriceItem, deletePriceItem } = require('../Controller/Controller')
 const { register, login } = require('../Controller/AuthController')
 const router = express.Router()
 const multer = require('multer')
@@ -33,6 +33,7 @@ router.get('/getQueries', getQueries)
 router.get('/getServices', getServices)
 router.get('/getBusinessProducts', businessProducts)
 router.get('/getCatalogues', getCatalogues)
+router.get('/getPriceList', getPriceList)
 
 // ====== POST Routes ======
 router.post('/register', register)
@@ -59,8 +60,10 @@ router.post('/addCatalogue', upload.fields([
     { name: 'pdf' },
     { name: 'image' }
 ]), addCatalogue)
+router.post('/addPriceItem', upload.any(), addPriceItem)
 // ====== PUT Routes ======
 router.put('/updateBanner/:id', upload.fields([{ name: 'images' }]), updateBanner)
+router.put('/updatePriceItem/:id', upload.any(), updatePriceItem)
 router.put('/updateProduct/:id', upload.any(), updateProduct)
 router.put('/updateService/:id', updateService)
 router.put('/updateCategory/:id', upload.fields([
@@ -77,6 +80,7 @@ router.delete('/deleteCountry', deleteCountry)
 router.delete('/deleteService', deleteService)
 router.delete('/deleteCertificate', deleteCertificate)
 router.delete('/deleteCatalogue/:id', deleteCatalogue)
+router.delete('/deletePriceItem', deletePriceItem)
 
 router.post('/del', async (req, res) => {
     try {

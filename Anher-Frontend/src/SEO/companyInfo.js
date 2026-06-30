@@ -20,7 +20,7 @@ const GEO = { latitude: 22.3569, longitude: 91.7832 };
 
 const MAP_EMBED_QUERY = encodeURIComponent("Chattogram, Bangladesh");
 const MAP_QUERY = encodeURIComponent(
-  `Inqilab Trading Corporation, Chattogram, Bangladesh`
+  `Inqilab Trading Corporation, Chattogram, Bangladesh`,
 );
 
 export const COMPANY = {
@@ -41,7 +41,7 @@ export const COMPANY = {
     name: "Kawsar Alam",
     title: "Founder & CEO",
     education: "MBA in Accounting",
-    photo: "/kawsar-alam.jpg",
+    photo: "/kawsar-alam.jpeg",
     quote:
       "We don't just supply materials — we build the foundations of Bangladesh.",
   },

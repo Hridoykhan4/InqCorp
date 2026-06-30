@@ -36,6 +36,7 @@ export const Root = () => {
   const [businessProducts, setBusinessProducts] = useState(null);
   const [certificate, setCertificate] = useState(null);
   const [country, setCountry] = useState([]);
+  const [priceList, setPriceList] = useState([]);
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.hvac.users);
   useEffect(() => {
@@ -63,6 +64,8 @@ export const Root = () => {
       setCountry,
       dashboardBanners,
       setDashboardBanners,
+      priceList,
+      setPriceList,
     }),
     [
       products,
@@ -75,6 +78,7 @@ export const Root = () => {
       certificate,
       country,
       dashboardBanners,
+      priceList,
     ]
   );
 
@@ -208,6 +212,11 @@ export const Root = () => {
           title: err.response.data.message || err.message,
         });
       });
+
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getPriceList`)
+      .then((res) => setPriceList(res.data.data || []))
+      .catch((err) => console.log(err));
   }, []);
   // eslint-disable-next-line no-unused-vars
   const handleToast = () => {
