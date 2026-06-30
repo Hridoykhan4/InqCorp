@@ -1,7 +1,6 @@
 import {
   faArrowRight,
   faChevronDown,
-  faLayerGroup,
   faRightFromBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -25,9 +24,11 @@ const getCategoryImage = (item) => {
   if (Array.isArray(item?.imageUrl)) {
     return item.imageUrl[0] || fallbackImage;
   }
-
   return item?.imageUrl || fallbackImage;
 };
+
+const NAVY = "#1B3A8A";
+const GOLD = "#C49B2B";
 
 export const SideNavbar = ({ categories = [] }) => {
   const [isProductsOpen, setProductsOpen] = useState(true);
@@ -40,9 +41,7 @@ export const SideNavbar = ({ categories = [] }) => {
 
   const closeDrawer = () => {
     const drawer = document.getElementById("navbar-drawer");
-    if (drawer) {
-      drawer.checked = false;
-    }
+    if (drawer) drawer.checked = false;
   };
 
   const goTo = (path) => {
@@ -66,33 +65,47 @@ export const SideNavbar = ({ categories = [] }) => {
         />
 
         <aside className="flex h-full w-[88vw] max-w-[420px] flex-col bg-white shadow-2xl">
-          <div className="border-b border-safety-border px-5 py-5">
+          {/* Header */}
+          <div
+            className="border-b px-5 py-5"
+            style={{ borderColor: "rgba(27,58,138,0.12)" }}
+          >
             <div className="flex items-center justify-between gap-4">
               <button
                 type="button"
                 className="flex min-w-0 items-center gap-3 text-left"
                 onClick={() => goTo("/")}
               >
-                <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-md border border-safety-border bg-white shadow-sm">
-                  {logo ? (
-                    <img src={logo} className="h-9 w-9 object-contain" alt="SafetyPlus logo" />
-                  ) : (
-                    <FontAwesomeIcon icon={faLayerGroup} className="text-safety-red" />
-                  )}
+                <span
+                  className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white shadow-sm"
+                  style={{ borderColor: "rgba(27,58,138,0.15)" }}
+                >
+                  <img
+                    src={logo || "/inqcorpLogo.jpeg"}
+                    className="h-10 w-10 object-contain"
+                    alt="Kawsar Anher logo"
+                    onError={(e) => { e.currentTarget.src = "/inqcorpLogo.jpeg"; }}
+                  />
                 </span>
                 <span>
-                  <span className="block text-base font-extrabold leading-5 text-safety-ink">
-                    SafetyPlus
+                  <span
+                    className="block text-base font-extrabold leading-5 tracking-tight"
+                    style={{ color: NAVY }}
+                  >
+                    Kawsar Anher
                   </span>
-                  <span className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-safety-muted">
-                    Fire Safety
+                  <span
+                    className="block text-[10px] font-bold uppercase tracking-[0.2em]"
+                    style={{ color: GOLD }}
+                  >
+                    Inqilab Trading Corporation
                   </span>
                 </span>
               </button>
 
               <label
                 htmlFor="navbar-drawer"
-                className="grid h-10 w-10 cursor-pointer place-items-center rounded-md border border-safety-border text-safety-muted transition hover:border-safety-red hover:text-safety-red"
+                className="grid h-10 w-10 cursor-pointer place-items-center rounded-xl border border-safety-border text-safety-muted transition hover:border-safety-red hover:text-safety-red"
                 aria-label="Close navigation menu"
               >
                 <FontAwesomeIcon icon={faXmark} />
@@ -100,56 +113,81 @@ export const SideNavbar = ({ categories = [] }) => {
             </div>
           </div>
 
+          {/* Nav items */}
           <div className="flex-1 overflow-y-auto px-5 py-5">
-            <nav className="space-y-2">
+            <nav className="space-y-1">
               {MAIN_NAV_ITEMS.map((item) => (
                 <button
                   type="button"
                   key={item.path}
                   onClick={() => goTo(item.path)}
-                  className="flex w-full items-center justify-between rounded-md px-4 py-3 text-left text-base font-bold text-safety-ink transition hover:bg-red-50 hover:text-safety-red"
+                  className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition hover:text-white"
+                  style={{}}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = NAVY;
+                    e.currentTarget.style.color = "white";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "";
+                    e.currentTarget.style.color = "";
+                  }}
                 >
                   {item.label}
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs text-safety-muted" />
+                  <FontAwesomeIcon icon={faArrowRight} className="text-xs opacity-50" />
                 </button>
               ))}
             </nav>
 
-            <div className="mt-5 rounded-lg border border-safety-border">
+            {/* Products accordion */}
+            <div
+              className="mt-4 overflow-hidden rounded-xl border"
+              style={{ borderColor: "rgba(27,58,138,0.15)" }}
+            >
               <button
                 type="button"
-                onClick={() => setProductsOpen((value) => !value)}
-                className="flex w-full items-center justify-between px-4 py-4 text-left"
+                onClick={() => setProductsOpen((v) => !v)}
+                className="flex w-full items-center justify-between px-4 py-4 text-left transition"
                 aria-expanded={isProductsOpen}
+                style={{ background: isProductsOpen ? "rgba(27,58,138,0.04)" : "white" }}
               >
                 <span>
-                  <span className="eyebrow">Products</span>
-                  <span className="mt-1 block text-sm font-bold text-safety-ink">
-                    Browse Safety Categories
+                  <span
+                    className="block text-[10px] font-bold uppercase tracking-[0.22em]"
+                    style={{ color: GOLD }}
+                  >
+                    Our Products
+                  </span>
+                  <span className="mt-0.5 block text-sm font-bold text-safety-ink">
+                    Browse Aggregate Categories
                   </span>
                 </span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
-                  className={`text-sm text-safety-red transition-transform ${
-                    isProductsOpen ? "rotate-180" : ""
-                  }`}
+                  className={`text-sm transition-transform`}
+                  style={{
+                    color: NAVY,
+                    transform: isProductsOpen ? "rotate(180deg)" : "none",
+                  }}
                 />
               </button>
 
               {isProductsOpen && (
-                <div className="border-t border-safety-border p-2">
+                <div
+                  className="border-t p-2"
+                  style={{ borderColor: "rgba(27,58,138,0.1)" }}
+                >
                   {productItems.length > 0 ? (
                     productItems.map((item) => (
                       <button
                         type="button"
                         key={item?._id || item?.name}
                         onClick={() => goToCategory(item)}
-                        className="flex w-full items-center gap-3 rounded-md p-3 text-left transition hover:bg-red-50"
+                        className="flex w-full items-center gap-3 rounded-xl p-3 text-left transition hover:bg-blue-50"
                       >
                         <img
                           src={getCategoryImage(item)}
-                          alt={item?.label || item?.name || "SafetyPlus product category"}
-                          className="h-12 w-12 shrink-0 rounded-md border border-safety-border object-cover"
+                          alt={item?.label || item?.name || "Kawsar Anher product"}
+                          className="h-12 w-12 shrink-0 rounded-lg border border-safety-border object-cover"
                           loading="lazy"
                         />
                         <span className="min-w-0 flex-1">
@@ -157,13 +195,13 @@ export const SideNavbar = ({ categories = [] }) => {
                             {capitalizeWords(item?.label || item?.name) || "Product Category"}
                           </span>
                           <span className="block text-xs text-safety-muted">
-                            {isExternalCategory(item) ? "Open site" : "Open category"}
+                            {isExternalCategory(item) ? "Open site" : "View products"}
                           </span>
                         </span>
                       </button>
                     ))
                   ) : (
-                    <p className="rounded-md bg-safety-surface p-4 text-sm text-safety-muted">
+                    <p className="rounded-xl p-4 text-sm text-safety-muted" style={{ background: "rgba(27,58,138,0.04)" }}>
                       Product categories will appear after they are added.
                     </p>
                   )}
@@ -171,10 +209,11 @@ export const SideNavbar = ({ categories = [] }) => {
                   <button
                     type="button"
                     onClick={() => goTo("/all-products")}
-                    className="mt-2 flex w-full items-center justify-center rounded-md bg-safety-ink px-4 py-3 text-sm font-bold text-white transition hover:bg-safety-red"
+                    className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white transition"
+                    style={{ background: `linear-gradient(135deg, ${NAVY}, #2a50b8)` }}
                   >
                     View All Products
-                    <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-xs" />
+                    <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
                   </button>
                 </div>
               )}
@@ -184,19 +223,27 @@ export const SideNavbar = ({ categories = [] }) => {
               <button
                 type="button"
                 onClick={() => goTo("/dashboard")}
-                className="mt-5 flex w-full items-center justify-between rounded-md bg-safety-surface px-4 py-3 text-left text-base font-bold text-safety-ink transition hover:bg-red-50 hover:text-safety-red"
+                className="mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition"
+                style={{ background: "rgba(27,58,138,0.05)", border: `1px solid rgba(27,58,138,0.12)` }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(27,58,138,0.1)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(27,58,138,0.05)"; }}
               >
                 Dashboard
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                <FontAwesomeIcon icon={faArrowRight} className="text-xs opacity-50" />
               </button>
             )}
           </div>
 
-          <div className="border-t border-safety-border p-5">
+          {/* Footer CTA */}
+          <div
+            className="border-t p-5"
+            style={{ borderColor: "rgba(27,58,138,0.1)" }}
+          >
             <button
               type="button"
               onClick={() => goTo("/contact")}
-              className="btn-brand w-full"
+              className="w-full rounded-xl py-3 text-sm font-bold text-white transition"
+              style={{ background: `linear-gradient(135deg, ${NAVY}, #2a50b8)` }}
             >
               Request a Quote
             </button>
@@ -208,7 +255,7 @@ export const SideNavbar = ({ categories = [] }) => {
                   dispatch(removeUser());
                   closeDrawer();
                 }}
-                className="mt-3 flex w-full items-center justify-center gap-2 rounded-md border border-safety-border px-4 py-3 text-sm font-bold text-safety-muted transition hover:border-safety-red hover:text-safety-red"
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-safety-border px-4 py-3 text-sm font-bold text-safety-muted transition hover:border-red-400 hover:text-red-500"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 Logout

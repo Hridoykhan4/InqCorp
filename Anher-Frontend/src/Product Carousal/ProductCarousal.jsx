@@ -2,15 +2,9 @@ import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRight,
-  faBoxOpen,
   faChevronLeft,
   faChevronRight,
-  faDoorClosed,
-  faFireExtinguisher,
-  faIndustry,
-  faLayerGroup,
-  faShieldHalved,
-  faWarehouse,
+  faMountain,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { capitalizeWords } from "../Functions/functions";
@@ -18,51 +12,50 @@ import { getCategoryHref, getCategoryList, isExternalCategory } from "../config/
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const NAVY = "#1B3A8A";
+const GOLD = "#C49B2B";
 
 const fallbackProduct =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png";
 
 const getImage = (item) => {
-  if (Array.isArray(item?.imageUrl)) {
-    return item.imageUrl[0] || fallbackProduct;
-  }
+  if (Array.isArray(item?.imageUrl)) return item.imageUrl[0] || fallbackProduct;
   return item?.imageUrl || fallbackProduct;
 };
 
-const plannedLines = [
-  { title: "Electric DB Box", icon: faBoxOpen },
-  { title: "Hose Cabinet", icon: faFireExtinguisher },
-  { title: "Industrial Racks", icon: faWarehouse },
-  { title: "Industrial Furniture", icon: faIndustry },
-  { title: "Fire Door", icon: faDoorClosed },
-  { title: "Industrial Garments", icon: faLayerGroup },
+// Fallback product lines when backend empty
+const FALLBACK_LINES = [
+  { title: "Fine Sand", sub: "0.063 – 1mm", icon: faMountain, color: "#C49B2B" },
+  { title: "Medium Sand", sub: "1 – 2mm", icon: faMountain, color: "#1B3A8A" },
+  { title: "Coarse Sand", sub: "2 – 4.75mm", icon: faMountain, color: "#C49B2B" },
+  { title: "Stone Chips 5–10mm", sub: "Fine chips", icon: faMountain, color: "#1B3A8A" },
+  { title: "Stone Chips 10–20mm", sub: "Standard chips", icon: faMountain, color: "#C49B2B" },
+  { title: "Boulder / Pathor", sub: "20mm+", icon: faMountain, color: "#1B3A8A" },
 ];
 
 const ProductTile = ({ item }) => {
   const navigate = useNavigate();
-  // Product NAME leads; model is a quiet SKU when it differs from the name.
-  const title = capitalizeWords(item?.name || item?.model || "Safety product");
+  const tileRef = useRef(null);
+  const title = capitalizeWords(item?.name || item?.model || "Aggregate Product");
   const sku = item?.name && item?.model ? String(item.model).toUpperCase() : null;
 
-  // Drag guard: slick fires a click after a desktop drag/swipe. Record the
-  // pointer-down position and cancel navigation if the pointer actually moved.
   const down = useRef({ x: 0, y: 0 });
-  const onPointerDown = (e) => {
-    down.current = { x: e.clientX ?? 0, y: e.clientY ?? 0 };
-  };
+  const onPointerDown = (e) => { down.current = { x: e.clientX ?? 0, y: e.clientY ?? 0 }; };
   const onClick = (e) => {
     const dx = Math.abs((e.clientX ?? 0) - down.current.x);
     const dy = Math.abs((e.clientY ?? 0) - down.current.y);
-    if (dx > 8 || dy > 8) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
+    if (dx > 8 || dy > 8) { e.preventDefault(); e.stopPropagation(); return; }
     if (item?.model) navigate(`/products/${item.model}`);
   };
 
   return (
     <div
+      ref={tileRef}
       role="link"
       tabIndex={0}
       aria-label={title}
@@ -70,47 +63,75 @@ const ProductTile = ({ item }) => {
       onClick={onClick}
       onKeyDown={(e) => {
         if ((e.key === "Enter" || e.key === " ") && item?.model) {
-          e.preventDefault();
-          navigate(`/products/${item.model}`);
+          e.preventDefault(); navigate(`/products/${item.model}`);
         }
       }}
-      className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-safety-border bg-white shadow-sm transition duration-500 hover:-translate-y-1.5 hover:border-safety-red/40 hover:shadow-[0_24px_60px_-20px_rgba(185,28,28,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-safety-red focus-visible:ring-offset-2"
+      className="product-tile group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_60px_rgba(27,58,138,0.2)] focus:outline-none"
+      style={{ border: "1px solid rgba(27,58,138,0.1)" }}
     >
-      <div className="absolute inset-x-0 top-0 z-10 h-1 origin-left scale-x-0 bg-gradient-to-r from-safety-red to-safety-amber transition-transform duration-500 group-hover:scale-x-100" />
-      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-safety-surface via-white to-safety-surface p-5">
+      {/* Top progress bar on hover */}
+      <div
+        className="absolute inset-x-0 top-0 z-10 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+        style={{ background: `linear-gradient(90deg, ${NAVY}, ${GOLD})` }}
+      />
+
+      {/* Image area */}
+      <div
+        className="relative aspect-[4/3] overflow-hidden p-5"
+        style={{ background: "linear-gradient(135deg, #f0f4ff 0%, #ffffff 60%, #fffbef 100%)" }}
+      >
         <img
           src={getImage(item)}
           alt={title}
-          className="h-full w-full object-contain transition duration-[800ms] ease-out group-hover:scale-[1.12] group-hover:-rotate-1"
+          className="h-full w-full object-contain transition-all duration-700 group-hover:scale-110"
           loading="lazy"
-          onError={(event) => {
-            event.currentTarget.src = fallbackProduct;
-          }}
+          onError={(e) => { e.currentTarget.src = fallbackProduct; }}
         />
-        <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.55),transparent)] transition-transform duration-700 ease-out group-hover:translate-x-full" />
+        {/* Shimmer shine on hover */}
+        <span className="pointer-events-none absolute inset-0 -translate-x-full bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.6),transparent)] transition-transform duration-700 ease-out group-hover:translate-x-full" />
+
+        {/* Category badge */}
         {item?.category && (
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/60 bg-white/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-safety-red shadow-sm backdrop-blur-md">
-            <FontAwesomeIcon icon={faShieldHalved} className="text-[9px]" />
+          <span
+            className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white shadow-sm"
+            style={{ background: NAVY }}
+          >
+            <FontAwesomeIcon icon={faMountain} className="text-[9px]" style={{ color: GOLD }} />
             {capitalizeWords(item.category)}
           </span>
         )}
-        <span className="absolute bottom-3 right-3 grid h-10 w-10 translate-y-3 place-items-center rounded-full bg-safety-red text-white opacity-0 shadow-lg transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+
+        {/* Arrow button reveal */}
+        <span
+          className="absolute bottom-3 right-3 grid h-10 w-10 translate-y-3 place-items-center rounded-full text-white opacity-0 shadow-lg transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100"
+          style={{ background: `linear-gradient(135deg, ${NAVY}, #2a50b8)` }}
+        >
           <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
         </span>
       </div>
+
+      {/* Content */}
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="line-clamp-2 min-h-12 text-base font-extrabold leading-6 tracking-tight text-safety-ink transition-colors duration-300 group-hover:text-safety-red md:text-lg">
+        <h3
+          className="line-clamp-2 min-h-12 text-base font-extrabold leading-6 tracking-tight text-safety-ink transition-colors duration-300 group-hover:text-safety-red md:text-lg"
+        >
           {title}
         </h3>
         <div className="mt-auto flex items-center justify-between gap-2 pt-3">
           {sku ? (
-            <span className="inline-flex items-center rounded-md bg-safety-surface px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider text-safety-muted">
+            <span
+              className="inline-flex items-center rounded-lg px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider"
+              style={{ background: "rgba(27,58,138,0.06)", color: NAVY }}
+            >
               {sku}
             </span>
           ) : (
             <span />
           )}
-          <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-[0.14em] text-safety-muted transition-colors duration-300 group-hover:text-safety-red">
+          <span
+            className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-[0.14em] transition-colors duration-300 group-hover:text-safety-red"
+            style={{ color: "rgba(27,58,138,0.5)" }}
+          >
             View
             <FontAwesomeIcon icon={faArrowRight} className="text-[10px] transition-transform duration-300 group-hover:translate-x-1" />
           </span>
@@ -122,52 +143,70 @@ const ProductTile = ({ item }) => {
 
 const CategoryPill = ({ item }) => {
   const className =
-    "group flex items-center gap-3 rounded-xl border border-safety-border bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:border-safety-red/40 hover:shadow-md";
+    "group flex items-center gap-3 rounded-xl border bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md";
+  const style = { borderColor: "rgba(27,58,138,0.12)" };
   const content = (
     <>
-    <img
-      src={getImage(item)}
-      alt={item?.label || item?.name || "SafetyPlus category"}
-      className="h-12 w-12 rounded-md bg-safety-surface object-cover"
-      loading="lazy"
-      onError={(event) => {
-        event.currentTarget.src = fallbackProduct;
-      }}
-    />
-    <span className="min-w-0 flex-1">
-      <span className="block truncate text-sm font-extrabold text-safety-ink group-hover:text-safety-red">
-        {capitalizeWords(item?.label || item?.name) || "Category"}
+      <img
+        src={getImage(item)}
+        alt={item?.label || item?.name || "Product category"}
+        className="h-12 w-12 rounded-lg object-cover"
+        loading="lazy"
+        onError={(e) => { e.currentTarget.src = fallbackProduct; }}
+      />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-extrabold text-safety-ink group-hover:text-safety-red">
+          {capitalizeWords(item?.label || item?.name) || "Category"}
+        </span>
+        <span className="block text-xs text-safety-muted">Browse products</span>
       </span>
-      <span className="block text-xs text-safety-muted">Browse line</span>
-    </span>
-    <FontAwesomeIcon
-      icon={faArrowRight}
-      className="text-xs text-safety-muted transition-transform group-hover:translate-x-0.5 group-hover:text-safety-red"
-    />
+      <FontAwesomeIcon
+        icon={faArrowRight}
+        className="text-xs text-safety-muted transition-transform group-hover:translate-x-0.5 group-hover:text-safety-red"
+      />
     </>
   );
 
   return isExternalCategory(item) ? (
-    <a href={getCategoryHref(item)} className={className}>
-      {content}
-    </a>
+    <a href={getCategoryHref(item)} className={className} style={style}>{content}</a>
   ) : (
-    <Link to={getCategoryHref(item)} className={className}>
-      {content}
-    </Link>
+    <Link to={getCategoryHref(item)} className={className} style={style}>{content}</Link>
   );
 };
 
 export default function ProductsCarousel() {
   const { products = [], categories = [] } = useOutletContext();
-  // Show ALL products — the carousel handles any count gracefully.
   const featuredProducts = useMemo(() => products || [], [products]);
   const featuredCategories = useMemo(() => getCategoryList(categories), [categories]);
   const sliderRef = useRef(null);
   const sectionRef = useRef(null);
+  const headingRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slidesToShow, setSlidesToShow] = useState(4);
   const [inView, setInView] = useState(true);
+
+  // GSAP scroll reveal for heading
+  useEffect(() => {
+    if (!headingRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        headingRef.current.children,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: "top 85%",
+          },
+        }
+      );
+    });
+    return () => ctx.revert();
+  }, []);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -203,8 +242,6 @@ export default function ProductsCarousel() {
   }, []);
 
   const count = featuredProducts.length;
-  // Never request more slides than exist — that's what hid the last 2–3 products
-  // and left blank gaps. Clamp every breakpoint to the real product count.
   const clamp = (n) => Math.max(1, Math.min(n, count));
   const visible = clamp(slidesToShow);
   const totalDots = Math.max(1, count - visible + 1);
@@ -237,16 +274,26 @@ export default function ProductsCarousel() {
   };
 
   return (
-    <section ref={sectionRef} className="section-page bg-gradient-to-b from-safety-surface via-white to-safety-surface">
+    <section ref={sectionRef} className="section-page" style={{ background: "linear-gradient(to bottom, #f8f9fe, #ffffff, #f8f9fe)" }}>
       <div className="container-page">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+
+        {/* Heading */}
+        <div ref={headingRef} className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
-            <p className="eyebrow">SafetyPlus Products</p>
-            <h2 className="heading-lg mt-3 text-balance">
-              Engineered safety, curated for serious projects.
+            <p
+              className="text-[11px] font-bold uppercase tracking-[0.25em]"
+              style={{ color: GOLD }}
+            >
+              Premium Aggregates
+            </p>
+            <h2
+              className="mt-3 text-[clamp(26px,4vw,44px)] font-black leading-tight tracking-tight"
+              style={{ color: "#0d1a36" }}
+            >
+              Quality Materials for Every Build
             </h2>
-            <p className="body-lead mt-4">
-              Browse featured fire & industrial safety lines. Swipe, tap, or drag — built smooth on every device.
+            <p className="mt-4 text-[15px] leading-7 text-gray-500">
+              From fine river sand to large boulders — every grade, precision-sourced and delivered across Chattogram.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
@@ -255,7 +302,9 @@ export default function ProductsCarousel() {
               onClick={() => sliderRef.current?.slickPrev()}
               aria-label="Previous products"
               disabled={featuredProducts.length <= visible}
-              className="grid h-12 w-12 place-items-center rounded-full border border-safety-border bg-white text-safety-ink shadow-sm transition hover:-translate-y-0.5 hover:border-safety-red hover:text-safety-red disabled:cursor-not-allowed disabled:opacity-40"
+              className="grid h-12 w-12 place-items-center rounded-full border border-safety-border bg-white text-safety-ink shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = NAVY; e.currentTarget.style.color = NAVY; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = ""; e.currentTarget.style.color = ""; }}
             >
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
@@ -264,19 +313,27 @@ export default function ProductsCarousel() {
               onClick={() => sliderRef.current?.slickNext()}
               aria-label="Next products"
               disabled={featuredProducts.length <= visible}
-              className="grid h-12 w-12 place-items-center rounded-full bg-safety-red text-white shadow-md transition hover:-translate-y-0.5 hover:bg-safety-red-dark disabled:cursor-not-allowed disabled:opacity-40"
+              className="grid h-12 w-12 place-items-center rounded-full text-white shadow-md transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+              style={{ background: `linear-gradient(135deg, ${NAVY}, #2a50b8)` }}
             >
               <FontAwesomeIcon icon={faChevronRight} />
             </button>
-            <Link to="/all-products" className="btn-brand-outline self-start md:self-auto">
+            <Link
+              to="/all-products"
+              className="inline-flex items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-sm font-bold transition-all duration-300"
+              style={{ borderColor: NAVY, color: NAVY }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = "white"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = ""; e.currentTarget.style.color = NAVY; }}
+            >
               View All
-              <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-xs" />
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
             </Link>
           </div>
         </div>
 
+        {/* Carousel or fallback */}
         {featuredProducts.length > 0 ? (
-          <div className="mt-10 safety-products-carousel">
+          <div className="mt-10 inq-products-carousel">
             <Slider
               ref={sliderRef}
               {...sliderSettings}
@@ -292,15 +349,15 @@ export default function ProductsCarousel() {
             {totalDots > 1 && (
               <div className="mt-8 flex items-center justify-center gap-4">
                 <span className="text-xs font-bold tabular-nums text-safety-muted">
-                  <span className="text-safety-red">{String(safeCurrent + 1).padStart(2, "0")}</span>
+                  <span style={{ color: NAVY }}>{String(safeCurrent + 1).padStart(2, "0")}</span>
                   <span className="mx-1 text-safety-border">/</span>
                   {String(totalDots).padStart(2, "0")}
                 </span>
-                {/* Modern sliding position track — thumb glides to current page */}
-                <div className="relative h-1 w-44 overflow-hidden rounded-full bg-safety-border/70 sm:w-64">
+                <div className="relative h-1 w-44 overflow-hidden rounded-full sm:w-64" style={{ background: "rgba(27,58,138,0.1)" }}>
                   <span
-                    className="absolute top-0 h-full rounded-full bg-gradient-to-r from-safety-red to-safety-amber transition-all duration-500 ease-out"
+                    className="absolute top-0 h-full rounded-full transition-all duration-500 ease-out"
                     style={{
+                      background: `linear-gradient(90deg, ${NAVY}, ${GOLD})`,
                       width: `${100 / totalDots}%`,
                       left: `${(safeCurrent / totalDots) * 100}%`,
                     }}
@@ -311,30 +368,51 @@ export default function ProductsCarousel() {
           </div>
         ) : (
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {plannedLines.map((item) => (
-              <div key={item.title} className="card-surface p-5">
-                <span className="grid h-12 w-12 place-items-center rounded-md bg-red-50 text-safety-red">
+            {FALLBACK_LINES.map((item) => (
+              <div
+                key={item.title}
+                className="group overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                style={{ border: "1px solid rgba(27,58,138,0.1)" }}
+              >
+                <div
+                  className="grid h-14 w-14 place-items-center rounded-2xl text-xl"
+                  style={{ background: `${item.color}18`, color: item.color }}
+                >
                   <FontAwesomeIcon icon={item.icon} />
-                </span>
-                <h3 className="mt-5 text-xl font-extrabold text-safety-ink">{item.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-safety-muted">
-                  This SafetyPlus product line is ready to be populated from the dashboard.
+                </div>
+                <h3 className="mt-5 text-lg font-extrabold text-safety-ink">{item.title}</h3>
+                <p className="mt-1 text-sm font-semibold" style={{ color: GOLD }}>{item.sub}</p>
+                <p className="mt-3 text-sm leading-6 text-gray-500">
+                  Premium quality aggregate — add products from the dashboard to see them here.
                 </p>
               </div>
             ))}
           </div>
         )}
 
+        {/* Categories browser */}
         {featuredCategories.length > 0 && (
-          <div className="mt-12 rounded-2xl border border-safety-border bg-white p-5 shadow-sm sm:p-6">
+          <div
+            className="mt-12 overflow-hidden rounded-2xl bg-white p-5 shadow-sm sm:p-6"
+            style={{ border: "1px solid rgba(27,58,138,0.1)" }}
+          >
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="eyebrow">Browse by Category</p>
+                <p
+                  className="text-[10px] font-bold uppercase tracking-[0.22em]"
+                  style={{ color: GOLD }}
+                >
+                  Browse by Category
+                </p>
                 <h3 className="mt-2 text-2xl font-black text-safety-ink">
-                  Find the right safety line faster.
+                  Find the right aggregate faster.
                 </h3>
               </div>
-              <Link to="/all-products" className="text-sm font-extrabold text-safety-red">
+              <Link
+                to="/all-products"
+                className="text-sm font-extrabold transition"
+                style={{ color: NAVY }}
+              >
                 Complete catalogue →
               </Link>
             </div>
@@ -348,14 +426,11 @@ export default function ProductsCarousel() {
       </div>
 
       <style>{`
-        .safety-products-carousel .slick-list { padding: 4px 0 12px !important; }
-        .safety-products-carousel .slick-track { display: flex; }
-        @keyframes carouselDotFill {
-          from { transform: translateX(-100%); }
-          to { transform: translateX(0); }
-        }
-        .safety-products-carousel .slick-slide { height: auto; }
-        .safety-products-carousel .slick-slide > div { height: 100%; }
+        .inq-products-carousel .slick-list { padding: 4px 0 12px !important; }
+        .inq-products-carousel .slick-track { display: flex; }
+        .inq-products-carousel .slick-slide { height: auto; }
+        .inq-products-carousel .slick-slide > div { height: 100%; }
+        .product-tile { will-change: transform; }
       `}</style>
     </section>
   );

@@ -6,7 +6,7 @@ import {
   faBars,
   faChevronDown,
   faPenToSquare,
-  faShieldHalved,
+  faMountain,
 } from "@fortawesome/free-solid-svg-icons";
 import { capitalizeWords } from "../Functions/functions";
 import { useSelector } from "react-redux";
@@ -140,21 +140,22 @@ export const Navbar = ({ categories = [] }) => {
               type="button"
               className="group relative flex min-w-0 items-center gap-3"
               onClick={() => navigate("/")}
-              aria-label="Go to SafetyPlus home"
+              aria-label="Go to Kawsar Anher home"
             >
               <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-md border border-safety-border bg-white shadow-sm">
-                {logo ? (
-                  <img src={logo} alt="SafetyPlus logo" className="h-9 w-9 object-contain" />
-                ) : (
-                  <span className="h-7 w-7 animate-pulse rounded bg-safety-surface" />
-                )}
+                <img
+                  src={logo || "/inqcorpLogo.jpeg"}
+                  alt="Kawsar Anher logo"
+                  className="h-9 w-9 object-contain"
+                  onError={(e) => { e.currentTarget.src = "/inqcorpLogo.jpeg"; }}
+                />
               </span>
               <span className="hidden min-w-0 text-left sm:block">
                 <span className="block text-base font-extrabold leading-5 tracking-tight text-safety-ink">
-                  SafetyPlus
+                  Kawsar Anher
                 </span>
                 <span className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-safety-muted">
-                  Fire Safety
+                  Inqilab Trading Corporation
                 </span>
               </span>
 
@@ -234,13 +235,13 @@ export const Navbar = ({ categories = [] }) => {
                     <div className="flex items-center justify-between border-b border-safety-border/70 bg-gradient-to-r from-safety-surface to-white px-6 py-4">
                       <div>
                         <p className="eyebrow flex items-center gap-2">
-                          <FontAwesomeIcon icon={faShieldHalved} />
+                          <FontAwesomeIcon icon={faMountain} />
                           Product Categories
                         </p>
                         <p className="mt-1 text-sm text-safety-muted">
                           {productPreview.length > 0
-                            ? `${productPreview.length} curated safety lines`
-                            : "Lines populate from the dashboard"}
+                            ? `${productPreview.length} aggregate product lines`
+                            : "Categories populate from the dashboard"}
                         </p>
                       </div>
                       <button
@@ -262,14 +263,14 @@ export const Navbar = ({ categories = [] }) => {
                           <button
                             type="button"
                             key={item?._id || item?.name}
-                            className="group flex items-center gap-3 rounded-xl border border-transparent p-2.5 text-left transition duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:border-safety-red/30 hover:bg-red-50"
+                            className="group flex items-center gap-3 rounded-xl border border-transparent p-2.5 text-left transition duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:border-safety-red/30 hover:bg-blue-50"
                             onClick={() => goToCategory(item)}
                           >
                             <img
                               loading="lazy"
                               src={getCategoryImage(item)}
                               className="h-12 w-12 shrink-0 rounded-md border border-safety-border bg-white object-cover transition duration-300 group-hover:scale-105"
-                              alt={item?.name || "SafetyPlus category"}
+                              alt={item?.name || "Kawsar Anher product"}
                             />
                             <span className="min-w-0 flex-1">
                               <span className="block truncate text-sm font-bold text-safety-ink group-hover:text-safety-red">
