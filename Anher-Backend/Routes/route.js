@@ -1,7 +1,7 @@
 
 
 const express = require('express')
-const { getProducts, addProduct, deleteProduct, getCategories, addCategory, deleteCategory, updateProduct, updateCategory, downloadPdfFiles, getLogo, pdfUpload, uploadBanner, getBanners, deleteBanner, updateBanner, AddBlog, getBlogs, deleteBlog, addService, getServices, updateService, deleteService, businessProducts, addCertificate, deleteCertificate, getCertificate, addCountry, getCountry, deleteCountry, addCatalogue, getCatalogues, deleteCatalogue } = require('../Controller/Controller')
+const { seedDatabase, getProducts, addProduct, deleteProduct, getCategories, addCategory, deleteCategory, updateProduct, updateCategory, downloadPdfFiles, getLogo, pdfUpload, uploadBanner, getBanners, deleteBanner, updateBanner, AddBlog, getBlogs, deleteBlog, addService, getServices, updateService, deleteService, businessProducts, addCertificate, deleteCertificate, getCertificate, addCountry, getCountry, deleteCountry, addCatalogue, getCatalogues, deleteCatalogue } = require('../Controller/Controller')
 const { register, login } = require('../Controller/AuthController')
 const router = express.Router()
 const multer = require('multer')
@@ -15,6 +15,9 @@ const upload = multer({ dest: 'uploads/' })
 router.get('/', (req, res) => {
     res.send('The Server Is Working')
 })
+
+// Seed default products & categories (safe — skips if data exists)
+router.get('/seed', seedDatabase)
 
 // ====== GET Routes ======
 router.get('/getProducts', getProducts)

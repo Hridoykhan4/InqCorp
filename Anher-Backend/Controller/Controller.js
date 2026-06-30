@@ -1152,6 +1152,41 @@ const deleteCatalogue = async (req, res) => {
 };
 
 
+// ── Seed: insert default categories + products if DB is empty ─────────────────
+const seedDatabase = async (req, res) => {
+    try {
+        const existingProducts = await Products.countDocuments();
+        const existingCategories = await Categories.countDocuments();
+        if (existingProducts > 0 || existingCategories > 0) {
+            return res.send({ message: 'Database already has data — seed skipped.', products: existingProducts, categories: existingCategories });
+        }
+
+        const IMG = (label) => [`https://placehold.co/600x400/1B3A8A/C49B2B?text=${encodeURIComponent(label)}`];
+
+        const cats = await Categories.insertMany([
+            { name: 'Sand', imageUrl: IMG('Sand'), bannerImgUrl: IMG('Premium Sand') },
+            { name: 'Stone Chips', imageUrl: IMG('Stone Chips'), bannerImgUrl: IMG('Stone Chips') },
+            { name: 'Boulder', imageUrl: IMG('Boulder'), bannerImgUrl: IMG('Boulder') },
+        ]);
+
+        await Products.insertMany([
+            { model: 'FINE-SAND-001', name: 'Fine Sand', category: 'Sand', description: 'Premium fine river sand (0.063–1mm) ideal for plastering, mortar, and fine concrete mixes. Sourced from quality river beds and precision-sieved.', imageUrl: IMG('Fine Sand'), parameter: [{ size: '0.063–1mm' }, { price: '৳65/CFT' }, { use: 'Plastering & Mortar' }] },
+            { model: 'MED-SAND-001', name: 'Medium Sand', category: 'Sand', description: 'General-purpose medium sand (1–2mm) for concrete mixing, block-work, and road sub-base. Consistent grading for reliable mix ratios.', imageUrl: IMG('Medium Sand'), parameter: [{ size: '1–2mm' }, { price: '৳60/CFT' }, { use: 'Concrete Mixing' }] },
+            { model: 'COARSE-SAND-001', name: 'Coarse Sand', category: 'Sand', description: 'Coarse river sand (2–4.75mm) for structural concrete, RCC columns, and foundation work. High bearing capacity and clean grading.', imageUrl: IMG('Coarse Sand'), parameter: [{ size: '2–4.75mm' }, { price: '৳55/CFT' }, { use: 'Structural Concrete' }] },
+            { model: 'SC-5-10-001', name: 'Stone Chips 5–10mm', category: 'Stone Chips', description: 'Fine crushed stone chips (5–10mm) for road base, lightweight concrete slabs, and drainage layers. Hard, angular, and durable.', imageUrl: IMG('Stone Chips 5-10mm'), parameter: [{ size: '5–10mm' }, { price: '৳85/CFT' }, { use: 'Road Base & Drainage' }] },
+            { model: 'SC-10-20-001', name: 'Stone Chips 10–20mm', category: 'Stone Chips', description: 'Standard stone chips (10–20mm) for RCC work, columns, beams, and slab construction. Meets BNBC structural aggregate specifications.', imageUrl: IMG('Stone Chips 10-20mm'), parameter: [{ size: '10–20mm' }, { price: '৳95/CFT' }, { use: 'RCC & Structural' }] },
+            { model: 'SC-20-40-001', name: 'Stone Chips 20–40mm', category: 'Stone Chips', description: 'Heavy aggregate (20–40mm) for mass concrete, bridge foundations, and large infrastructure works.', imageUrl: IMG('Stone Chips 20-40mm'), parameter: [{ size: '20–40mm' }, { price: '৳105/CFT' }, { use: 'Mass Concrete' }] },
+            { model: 'BOULDER-001', name: 'Boulder / Pathor', category: 'Boulder', description: 'Large natural boulders (20mm+) for foundation work, retaining walls, embankment stabilization, and river bank protection.', imageUrl: IMG('Boulder Pathor'), parameter: [{ size: '20mm+' }, { price: '৳120/CFT' }, { use: 'Foundation & Retaining' }] },
+            { model: 'FILL-SAND-001', name: 'Fill Sand', category: 'Sand', description: 'Economical fill sand for earthwork, backfilling, and sub-base levelling on construction sites.', imageUrl: IMG('Fill Sand'), parameter: [{ size: 'Mixed' }, { price: '৳45/CFT' }, { use: 'Backfill & Earthwork' }] },
+        ]);
+
+        const products = await Products.countDocuments();
+        return res.send({ message: `Seed complete — ${cats.length} categories, ${products} products inserted.` });
+    } catch (error) {
+        return res.status(500).send({ message: error.message });
+    }
+};
+
 module.exports = {
-    deleteCertificate, deleteCountry, addCountry, addCertificate, getCountry, businessProducts, deleteService, updateService, getServices, addService, deleteBlog, getBlogs, AddBlog, deleteBanner, updateBanner, uploadBanner, getBanners, pdfUpload, getLogo, downloadPdfFiles, getProducts, addProduct, deleteProduct, getCategories, getCertificate, addCategory, deleteCategory, updateProduct, updateCategory, addCatalogue, getCatalogues, deleteCatalogue
+    seedDatabase, deleteCertificate, deleteCountry, addCountry, addCertificate, getCountry, businessProducts, deleteService, updateService, getServices, addService, deleteBlog, getBlogs, AddBlog, deleteBanner, updateBanner, uploadBanner, getBanners, pdfUpload, getLogo, downloadPdfFiles, getProducts, addProduct, deleteProduct, getCategories, getCertificate, addCategory, deleteCategory, updateProduct, updateCategory, addCatalogue, getCatalogues, deleteCatalogue
 }

@@ -9,13 +9,9 @@ import {
   faAward,
   faHandshake,
   faCheckCircle,
-  faQuoteLeft,
   faLocationDot,
   faPhone,
   faEnvelope,
-  faBriefcase,
-  faGraduationCap,
-  faBuilding,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import gsap from "gsap";
@@ -29,7 +25,7 @@ const GOLD = "#C49B2B";
 
 const STATS = [
   { value: "500+", label: "Projects Delivered", icon: faAward },
-  { value: "10+", label: "Years of Excellence", icon: faBriefcase },
+  { value: "10+", label: "Years of Excellence", icon: faAward },
   { value: "6", label: "Product Variants", icon: faMountain },
   { value: "100%", label: "Quality Assured", icon: faCheckCircle },
 ];
@@ -222,101 +218,7 @@ export const About = () => {
         </div>
       </section>
 
-      {/* ── FOUNDER / CEO ─────────────────────────────────────────────────── */}
-      <section className="py-20">
-        <div className="container mx-auto px-4 sm:px-8 lg:px-12">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Photo */}
-            <div className="relative flex justify-center">
-              <div
-                className="relative overflow-hidden rounded-3xl shadow-2xl"
-                style={{ border: `4px solid ${GOLD}`, maxWidth: 420 }}
-              >
-                <img
-                  src="/kawsar-alam.jpg"
-                  alt="Kawsar Alam — Founder & CEO, Inqilab Trading Corporation"
-                  className="w-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                    e.currentTarget.parentElement.style.minHeight = "380px";
-                    e.currentTarget.parentElement.style.background = `linear-gradient(135deg, ${NAVY}, #0d1f4a)`;
-                    e.currentTarget.parentElement.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:380px;font-size:80px;font-weight:900;color:${GOLD};font-family:serif;">KA</div>`;
-                  }}
-                />
-                {/* Gold overlay label */}
-                <div
-                  className="absolute bottom-0 inset-x-0 p-5"
-                  style={{ background: "linear-gradient(to top, rgba(5,13,31,0.9), transparent)" }}
-                >
-                  <p className="text-lg font-black text-white">Kawsar Alam</p>
-                  <p className="text-sm font-semibold" style={{ color: GOLD }}>Founder &amp; CEO</p>
-                </div>
-              </div>
-              {/* Gold dot accent */}
-              <div
-                className="absolute -right-3 -top-3 h-6 w-6 rounded-full"
-                style={{ background: GOLD }}
-              />
-              <div
-                className="absolute -bottom-3 -left-3 h-4 w-4 rounded-full opacity-60"
-                style={{ background: GOLD }}
-              />
-            </div>
-
-            {/* Content */}
-            <div>
-              <span
-                className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
-                style={{ background: `${NAVY}10`, color: NAVY }}
-              >
-                <FontAwesomeIcon icon={faBuilding} className="text-[10px]" />
-                Founder &amp; CEO — Inqilab Trading Corporation
-              </span>
-              <h2
-                className="mt-4 text-[clamp(28px,4vw,44px)] font-black leading-tight tracking-tight"
-                style={{ color: "#0d1a36" }}
-              >
-                Kawsar Alam
-              </h2>
-              <div className="mt-4 flex flex-wrap gap-4">
-                <span className="flex items-center gap-2 text-[13px] text-gray-500">
-                  <FontAwesomeIcon icon={faGraduationCap} style={{ color: GOLD }} />
-                  MBA in Accounting
-                </span>
-                <span className="flex items-center gap-2 text-[13px] text-gray-500">
-                  <FontAwesomeIcon icon={faBriefcase} style={{ color: GOLD }} />
-                  6+ Years Finance Experience
-                </span>
-              </div>
-              <div className="my-6 h-[2px] w-16 rounded-full" style={{ background: GOLD }} />
-              <p className="text-[15px] leading-8 text-gray-600">
-                A seasoned finance professional with an MBA in Accounting and over 6 years of
-                experience at Compliance BD Ltd., Kawsar Alam founded Inqilab Trading Corporation
-                with a singular vision: to supply Bangladesh's booming construction sector with
-                world-class aggregates — consistently, reliably, and on time.
-              </p>
-              <p className="mt-4 text-[15px] leading-8 text-gray-600">
-                Under his leadership, Inqilab Trading Corporation has grown from a Chattogram-based
-                startup to one of the region's most trusted names in sand and stone supply.
-              </p>
-              <blockquote
-                className="relative mt-7 rounded-2xl py-5 pl-6 pr-5"
-                style={{ background: `${NAVY}06`, borderLeft: `4px solid ${GOLD}` }}
-              >
-                <FontAwesomeIcon icon={faQuoteLeft} className="mb-2 text-lg" style={{ color: GOLD, opacity: 0.6 }} />
-                <p className="text-[15px] font-semibold italic leading-7" style={{ color: NAVY }}>
-                  "We don't just supply materials — we build the foundations of Bangladesh."
-                </p>
-                <span className="mt-2 block text-[12px] font-bold tracking-wide text-gray-400">
-                  — Kawsar Alam, Founder &amp; CEO
-                </span>
-              </blockquote>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TEAM ──────────────────────────────────────────────────────────── */}
+      {/* ── TEAM (CEO on top, managers below) ────────────────────────────── */}
       <TeamSection />
 
       {/* ── VALUES ────────────────────────────────────────────────────────── */}
