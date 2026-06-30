@@ -2,10 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY SafetyPlus-Backend/package*.json ./
+COPY Anher-Backend/package*.json ./
 RUN npm ci --omit=dev
 
-COPY SafetyPlus-Backend/ ./
+COPY Anher-Backend/ ./
 
 RUN mkdir -p uploads
 

@@ -7,13 +7,11 @@
 **/vercel.json
 **/uploads/*
 !**/uploads/.gitkeep
-**/Dockerfile
-**/.dockerignore
 **/dist
 **/dist-ssr
 **/*.log
 **/.DS_Store
 **/.vscode
 **/.idea
-SafetyPlus-Frontend
+Anher-Frontend
 Notes.txt
