@@ -6,15 +6,15 @@ export const Preloader = () => {
   const logo = useSelector((state) => state.hvac.logo);
   const [gone, setGone] = useState(false);
 
-  const rootRef      = useRef(null);
-  const leftRef      = useRef(null);
-  const rightRef     = useRef(null);
+  const rootRef = useRef(null);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
   const logoStageRef = useRef(null);
-  const logoImgRef   = useRef(null);
-  const strokeRef    = useRef(null);
-  const ringRef      = useRef(null);
-  const brandRef     = useRef(null);
-  const progFillRef  = useRef(null);
+  const logoImgRef = useRef(null);
+  const strokeRef = useRef(null);
+  const ringRef = useRef(null);
+  const brandRef = useRef(null);
+  const progFillRef = useRef(null);
   const progTrackRef = useRef(null);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const Preloader = () => {
   if (gone) return null;
 
   return (
-    <div ref={rootRef} className="pl-root" role="status" aria-label="Loading Kawsar Anher">
+    <div ref={rootRef} className="pl-root" role="status" aria-label="Loading ITC">
 
       <div ref={leftRef} className="pl-panel pl-panel--l" />
       <div ref={rightRef} className="pl-panel pl-panel--r" />
@@ -72,7 +72,7 @@ export const Preloader = () => {
           <img
             ref={logoImgRef}
             src={logo || "/inqcorpLogo.jpeg"}
-            alt="Kawsar Anher"
+            alt="ITC"
             className="pl-logo-img"
             decoding="async"
             fetchPriority="high"
@@ -82,7 +82,7 @@ export const Preloader = () => {
 
         <div ref={brandRef} className="pl-brand" style={{ opacity: 0 }}>
           <p className="pl-name">
-            Kawsar <span className="pl-gold">Anher</span>
+             <span className="pl-gold">ITC</span>
           </p>
           <p className="pl-tag">Build with Strength · Bangladesh</p>
         </div>

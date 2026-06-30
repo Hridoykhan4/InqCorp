@@ -117,10 +117,10 @@ export const About = () => {
   return (
     <div className="overflow-x-hidden bg-white">
       <SeoManager
-        title="About Kawsar Anher — Inqilab Trading Corporation, Chattogram"
-        description="Kawsar Anher (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — fine sand, stone chips, and boulders from Chattogram."
+        title="About ITC — Inqilab Trading Corporation, Chattogram"
+        description="ITC (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — fine sand, stone chips, and boulders from Chattogram."
         path="/about"
-        keywords="Kawsar Anher about, Inqilab Trading Corporation, sand supplier Chattogram, construction aggregate Bangladesh, Kawsar Alam CEO"
+        keywords="ITC about, Inqilab Trading Corporation, sand supplier Chattogram, construction aggregate Bangladesh, Kawsar Alam CEO"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Organization",

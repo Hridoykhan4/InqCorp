@@ -21,30 +21,30 @@ import {
 import { removeUser } from '../../Redux/hvac'
 
 // ─── Colour tokens ───────────────────────────────────────────────────────────
-const NAVY      = '#1B3A8A'
+const NAVY = '#1B3A8A'
 const NAVY_DARK = '#0F2257'
-const GOLD      = '#C49B2B'
+const GOLD = '#C49B2B'
 
 // ─── Nav items ───────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-    { to: '/dashboard',            label: 'Dashboard',  icon: faHouse,        exact: true },
-    { to: '/dashboard/categories', label: 'Categories', icon: faLayerGroup              },
-    { to: '/dashboard/products',   label: 'Products',   icon: faBoxesStacked            },
-    { to: '/dashboard/queries',    label: 'Queries',    icon: faMessage                 },
-    { to: '/dashboard/banners',    label: 'Banners',    icon: faPhotoFilm               },
-    { to: '/dashboard/blog',       label: 'Blog',       icon: faNewspaper               },
-    { to: '/dashboard/certificate',label: 'Certificate',icon: faAward                   },
-    { to: '/dashboard/catalogue',  label: 'Catalogues', icon: faBookOpen                },
-    { to: '/dashboard/country',    label: 'Country',    icon: faGlobe                   },
-    { to: '/dashboard/pricelist',  label: 'Price List', icon: faTag                     },
+    { to: '/dashboard', label: 'Dashboard', icon: faHouse, exact: true },
+    { to: '/dashboard/categories', label: 'Categories', icon: faLayerGroup },
+    { to: '/dashboard/products', label: 'Products', icon: faBoxesStacked },
+    { to: '/dashboard/queries', label: 'Queries', icon: faMessage },
+    { to: '/dashboard/banners', label: 'Banners', icon: faPhotoFilm },
+    { to: '/dashboard/blog', label: 'Blog', icon: faNewspaper },
+    { to: '/dashboard/certificate', label: 'Certificate', icon: faAward },
+    { to: '/dashboard/catalogue', label: 'Catalogues', icon: faBookOpen },
+    { to: '/dashboard/country', label: 'Country', icon: faGlobe },
+    { to: '/dashboard/pricelist', label: 'Price List', icon: faTag },
 ]
 
 // ─── Sidebar inner ────────────────────────────────────────────────────────────
 const SidebarInner = () => {
-    const location  = useLocation()
-    const dispatch  = useDispatch()
-    const navigate  = useNavigate()
-    const user      = useSelector((state) => state.hvac.users)
+    const location = useLocation()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const user = useSelector((state) => state.hvac.users)
 
     const isActive = (item) =>
         item.exact
@@ -89,13 +89,13 @@ const SidebarInner = () => {
                 >
                     <img
                         src="/inqcorpLogo.jpeg"
-                        alt="Kawsar Anher"
+                        alt="ITC"
                         className="h-14 w-14 rounded-full object-cover"
                     />
                 </div>
 
                 <h2 className="text-sm font-extrabold tracking-tight text-white">
-                    Kawsar Anher
+                    ITC
                 </h2>
                 <p
                     className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.28em]"

@@ -39,7 +39,7 @@ const reviewStructuredData = {
       reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
       author: { "@type": "Organization", name: "Al-Amin Builders" },
       reviewBody:
-        "Best aggregate supplier in Bangladesh. Kawsar Anher delivers consistent grading and competitive pricing — our go-to for all construction materials.",
+        "Best aggregate supplier in Bangladesh. ITC delivers consistent grading and competitive pricing — our go-to for all construction materials.",
     },
   ],
 };
@@ -102,9 +102,9 @@ export const Home = () => {
     <div className="overflow-x-clip bg-white">
       <SeoManager
         title="Premium Sand & Stone Supplier Bangladesh | Build with Strength"
-        description="Kawsar Anher (Inqilab Trading Corporation) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips & Boulder at competitive CFT prices."
+        description="ITC (Inqilab Trading Corporation) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips & Boulder at competitive CFT prices."
         path="/"
-        keywords="Kawsar Anher, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, fine sand Chattogram, coarse sand Bangladesh, boulder supplier, construction aggregate Bangladesh, building materials Chattogram, sand stone price Bangladesh"
+        keywords="ITC, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, fine sand Chattogram, coarse sand Bangladesh, boulder supplier, construction aggregate Bangladesh, building materials Chattogram, sand stone price Bangladesh"
         structuredData={[
           localBusinessStructuredData,
           websiteStructuredData,

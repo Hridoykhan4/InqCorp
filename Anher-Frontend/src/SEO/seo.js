@@ -1,17 +1,17 @@
 import { COMPANY, postalAddressSchema } from "./companyInfo";
 
 export const SEO_CONFIG = {
-  siteName: "Kawsar Anher",
-  siteUrl: (
-    import.meta.env.VITE_SITE_URL || "https://kawsaranher.com"
-  ).replace(/\/+$/, ""),
-  defaultTitle:
-    "Kawsar Anher | Premium Sand & Stone Supplier in Bangladesh",
-  titleSuffix: "Kawsar Anher",
+  siteName: "ITC",
+  siteUrl: (import.meta.env.VITE_SITE_URL || "https://kawsaranher.com").replace(
+    /\/+$/,
+    "",
+  ),
+  defaultTitle: "ITC | Premium Sand & Stone Supplier in Bangladesh",
+  titleSuffix: "ITC",
   defaultDescription:
-    "Kawsar Anher (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — Fine Sand, Medium Sand, Coarse Sand, Stone Chips, and Boulder from Chattogram.",
+    "ITC (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — Fine Sand, Medium Sand, Coarse Sand, Stone Chips, and Boulder from Chattogram.",
   defaultKeywords:
-    "Kawsar Anher, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, construction aggregate Chattogram, fine sand Bangladesh, coarse sand, boulder supplier, building materials Bangladesh, kawsaranher.com",
+    "ITC, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, construction aggregate Chattogram, fine sand Bangladesh, coarse sand, boulder supplier, building materials Bangladesh, kawsaranher.com",
   defaultImage: "/inqcorpLogo.jpeg",
   themeColor: "#1B3A8A",
   locale: "en_BD",
@@ -38,7 +38,10 @@ export const createTitle = (title) => {
 };
 
 export const stripHtml = (value = "") =>
-  value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 export const truncate = (value = "", limit = 160) =>
   value.length <= limit ? value : `${value.slice(0, limit - 1).trim()}…`;
@@ -48,7 +51,7 @@ export const organizationStructuredData = {
   "@type": "Organization",
   name: SEO_CONFIG.siteName,
   legalName: COMPANY.legalName,
-  alternateName: ["Inqilab Trading", "ITC Bangladesh", "Kawsar Anher Sand Stone"],
+  alternateName: ["Inqilab Trading", "ITC Bangladesh", "ITC Sand Stone"],
   url: SEO_CONFIG.siteUrl,
   email: COMPANY.email,
   telephone: COMPANY.phoneTel,

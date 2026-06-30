@@ -136,7 +136,7 @@ const Footer = ({ categories }) => {
                   {logo ? (
                     <img
                       src={logo}
-                      alt="Kawsar Anher logo"
+                      alt="ITC logo"
                       className="h-full w-full object-contain"
                     />
                   ) : (

@@ -49,7 +49,7 @@ export default function WhyChooseUs() {
           <div className="overflow-hidden rounded-2xl border border-safety-border bg-safety-surface p-3 shadow-xl">
             <img
               src={image}
-              alt="Kawsar Anher — premium construction aggregate supply in Bangladesh"
+              alt="ITC — premium construction aggregate supply in Bangladesh"
               className="aspect-[4/3] w-full rounded-xl object-cover"
             />
           </div>
@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
                 <FontAwesomeIcon icon={faMountain} className="text-safety-amber" />
               </span>
               <div>
-                <p className="text-lg font-black">Kawsar Anher</p>
+                <p className="text-lg font-black">ITC</p>
                 <p className="text-sm leading-5 text-white/70">
                   Build with Strength · Chattogram, Bangladesh
                 </p>
@@ -69,13 +69,13 @@ export default function WhyChooseUs() {
         </div>
 
         <div data-aos="fade-left" className="pt-8 lg:pt-0">
-          <p className="eyebrow">Why Choose Kawsar Anher</p>
+          <p className="eyebrow">Why Choose ITC</p>
           <h2 className="heading-lg mt-3 text-balance">
             The foundation your construction projects deserve.
           </h2>
           <p className="body-lead mt-5">
             Bangladesh's construction sector demands consistent quality, competitive
-            pricing, and reliable delivery. Kawsar Anher (Inqilab Trading Corporation)
+            pricing, and reliable delivery. ITC (Inqilab Trading Corporation)
             is built around exactly that — premium aggregates, zero compromise.
           </p>
 

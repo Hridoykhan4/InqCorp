@@ -18,7 +18,7 @@ const TESTIMONIALS = [
     rating: 5,
     initials: "RA",
     color: NAVY,
-    text: "We sourced Fine Sand and Stone Chips from Kawsar Anher for a large residential complex. Material quality was consistent, delivery was on time, and the CFT pricing was the best in Chattogram. Our go-to supplier.",
+    text: "We sourced Fine Sand and Stone Chips from ITC for a large residential complex. Material quality was consistent, delivery was on time, and the CFT pricing was the best in Chattogram. Our go-to supplier.",
   },
   {
     name: "Al-Amin Hossain",
@@ -38,7 +38,7 @@ const TESTIMONIALS = [
     rating: 5,
     initials: "KU",
     color: NAVY,
-    text: "We've been sourcing Stone Chips 10–20mm for three major road construction projects. Consistent grading, reliable delivery schedule, and transparent pricing. Kawsar Anher is now our preferred aggregate partner.",
+    text: "We've been sourcing Stone Chips 10–20mm for three major road construction projects. Consistent grading, reliable delivery schedule, and transparent pricing. ITC is now our preferred aggregate partner.",
   },
   {
     name: "Nasrin Begum",
@@ -58,7 +58,7 @@ const TESTIMONIALS = [
     rating: 5,
     initials: "JA",
     color: NAVY,
-    text: "Medium Sand quality from Kawsar Anher is excellent — no clay contamination, proper grading. We've now made them our sole sand supplier for all ongoing projects across Sylhet and Chattogram divisions.",
+    text: "Medium Sand quality from ITC is excellent — no clay contamination, proper grading. We've now made them our sole sand supplier for all ongoing projects across Sylhet and Chattogram divisions.",
   },
 ];
 

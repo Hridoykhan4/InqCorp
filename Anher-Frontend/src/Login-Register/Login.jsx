@@ -139,7 +139,7 @@ export const Login = () => {
                             className="text-4xl font-extrabold tracking-tight text-white"
                             style={{ letterSpacing: '-0.02em' }}
                         >
-                            Kawsar Anher
+                            ITC
                         </h1>
                         <p
                             className="mt-1 text-sm font-semibold uppercase tracking-widest"
@@ -203,7 +203,7 @@ export const Login = () => {
                         className="text-sm font-bold uppercase tracking-widest"
                         style={{ color: '#1B3A8A' }}
                     >
-                        Kawsar Anher
+                        ITC
                     </p>
                 </div>
 

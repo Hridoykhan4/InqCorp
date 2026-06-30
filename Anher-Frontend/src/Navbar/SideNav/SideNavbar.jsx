@@ -83,7 +83,7 @@ export const SideNavbar = ({ categories = [] }) => {
                   <img
                     src={logo || "/inqcorpLogo.jpeg"}
                     className="h-10 w-10 object-contain"
-                    alt="Kawsar Anher logo"
+                    alt="ITC logo"
                     onError={(e) => { e.currentTarget.src = "/inqcorpLogo.jpeg"; }}
                   />
                 </span>
@@ -92,7 +92,7 @@ export const SideNavbar = ({ categories = [] }) => {
                     className="block text-base font-extrabold leading-5 tracking-tight"
                     style={{ color: NAVY }}
                   >
-                    Kawsar Anher
+                    ITC
                   </span>
                   <span
                     className="block text-[10px] font-bold uppercase tracking-[0.2em]"
@@ -186,7 +186,7 @@ export const SideNavbar = ({ categories = [] }) => {
                       >
                         <img
                           src={getCategoryImage(item)}
-                          alt={item?.label || item?.name || "Kawsar Anher product"}
+                          alt={item?.label || item?.name || "ITC product"}
                           className="h-12 w-12 shrink-0 rounded-lg border border-safety-border object-cover"
                           loading="lazy"
                         />

@@ -140,19 +140,19 @@ export const Navbar = ({ categories = [] }) => {
               type="button"
               className="group relative flex min-w-0 items-center gap-3"
               onClick={() => navigate("/")}
-              aria-label="Go to Kawsar Anher home"
+              aria-label="Go to ITC home"
             >
               <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-md border border-safety-border bg-white shadow-sm">
                 <img
                   src={logo || "/inqcorpLogo.jpeg"}
-                  alt="Kawsar Anher logo"
+                  alt="ITC logo"
                   className="h-9 w-9 object-contain"
                   onError={(e) => { e.currentTarget.src = "/inqcorpLogo.jpeg"; }}
                 />
               </span>
               <span className="hidden min-w-0 text-left sm:block">
                 <span className="block text-base font-extrabold leading-5 tracking-tight text-safety-ink">
-                  Kawsar Anher
+                  ITC
                 </span>
                 <span className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-safety-muted">
                   Inqilab Trading Corporation
@@ -177,11 +177,10 @@ export const Navbar = ({ categories = [] }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`relative rounded-md px-4 py-2 text-sm font-semibold transition ${
-                  isActive(item.path)
+                className={`relative rounded-md px-4 py-2 text-sm font-semibold transition ${isActive(item.path)
                     ? "text-safety-red"
                     : "text-safety-muted hover:text-safety-ink"
-                }`}
+                  }`}
               >
                 {item.label}
                 {isActive(item.path) && (
@@ -197,13 +196,12 @@ export const Navbar = ({ categories = [] }) => {
               onMouseLeave={scheduleClose}
             >
               <div
-                className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${
-                  location.pathname.includes("product") ||
-                  location.pathname.includes("category") ||
-                  showProducts
+                className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${location.pathname.includes("product") ||
+                    location.pathname.includes("category") ||
+                    showProducts
                     ? "text-safety-red"
                     : "text-safety-muted hover:text-safety-ink"
-                }`}
+                  }`}
               >
                 <Link to="/all-products" onClick={() => setShowProducts(false)}>
                   Products
@@ -270,7 +268,7 @@ export const Navbar = ({ categories = [] }) => {
                               loading="lazy"
                               src={getCategoryImage(item)}
                               className="h-12 w-12 shrink-0 rounded-md border border-safety-border bg-white object-cover transition duration-300 group-hover:scale-105"
-                              alt={item?.name || "Kawsar Anher product"}
+                              alt={item?.name || "ITC product"}
                             />
                             <span className="min-w-0 flex-1">
                               <span className="block truncate text-sm font-bold text-safety-ink group-hover:text-safety-red">
@@ -300,11 +298,10 @@ export const Navbar = ({ categories = [] }) => {
             {admin && (
               <Link
                 to="/dashboard"
-                className={`rounded-md px-4 py-2 text-sm font-semibold transition ${
-                  isDashboard
+                className={`rounded-md px-4 py-2 text-sm font-semibold transition ${isDashboard
                     ? "bg-red-50 text-safety-red"
                     : "text-safety-muted hover:bg-safety-surface hover:text-safety-ink"
-                }`}
+                  }`}
               >
                 Dashboard
               </Link>

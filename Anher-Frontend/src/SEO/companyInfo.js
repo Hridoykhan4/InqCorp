@@ -1,5 +1,5 @@
 // =============================================================================
-// SINGLE SOURCE OF TRUTH — Kawsar Anher / Inqilab Trading Corporation
+// SINGLE SOURCE OF TRUTH — ITC / Inqilab Trading Corporation
 // Change here → updates entire website (SEO, footer, contact, schema, sitemap).
 // =============================================================================
 
@@ -25,7 +25,7 @@ const MAP_QUERY = encodeURIComponent(
 
 export const COMPANY = {
   // Branding
-  name: "Kawsar Anher",
+  name: "ITC",
   legalName: "Inqilab Trading Corporation",
   tagline: "Build with Strength",
   shortTagline: "Bangladesh's Premium Sand & Stone Supplier",
