@@ -54,8 +54,13 @@ export const ProductGallery = ({ item }) => {
 
     const closeLightbox = () => {
         setIsLightboxOpen(false)
-        document.body.style.overflow = 'unset'
+        document.body.style.overflow = ''
     }
+
+    // Always restore overflow on unmount (navigation away while lightbox open)
+    useEffect(() => {
+        return () => { document.body.style.overflow = '' }
+    }, [])
 
     // Keyboard navigation for lightbox
     useEffect(() => {

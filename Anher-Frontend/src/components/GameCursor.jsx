@@ -59,14 +59,14 @@ export const GameCursor = () => {
       });
     };
 
-    // Hover state: ring grows + tints
+    // Hover state: ring grows + switches to navy
     const onEnter = (e) => {
       if (!e.target.closest(INTERACTIVE)) return;
       isHovering.current = true;
       gsap.to(ring, {
         scale: 1.85,
-        borderColor: "rgba(239,68,68,0.9)",
-        backgroundColor: "rgba(239,68,68,0.08)",
+        borderColor: "rgba(27,58,138,0.95)",
+        backgroundColor: "rgba(27,58,138,0.12)",
         duration: 0.22,
         ease: "power2.out",
         overwrite: "auto",
@@ -84,7 +84,7 @@ export const GameCursor = () => {
       isHovering.current = false;
       gsap.to(ring, {
         scale: 1,
-        borderColor: "rgba(239,68,68,0.65)",
+        borderColor: "rgba(196,155,43,0.75)",
         backgroundColor: "transparent",
         duration: 0.25,
         ease: "back.out(2)",
@@ -166,19 +166,19 @@ export const GameCursor = () => {
           width: 38px;
           height: 38px;
           border-radius: 50%;
-          border: 1.5px solid rgba(239,68,68,.65);
+          border: 1.5px solid rgba(196,155,43,0.75);
           background: transparent;
           will-change: transform;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 0 8px rgba(239,68,68,.25), inset 0 0 8px rgba(239,68,68,.08);
+          box-shadow: 0 0 10px rgba(196,155,43,0.3), inset 0 0 8px rgba(196,155,43,0.08);
         }
 
         /* Crosshair arms — gap in center so dot is visible */
         .gc-cross {
           position: absolute;
-          background: rgba(239,68,68,.7);
+          background: rgba(196,155,43,0.8);
         }
         .gc-cross--h {
           width: 10px;
@@ -186,10 +186,10 @@ export const GameCursor = () => {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          box-shadow: -8px 0 0 rgba(239,68,68,.7), 8px 0 0 rgba(239,68,68,.7);
+          box-shadow: -8px 0 0 rgba(196,155,43,0.8), 8px 0 0 rgba(196,155,43,0.8);
           background: transparent;
-          border-left: 4px solid rgba(239,68,68,.7);
-          border-right: 4px solid rgba(239,68,68,.7);
+          border-left: 4px solid rgba(196,155,43,0.8);
+          border-right: 4px solid rgba(196,155,43,0.8);
         }
         .gc-cross--v {
           width: 1px;
@@ -198,22 +198,22 @@ export const GameCursor = () => {
           left: 50%;
           transform: translate(-50%, -50%);
           background: transparent;
-          border-top: 4px solid rgba(239,68,68,.7);
-          border-bottom: 4px solid rgba(239,68,68,.7);
+          border-top: 4px solid rgba(196,155,43,0.8);
+          border-bottom: 4px solid rgba(196,155,43,0.8);
         }
 
         .gc-dot {
           width: 5px;
           height: 5px;
           border-radius: 50%;
-          background: #ef4444;
-          box-shadow: 0 0 6px rgba(239,68,68,.9);
+          background: #C49B2B;
+          box-shadow: 0 0 8px rgba(196,155,43,0.95);
           will-change: transform;
         }
 
         .gc-trail {
           border-radius: 50%;
-          background: #ef4444;
+          background: #C49B2B;
           will-change: transform;
           mix-blend-mode: screen;
         }

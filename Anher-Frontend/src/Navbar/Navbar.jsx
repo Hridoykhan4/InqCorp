@@ -295,6 +295,19 @@ export const Navbar = ({ categories = [] }) => {
               )}
             </div>
 
+            <Link
+              to="/gallery"
+              className={`relative rounded-md px-4 py-2 text-sm font-semibold transition ${isActive("/gallery")
+                  ? "text-safety-red"
+                  : "text-safety-muted hover:text-safety-ink"
+                }`}
+            >
+              Gallery
+              {isActive("/gallery") && (
+                <span className="absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-safety-red" />
+              )}
+            </Link>
+
             {admin && (
               <Link
                 to="/dashboard"

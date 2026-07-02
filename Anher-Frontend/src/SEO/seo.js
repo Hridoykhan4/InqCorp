@@ -1,17 +1,17 @@
 import { COMPANY, postalAddressSchema } from "./companyInfo";
 
 export const SEO_CONFIG = {
-  siteName: "ITC",
+  siteName: "Inqilab Trading Corporation",
   siteUrl: (import.meta.env.VITE_SITE_URL || "https://kawsaranher.com").replace(
     /\/+$/,
     "",
   ),
-  defaultTitle: "ITC | Premium Sand & Stone Supplier in Bangladesh",
-  titleSuffix: "ITC",
+  defaultTitle: "Inqilab Trading Corporation (ITC) | Sand & Stone Supplier Chattogram Bangladesh",
+  titleSuffix: "Inqilab Trading Corporation",
   defaultDescription:
-    "ITC (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — Fine Sand, Medium Sand, Coarse Sand, Stone Chips, and Boulder from Chattogram.",
+    "Inqilab Trading Corporation (ITC) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips (5–20mm) & Boulder. Call +880 1718 427 703.",
   defaultKeywords:
-    "ITC, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, construction aggregate Chattogram, fine sand Bangladesh, coarse sand, boulder supplier, building materials Bangladesh, kawsaranher.com",
+    "inqilab, inqilab trading, inqilab trading corporation, inqilab bangladesh, ইনকিলাব ট্রেডিং, ITC, ITC bangladesh, kawsar anher, Kawsar Alam, sand supplier bangladesh, stone chips bangladesh, construction aggregate chattogram, fine sand chattogram, coarse sand bangladesh, boulder supplier, building materials chittagong, বালি সরবরাহকারী চট্টগ্রাম",
   defaultImage: "/inqcorpLogo.jpeg",
   themeColor: "#1B3A8A",
   locale: "en_BD",
@@ -49,21 +49,26 @@ export const truncate = (value = "", limit = 160) =>
 export const organizationStructuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: SEO_CONFIG.siteName,
+  name: "Inqilab Trading Corporation",
   legalName: COMPANY.legalName,
-  alternateName: ["Inqilab Trading", "ITC Bangladesh", "ITC Sand Stone"],
+  alternateName: ["Inqilab Trading", "ITC", "ITC Bangladesh", "Kawsar Anher", "ইনকিলাব ট্রেডিং কর্পোরেশন"],
   url: SEO_CONFIG.siteUrl,
   email: COMPANY.email,
   telephone: COMPANY.phoneTel,
   address: postalAddressSchema,
-  areaServed: "Bangladesh",
+  areaServed: ["Bangladesh", "Chattogram", "Chittagong"],
   image: getAbsoluteUrl(SEO_CONFIG.defaultImage),
+  logo: getAbsoluteUrl(SEO_CONFIG.defaultImage),
   foundingDate: "2020",
   founder: {
     "@type": "Person",
     name: COMPANY.ceo.name,
     jobTitle: COMPANY.ceo.title,
   },
+  sameAs: [
+    COMPANY.social.facebook,
+    SEO_CONFIG.siteUrl,
+  ],
 };
 
 export const localBusinessStructuredData = {

@@ -1,20 +1,21 @@
 {
-  "name": "SafetyPlus | Fire Safety Equipment Bangladesh",
-  "short_name": "SafetyPlus",
+  "name": "Inqilab Trading Corporation (ITC)",
+  "short_name": "ITC",
+  "description": "Bangladesh's trusted supplier of premium construction aggregates — Fine Sand, Stone Chips & Boulder from Chattogram.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#B91C1C",
+  "background_color": "#050d1f",
+  "theme_color": "#1B3A8A",
   "icons": [
     {
-      "src": "/Icon.png",
+      "src": "/inqcorpLogo.jpeg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/jpeg"
     },
     {
-      "src": "/Icon.png",
+      "src": "/inqcorpLogo.jpeg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }

@@ -18,7 +18,7 @@ import { COMPANY } from "../SEO/companyInfo";
 const reviewStructuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: SEO_CONFIG.siteName,
+  name: "Inqilab Trading Corporation",
   url: SEO_CONFIG.siteUrl,
   aggregateRating: {
     "@type": "AggregateRating",
@@ -101,10 +101,10 @@ export const Home = () => {
   return (
     <div className="overflow-x-clip bg-white">
       <SeoManager
-        title="Premium Sand & Stone Supplier Bangladesh | Build with Strength"
-        description="ITC (Inqilab Trading Corporation) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips & Boulder at competitive CFT prices."
+        title="Inqilab Trading Corporation (ITC) | Premium Sand & Stone Supplier Bangladesh"
+        description="Inqilab Trading Corporation (ITC) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips & Boulder at competitive CFT prices."
         path="/"
-        keywords="ITC, Inqilab Trading Corporation, sand supplier Bangladesh, stone chips Bangladesh, fine sand Chattogram, coarse sand Bangladesh, boulder supplier, construction aggregate Bangladesh, building materials Chattogram, sand stone price Bangladesh"
+        keywords="inqilab, inqilab trading corporation, ITC, Kawsar Anher, sand supplier Bangladesh, stone chips Bangladesh, fine sand Chattogram, coarse sand Bangladesh, boulder supplier bd, construction aggregate Bangladesh, building materials Chattogram, ইনকিলাব ট্রেডিং"
         structuredData={[
           localBusinessStructuredData,
           websiteStructuredData,

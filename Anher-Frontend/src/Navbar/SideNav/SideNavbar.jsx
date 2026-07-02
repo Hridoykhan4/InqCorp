@@ -219,11 +219,23 @@ export const SideNavbar = ({ categories = [] }) => {
               )}
             </div>
 
+            <button
+              type="button"
+              onClick={() => goTo("/gallery")}
+              className="mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition"
+              style={{ background: "rgba(196,155,43,0.06)", border: `1px solid rgba(196,155,43,0.2)` }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(196,155,43,0.12)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(196,155,43,0.06)"; }}
+            >
+              Gallery
+              <FontAwesomeIcon icon={faArrowRight} className="text-xs opacity-50" />
+            </button>
+
             {admin && (
               <button
                 type="button"
                 onClick={() => goTo("/dashboard")}
-                className="mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition"
+                className="mt-2 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition"
                 style={{ background: "rgba(27,58,138,0.05)", border: `1px solid rgba(27,58,138,0.12)` }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(27,58,138,0.1)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(27,58,138,0.05)"; }}

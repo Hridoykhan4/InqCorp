@@ -5,6 +5,7 @@ const { cloudinary } = require("../Cloudinary/cloudinary")
 const { Categories } = require("../Model/Categories")
 const { Products } = require("../Model/Prodcuts")
 const { PriceList } = require("../Model/PriceList")
+const { Gallery } = require("../Model/Gallery")
 const { Logo } = require("../Model/logo")
 const { Banners } = require("../Model/Banners")
 const { Blogs } = require("../Model/Blogs")
@@ -1153,6 +1154,42 @@ const deleteCatalogue = async (req, res) => {
 };
 
 
+// ── Gallery CRUD ──────────────────────────────────────────────────────────────
+const getGallery = async (req, res) => {
+    try {
+        const data = await Gallery.find({}).sort({ order: 1, createdAt: -1 }).lean()
+        res.send({ data })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+const addGalleryImages = async (req, res) => {
+    try {
+        const files = req.files
+        if (!files || !files.length) return res.status(400).send({ message: 'No images provided' })
+        const title = req.body.title || ''
+        const urls = await uploadImages(files)
+        const docs = urls.map((url) => new Gallery({ imageUrl: url, title }))
+        await Gallery.insertMany(docs)
+        const data = await Gallery.find({}).sort({ order: 1, createdAt: -1 }).lean()
+        res.send({ message: 'Images uploaded successfully', data })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
+const deleteGalleryImage = async (req, res) => {
+    try {
+        const { id } = req.body
+        await Gallery.deleteOne({ _id: id })
+        const data = await Gallery.find({}).sort({ order: 1, createdAt: -1 }).lean()
+        res.send({ message: 'Deleted successfully', data })
+    } catch (error) {
+        res.status(500).send({ message: error.message })
+    }
+}
+
 // ── PriceList CRUD ────────────────────────────────────────────────────────────
 const getPriceList = async (req, res) => {
     try {
@@ -1245,5 +1282,6 @@ const seedDatabase = async (req, res) => {
 
 module.exports = {
     seedDatabase, deleteCertificate, deleteCountry, addCountry, addCertificate, getCountry, businessProducts, deleteService, updateService, getServices, addService, deleteBlog, getBlogs, AddBlog, deleteBanner, updateBanner, uploadBanner, getBanners, pdfUpload, getLogo, downloadPdfFiles, getProducts, addProduct, deleteProduct, getCategories, getCertificate, addCategory, deleteCategory, updateProduct, updateCategory, addCatalogue, getCatalogues, deleteCatalogue,
-    getPriceList, addPriceItem, updatePriceItem, deletePriceItem
+    getPriceList, addPriceItem, updatePriceItem, deletePriceItem,
+    getGallery, addGalleryImages, deleteGalleryImage
 }

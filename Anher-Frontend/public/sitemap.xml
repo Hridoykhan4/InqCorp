@@ -1,38 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://safetyplusbd.com/</loc>
+    <loc>https://kawsaranher.com/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://safetyplusbd.com/about</loc>
+    <loc>https://kawsaranher.com/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://safetyplusbd.com/all-products</loc>
+    <loc>https://kawsaranher.com/all-products</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://safetyplusbd.com/catalogue</loc>
+    <loc>https://kawsaranher.com/catalogue</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://safetyplusbd.com/projects</loc>
+    <loc>https://kawsaranher.com/gallery</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://safetyplusbd.com/blog</loc>
-    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://safetyplusbd.com/contact</loc>
+    <loc>https://kawsaranher.com/contact</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
 </urlset>

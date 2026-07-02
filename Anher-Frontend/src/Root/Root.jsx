@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../Navbar/Navbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,8 +24,15 @@ import {
 import { COMPANY } from "../SEO/companyInfo";
 import { UpdateLogoModal } from "../Dashboard/Logo/UpdateLogoModal";
 import { Preloader } from "../Preloader/Preloader";
+import { GameCursor } from "../components/GameCursor";
 
 export const Root = () => {
+  const location = useLocation();
+
+  // Global safety: restore scroll whenever route changes
+  useEffect(() => {
+    document.body.style.overflow = "";
+  }, [location.pathname]);
   const [products, setProducts] = useState(null);
   const [categories, setCategories] = useState(null);
   const [queries, setQueries] = useState([]);
@@ -37,6 +44,7 @@ export const Root = () => {
   const [certificate, setCertificate] = useState(null);
   const [country, setCountry] = useState([]);
   const [priceList, setPriceList] = useState([]);
+  const [gallery, setGallery] = useState([]);
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.hvac.users);
   useEffect(() => {
@@ -66,6 +74,8 @@ export const Root = () => {
       setDashboardBanners,
       priceList,
       setPriceList,
+      gallery,
+      setGallery,
     }),
     [
       products,
@@ -79,6 +89,7 @@ export const Root = () => {
       country,
       dashboardBanners,
       priceList,
+      gallery,
     ]
   );
 
@@ -217,6 +228,11 @@ export const Root = () => {
       .get(`${import.meta.env.VITE_BACKEND_URL}/api/getPriceList`)
       .then((res) => setPriceList(res.data.data || []))
       .catch((err) => console.log(err));
+
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getGallery`)
+      .then((res) => setGallery(res.data.data || []))
+      .catch((err) => console.log(err));
   }, []);
   // eslint-disable-next-line no-unused-vars
   const handleToast = () => {
@@ -235,6 +251,7 @@ export const Root = () => {
 
   return (
     <div>
+      <GameCursor />
       <Preloader />
       <SeoManager
         structuredData={[organizationStructuredData, websiteStructuredData]}

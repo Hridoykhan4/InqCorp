@@ -2,8 +2,9 @@ import { urlConverter } from "../Functions/functions";
 
 export const MAIN_NAV_ITEMS = [
   { label: "Home", path: "/" },
-  { label: "About", path: "/about" },
+  { label: "About Us", path: "/about" },
   { label: "Catalogue", path: "/catalogue" },
+  // { label: "Gallery", path: "/gallery" },
   { label: "Contact", path: "/contact" },
 ];
 

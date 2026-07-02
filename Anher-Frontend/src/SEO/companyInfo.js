@@ -34,7 +34,7 @@ export const COMPANY = {
   phone: PHONE_DISPLAY,
   phoneTel: PHONE_TEL,
   email: "kawsar2nt1@gmail.com",
-  emails: ["kawsar2nt1@gmail.com", "info@kawsaranher.com"],
+  emails: ["kawsar2nt1@gmail.com", "info@inqilabtrading.com"],
 
   // CEO
   ceo: {

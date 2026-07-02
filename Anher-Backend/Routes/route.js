@@ -1,7 +1,7 @@
 
 
 const express = require('express')
-const { seedDatabase, getProducts, addProduct, deleteProduct, getCategories, addCategory, deleteCategory, updateProduct, updateCategory, downloadPdfFiles, getLogo, pdfUpload, uploadBanner, getBanners, deleteBanner, updateBanner, AddBlog, getBlogs, deleteBlog, addService, getServices, updateService, deleteService, businessProducts, addCertificate, deleteCertificate, getCertificate, addCountry, getCountry, deleteCountry, addCatalogue, getCatalogues, deleteCatalogue, getPriceList, addPriceItem, updatePriceItem, deletePriceItem } = require('../Controller/Controller')
+const { seedDatabase, getProducts, addProduct, deleteProduct, getCategories, addCategory, deleteCategory, updateProduct, updateCategory, downloadPdfFiles, getLogo, pdfUpload, uploadBanner, getBanners, deleteBanner, updateBanner, AddBlog, getBlogs, deleteBlog, addService, getServices, updateService, deleteService, businessProducts, addCertificate, deleteCertificate, getCertificate, addCountry, getCountry, deleteCountry, addCatalogue, getCatalogues, deleteCatalogue, getPriceList, addPriceItem, updatePriceItem, deletePriceItem, getGallery, addGalleryImages, deleteGalleryImage } = require('../Controller/Controller')
 const { register, login } = require('../Controller/AuthController')
 const router = express.Router()
 const multer = require('multer')
@@ -34,6 +34,7 @@ router.get('/getServices', getServices)
 router.get('/getBusinessProducts', businessProducts)
 router.get('/getCatalogues', getCatalogues)
 router.get('/getPriceList', getPriceList)
+router.get('/getGallery', getGallery)
 
 // ====== POST Routes ======
 router.post('/register', register)
@@ -61,6 +62,7 @@ router.post('/addCatalogue', upload.fields([
     { name: 'image' }
 ]), addCatalogue)
 router.post('/addPriceItem', upload.any(), addPriceItem)
+router.post('/addGalleryImages', upload.array('images', 20), addGalleryImages)
 // ====== PUT Routes ======
 router.put('/updateBanner/:id', upload.fields([{ name: 'images' }]), updateBanner)
 router.put('/updatePriceItem/:id', upload.any(), updatePriceItem)
@@ -81,6 +83,7 @@ router.delete('/deleteService', deleteService)
 router.delete('/deleteCertificate', deleteCertificate)
 router.delete('/deleteCatalogue/:id', deleteCatalogue)
 router.delete('/deletePriceItem', deletePriceItem)
+router.delete('/deleteGalleryImage', deleteGalleryImage)
 
 router.post('/del', async (req, res) => {
     try {
