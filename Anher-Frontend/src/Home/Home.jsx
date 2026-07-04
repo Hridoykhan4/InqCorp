@@ -1,10 +1,14 @@
+import { lazy, Suspense } from "react";
 import { HeroSection } from "../Hero/HeroSection";
-import WhyChooseUs from "../Why Choose Us/WhyChooseUs";
-import ProductsCarousel from "../Product Carousal/ProductCarousal";
-import TestimonialsSlider from "../Testimonial Slider/TestimonialSlider";
-import CompanyStats from "../Stats/CompanyStats";
-import CategoryShowcase from "../Category Showcase/CategoryShowcase";
 import { Reveal } from "../components/Reveal";
+
+// Below-the-fold sections — lazy chunks so the hero paints without waiting for
+// react-slick, ScrollTrigger, countup, etc.
+const WhyChooseUs = lazy(() => import("../Why Choose Us/WhyChooseUs"));
+const ProductsCarousel = lazy(() => import("../Product Carousal/ProductCarousal"));
+const TestimonialsSlider = lazy(() => import("../Testimonial Slider/TestimonialSlider"));
+const CompanyStats = lazy(() => import("../Stats/CompanyStats"));
+const CategoryShowcase = lazy(() => import("../Category Showcase/CategoryShowcase"));
 import { SeoManager } from "../SEO/SeoManager";
 import {
   getAbsoluteUrl,
@@ -14,35 +18,6 @@ import {
   organizationStructuredData,
 } from "../SEO/seo";
 import { COMPANY } from "../SEO/companyInfo";
-
-const reviewStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Inqilab Trading Corporation",
-  url: SEO_CONFIG.siteUrl,
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "4.9",
-    reviewCount: "87",
-    bestRating: "5",
-  },
-  review: [
-    {
-      "@type": "Review",
-      reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      author: { "@type": "Organization", name: "Rahim Construction Ltd." },
-      reviewBody:
-        "Premium Fine Sand and Stone Chips delivered on time. Material quality exceeded expectations for our residential project in Chattogram.",
-    },
-    {
-      "@type": "Review",
-      reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      author: { "@type": "Organization", name: "Al-Amin Builders" },
-      reviewBody:
-        "Best aggregate supplier in Bangladesh. ITC delivers consistent grading and competitive pricing — our go-to for all construction materials.",
-    },
-  ],
-};
 
 const productOfferSchema = {
   "@context": "https://schema.org",
@@ -109,30 +84,31 @@ export const Home = () => {
           localBusinessStructuredData,
           websiteStructuredData,
           organizationStructuredData,
-          reviewStructuredData,
           productOfferSchema,
         ]}
       />
 
       <HeroSection />
 
-      <Reveal variant="up">
-        <ProductsCarousel />
-      </Reveal>
+      <Suspense fallback={null}>
+        <Reveal variant="up">
+          <ProductsCarousel />
+        </Reveal>
 
-      <CategoryShowcase />
+        <CategoryShowcase />
 
-      <Reveal variant="scale">
-        <CompanyStats />
-      </Reveal>
+        <Reveal variant="scale">
+          <CompanyStats />
+        </Reveal>
 
-      <Reveal variant="up">
-        <WhyChooseUs />
-      </Reveal>
+        <Reveal variant="up">
+          <WhyChooseUs />
+        </Reveal>
 
-      <Reveal variant="up">
-        <TestimonialsSlider />
-      </Reveal>
+        <Reveal variant="up">
+          <TestimonialsSlider />
+        </Reveal>
+      </Suspense>
     </div>
   );
 };

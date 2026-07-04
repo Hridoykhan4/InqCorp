@@ -163,10 +163,12 @@ export const HeroSection = () => {
         <video
           className="h-full w-full object-cover"
           src="/hero-video.mp4"
+          poster="/hero-poster.jpg"
           autoPlay
           muted
           loop
           playsInline
+          preload="metadata"
         />
       </div>
 
@@ -182,7 +184,7 @@ export const HeroSection = () => {
 
             {/* Badge */}
             <div ref={badgeRef} style={{ opacity: 0 }}
-              className="inline-flex items-center gap-2 rounded-full border border-[#C49B2B]/30 bg-[#C49B2B]/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-[#C49B2B] backdrop-blur-sm"
+              className="inline-flex items-center gap-2 rounded-full border border-[#C49B2B]/30 bg-[#C49B2B]/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-[#C49B2B]"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#C49B2B] opacity-75" />
@@ -243,7 +245,7 @@ export const HeroSection = () => {
                 <span className="absolute inset-0 bg-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </button>
               <button type="button" onClick={() => navigate("/contact")}
-                className="inline-flex items-center gap-2.5 rounded-xl border border-white/15 px-7 py-[14px] text-sm font-bold text-white/75 backdrop-blur-sm transition-all duration-300 hover:border-[#C49B2B] hover:text-[#C49B2B] sm:text-base"
+                className="inline-flex items-center gap-2.5 rounded-xl border border-white/15 px-7 py-[14px] text-sm font-bold text-white/75 transition-all duration-300 hover:border-[#C49B2B] hover:text-[#C49B2B] sm:text-base"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-xs" />
                 Get Quote
@@ -292,7 +294,6 @@ export const HeroSection = () => {
                   background: "linear-gradient(150deg, rgba(8,18,48,0.97) 0%, rgba(4,10,30,0.98) 100%)",
                   border: "1.5px solid rgba(196,155,43,0.28)",
                   boxShadow: "0 0 0 1px rgba(255,255,255,0.03), 0 32px 80px rgba(0,0,0,0.65), inset 0 1px 0 rgba(196,155,43,0.09)",
-                  backdropFilter: "blur(16px)",
                 }}
               >
                 {/* Scan line */}
@@ -381,7 +382,6 @@ export const HeroSection = () => {
                   <div key={chip.label} className="flex items-center gap-2 rounded-xl px-3 py-2"
                     style={{
                       background: "rgba(5,12,30,0.88)",
-                      backdropFilter: "blur(10px)",
                       border: `1px solid ${chip.color}25`,
                     }}
                   >
@@ -411,7 +411,7 @@ export const HeroSection = () => {
 
       {/* ── TICKER ──────────────────────────────────────────────────────── */}
       <div className="relative w-full overflow-hidden border-t"
-        style={{ borderColor: "rgba(196,155,43,0.14)", background: "rgba(0,4,18,0.72)", backdropFilter: "blur(8px)" }}
+        style={{ borderColor: "rgba(196,155,43,0.14)", background: "rgba(0,4,18,0.72)" }}
       >
         <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20"
           style={{ background: "linear-gradient(to right, #000d24, transparent)" }}

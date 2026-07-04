@@ -24,7 +24,6 @@ import {
 import { COMPANY } from "../SEO/companyInfo";
 import { UpdateLogoModal } from "../Dashboard/Logo/UpdateLogoModal";
 import { Preloader } from "../Preloader/Preloader";
-import { GameCursor } from "../components/GameCursor";
 
 export const Root = () => {
   const location = useLocation();
@@ -48,7 +47,8 @@ export const Root = () => {
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.hvac.users);
   useEffect(() => {
-    AOS.init();
+    // Skip scroll animations on phones — they fight with touch scrolling
+    AOS.init({ disable: "phone", once: true, duration: 600 });
   }, []);
   const data = useMemo(
     () => ({
@@ -251,7 +251,6 @@ export const Root = () => {
 
   return (
     <div>
-      <GameCursor />
       <Preloader />
       <SeoManager
         structuredData={[organizationStructuredData, websiteStructuredData]}
