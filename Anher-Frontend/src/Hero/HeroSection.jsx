@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import gsap from "gsap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -54,21 +54,6 @@ const useCycleTypewriter = (startDelay = 2800) => {
   };
 };
 
-// ── Star field — generated once (no re-renders) ────────────────────────────────
-const useStarField = () =>
-  useMemo(() => {
-    const pts = [];
-    for (let i = 0; i < 80; i++) {
-      const x  = (Math.random() * 100).toFixed(2);
-      const y  = (Math.random() * 100).toFixed(2);
-      const r  = Math.random() > 0.88 ? 1.5 : Math.random() > 0.55 ? 1 : 0.5;
-      const op = (0.15 + Math.random() * 0.6).toFixed(2);
-      pts.push(`<circle cx="${x}%" cy="${y}%" r="${r}" fill="white" opacity="${op}"/>`);
-    }
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%'>${pts.join("")}</svg>`;
-    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-  }, []);
-
 // ── Static data ────────────────────────────────────────────────────────────────
 const TICKER_FALLBACK = [
   "Fine Sand · ৳65/CFT",
@@ -98,7 +83,6 @@ export const HeroSection = () => {
 
   const [bannerIdx, setBannerIdx] = useState(0);
   const { displayText, showCursor } = useCycleTypewriter(2800);
-  const starField = useStarField();
 
   const sectionRef    = useRef(null);
   const badgeRef      = useRef(null);
@@ -173,77 +157,21 @@ export const HeroSection = () => {
     <section
       ref={sectionRef}
       className="relative flex min-h-[100svh] flex-col overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #000d24 0%, #000818 55%, #000d20 100%)" }}
     >
-      {/* ── AMBIENT LIGHT ORBS (CSS only, no JS) ────────────────────────── */}
+      {/* ── VIDEO BACKGROUND ─────────────────────────────────────────────── */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <video
+          className="h-full w-full object-cover"
+          src="/hero-video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      </div>
 
-      {/* Orb 1 — primary blue/navy, top-right */}
-      <div aria-hidden className="pointer-events-none absolute hero-orb-1"
-        style={{
-          top: "-20%", right: "-10%",
-          width: "65%", height: "80%",
-          background: "radial-gradient(ellipse, rgba(27,58,138,0.75) 0%, rgba(15,34,80,0.32) 52%, transparent 75%)",
-          filter: "blur(40px)",
-        }}
-      />
-      {/* Orb 2 — gold accent, bottom-left */}
-      <div aria-hidden className="pointer-events-none absolute hero-orb-2"
-        style={{
-          bottom: "-15%", left: "-8%",
-          width: "48%", height: "58%",
-          background: "radial-gradient(ellipse, rgba(196,155,43,0.38) 0%, rgba(196,155,43,0.1) 52%, transparent 75%)",
-          filter: "blur(55px)",
-        }}
-      />
-      {/* Orb 3 — deep purple, center-left for depth */}
-      <div aria-hidden className="pointer-events-none absolute hero-orb-3"
-        style={{
-          top: "10%", left: "2%",
-          width: "50%", height: "65%",
-          background: "radial-gradient(ellipse, rgba(90,30,200,0.28) 0%, transparent 68%)",
-          filter: "blur(55px)",
-        }}
-      />
-      {/* Orb 4 — teal highlight, mid-right */}
-      <div aria-hidden className="pointer-events-none absolute hero-orb-4"
-        style={{
-          top: "35%", right: "18%",
-          width: "32%", height: "38%",
-          background: "radial-gradient(ellipse, rgba(0,180,240,0.12) 0%, transparent 68%)",
-          filter: "blur(48px)",
-        }}
-      />
-
-      {/* Star field */}
-      <div aria-hidden className="pointer-events-none absolute inset-0"
-        style={{ backgroundImage: starField, backgroundSize: "cover" }}
-      />
-
-      {/* Grid */}
-      <div aria-hidden className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cpath d='M 72 0 L 0 0 0 72' fill='none' stroke='%231B3A8A' stroke-width='0.5' stroke-opacity='0.1'/%3E%3C/svg%3E")`,
-          backgroundSize: "72px 72px",
-        }}
-      />
-
-      {/* Noise grain */}
-      <div aria-hidden className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat", opacity: 0.4,
-        }}
-      />
-
-      {/* Gold left accent */}
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[3px]"
-        style={{ background: "linear-gradient(to bottom, transparent, #C49B2B 35%, #C49B2B 65%, transparent)", opacity: 0.5 }}
-      />
-
-      {/* Horizon glow */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0"
-        style={{ height: 130, background: "linear-gradient(to top, rgba(27,58,138,0.16) 0%, transparent 100%)" }}
-      />
+      {/* Light black overlay */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/40" />
 
       {/* ── MAIN CONTENT ────────────────────────────────────────────────── */}
       <div className="container mx-auto flex flex-1 items-center px-4 py-20 sm:px-8 lg:px-12 xl:px-16">
