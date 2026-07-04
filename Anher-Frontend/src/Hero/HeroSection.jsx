@@ -178,7 +178,7 @@ export const HeroSection = () => {
         <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
 
           {/* LEFT */}
-          <div className="order-2 lg:order-1 max-w-2xl">
+          <div className="order-1 lg:order-1 max-w-2xl">
 
             {/* Badge */}
             <div ref={badgeRef} style={{ opacity: 0 }}
@@ -262,7 +262,7 @@ export const HeroSection = () => {
           </div>
 
           {/* RIGHT */}
-          <div className="order-1 flex flex-col items-center lg:order-2 lg:items-end">
+          <div className="order-2 flex flex-col items-center lg:order-2 lg:items-end">
             <div ref={rightPanelRef} style={{ opacity: 0 }} className="relative">
 
               {/* Glow ring */}

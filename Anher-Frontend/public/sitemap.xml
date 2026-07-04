@@ -1,32 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://kawsaranher.com/</loc>
+    <loc>https://inqilabtradingcorporation.com.bd/</loc>
+    <lastmod>2026-07-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://kawsaranher.com/about</loc>
+    <loc>https://inqilabtradingcorporation.com.bd/about</loc>
+    <lastmod>2026-07-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://kawsaranher.com/all-products</loc>
+    <loc>https://inqilabtradingcorporation.com.bd/all-products</loc>
+    <lastmod>2026-07-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://kawsaranher.com/catalogue</loc>
+    <loc>https://inqilabtradingcorporation.com.bd/catalogue</loc>
+    <lastmod>2026-07-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kawsaranher.com/gallery</loc>
+    <loc>https://inqilabtradingcorporation.com.bd/services</loc>
+    <lastmod>2026-07-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://kawsaranher.com/contact</loc>
+    <loc>https://inqilabtradingcorporation.com.bd/projects</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://inqilabtradingcorporation.com.bd/blog</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://inqilabtradingcorporation.com.bd/gallery</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://inqilabtradingcorporation.com.bd/contact</loc>
+    <lastmod>2026-07-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>

@@ -101,10 +101,10 @@ export const Home = () => {
   return (
     <div className="overflow-x-clip bg-white">
       <SeoManager
-        title="Inqilab Trading Corporation (ITC) | Premium Sand & Stone Supplier Bangladesh"
+        title="Inqilab Trading Corporation | Inqilab Corporation (ITC) — Premium Sand & Stone Supplier Bangladesh"
         description="Inqilab Trading Corporation (ITC) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips & Boulder at competitive CFT prices."
         path="/"
-        keywords="inqilab, inqilab trading corporation, ITC, Kawsar Anher, sand supplier Bangladesh, stone chips Bangladesh, fine sand Chattogram, coarse sand Bangladesh, boulder supplier bd, construction aggregate Bangladesh, building materials Chattogram, ইনকিলাব ট্রেডিং"
+        keywords="inqilab, inqilab corporation, inqilab trading, inqilab trading corporation, inqilab group, inqilab bd, ITC, Kawsar Anher, ইনকিলাব, ইনকিলাব ট্রেডিং, sand supplier Bangladesh, stone chips Bangladesh, fine sand Chattogram, coarse sand Bangladesh, boulder supplier bd, construction aggregate Bangladesh, building materials Chattogram"
         structuredData={[
           localBusinessStructuredData,
           websiteStructuredData,

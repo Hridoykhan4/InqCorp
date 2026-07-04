@@ -2,7 +2,7 @@ import { COMPANY, postalAddressSchema } from "./companyInfo";
 
 export const SEO_CONFIG = {
   siteName: "Inqilab Trading Corporation",
-  siteUrl: (import.meta.env.VITE_SITE_URL || "https://kawsaranher.com").replace(
+  siteUrl: (import.meta.env.VITE_SITE_URL || "https://inqilabtradingcorporation.com.bd").replace(
     /\/+$/,
     "",
   ),
@@ -11,7 +11,7 @@ export const SEO_CONFIG = {
   defaultDescription:
     "Inqilab Trading Corporation (ITC) — Bangladesh's trusted supplier of premium construction aggregates from Chattogram. Fine Sand, Medium Sand, Coarse Sand, Stone Chips (5–20mm) & Boulder. Call +880 1718 427 703.",
   defaultKeywords:
-    "inqilab, inqilab trading, inqilab trading corporation, inqilab bangladesh, ইনকিলাব ট্রেডিং, ITC, ITC bangladesh, kawsar anher, Kawsar Alam, sand supplier bangladesh, stone chips bangladesh, construction aggregate chattogram, fine sand chattogram, coarse sand bangladesh, boulder supplier, building materials chittagong, বালি সরবরাহকারী চট্টগ্রাম",
+    "inqilab, inqilab corporation, inqilab trading, inqilab trading corporation, inqilab group, inqilab bd, inqilab bangladesh, inqilab chattogram, ইনকিলাব, ইনকিলাব ট্রেডিং, ইনকিলাব ট্রেডিং কর্পোরেশন, ITC, ITC bangladesh, kawsar anher, Kawsar Alam, sand supplier bangladesh, stone chips bangladesh, construction aggregate chattogram, fine sand chattogram, coarse sand bangladesh, boulder supplier, building materials chittagong, বালি সরবরাহকারী চট্টগ্রাম",
   defaultImage: "/inqcorpLogo.jpeg",
   themeColor: "#1B3A8A",
   locale: "en_BD",
@@ -51,7 +51,7 @@ export const organizationStructuredData = {
   "@type": "Organization",
   name: "Inqilab Trading Corporation",
   legalName: COMPANY.legalName,
-  alternateName: ["Inqilab Trading", "ITC", "ITC Bangladesh", "Kawsar Anher", "ইনকিলাব ট্রেডিং কর্পোরেশন"],
+  alternateName: ["Inqilab", "Inqilab Corporation", "Inqilab Trading", "Inqilab Group", "ITC", "ITC Bangladesh", "Kawsar Anher", "ইনকিলাব", "ইনকিলাব ট্রেডিং কর্পোরেশন"],
   url: SEO_CONFIG.siteUrl,
   email: COMPANY.email,
   telephone: COMPANY.phoneTel,
@@ -77,7 +77,7 @@ export const localBusinessStructuredData = {
   "@id": `${SEO_CONFIG.siteUrl}/#localbusiness`,
   name: SEO_CONFIG.siteName,
   legalName: COMPANY.legalName,
-  alternateName: ["Inqilab Trading Corporation", "ITC"],
+  alternateName: ["Inqilab", "Inqilab Corporation", "Inqilab Trading", "Inqilab Trading Corporation", "Inqilab Group", "ITC"],
   description: SEO_CONFIG.defaultDescription,
   url: SEO_CONFIG.siteUrl,
   email: COMPANY.email,
