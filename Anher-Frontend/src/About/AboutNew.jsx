@@ -54,11 +54,11 @@ const VALUES = [
 ];
 
 const MILESTONES = [
-  { year: "2014", title: "Founded", desc: "Kawsar Alam establishes Inqilab Trading Corporation in Chattogram with a vision to supply premium aggregates." },
-  { year: "2016", title: "First 100 Projects", desc: "Reached milestone of 100 completed construction supply deliveries across Chattogram division." },
-  { year: "2018", title: "Fleet Expansion", desc: "Expanded delivery fleet to cover all major construction zones in Chattogram and surrounding districts." },
+  { year: "2014", title: "Founded", desc: "Kawsar Alam establishes Inqilab Trading Corporation with a vision to supply premium aggregates All Over Bangladesh." },
+  { year: "2016", title: "First 100 Projects", desc: "Reached milestone of 100 completed construction supply deliveries across Bangladesh." },
+  { year: "2018", title: "Fleet Expansion", desc: "Expanded delivery fleet to cover major construction zones All Over Bangladesh." },
   { year: "2021", title: "500+ Projects", desc: "Trusted by over 500 construction projects — from residential buildings to major infrastructure works." },
-  { year: "2024", title: "Market Leader", desc: "Recognized as one of Chattogram's most reliable premium aggregate and sand suppliers." },
+  { year: "2024", title: "Market Leader", desc: "Recognized as one of Bangladesh's most reliable premium aggregate and sand suppliers." },
 ];
 
 const PRODUCTS = [
@@ -117,16 +117,16 @@ export const About = () => {
   return (
     <div className="overflow-x-hidden bg-white">
       <SeoManager
-        title="About ITC — Inqilab Trading Corporation, Chattogram"
-        description="ITC (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — fine sand, stone chips, and boulders from Chattogram."
+        title="About ITC — Inqilab Trading Corporation, Bangladesh"
+        description="ITC (Inqilab Trading Corporation) is Bangladesh's trusted supplier of premium construction aggregates — fine sand, stone chips, and boulders All Over Bangladesh."
         path="/about"
-        keywords="ITC about, Inqilab Trading Corporation, sand supplier Chattogram, construction aggregate Bangladesh, Kawsar Alam CEO"
+        keywords="ITC about, Inqilab Trading Corporation, sand supplier Bangladesh, construction aggregate Bangladesh, Kawsar Alam CEO"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Organization",
           name: SEO_CONFIG.siteName,
           legalName: COMPANY.legalName,
-          description: "Premium sand and stone aggregate supplier in Chattogram, Bangladesh",
+          description: "Premium sand and stone aggregate supplier All Over Bangladesh",
           foundingDate: "2014",
           url: `${SEO_CONFIG.siteUrl}/about`,
           email: COMPANY.email,
@@ -167,7 +167,7 @@ export const About = () => {
             Built on Trust.<br />Delivered with Strength.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-8 text-white/60">
-            Since 2014, Inqilab Trading Corporation has been Chattogram's go-to source for
+            Since 2014, Inqilab Trading Corporation has been a go-to source across Bangladesh for
             premium sand and stone aggregates — powering Bangladesh's construction sector one
             delivery at a time.
           </p>
@@ -353,7 +353,7 @@ export const About = () => {
               Ready to Order Premium Aggregates?
             </h2>
             <p className="mt-4 text-[15px] leading-8 text-white/60">
-              Contact us today for pricing, availability, and delivery scheduling across Chattogram.
+              Contact us today for pricing, availability, and delivery scheduling All Over Bangladesh.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-5">
               <a

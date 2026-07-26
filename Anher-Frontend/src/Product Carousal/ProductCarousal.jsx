@@ -293,7 +293,7 @@ export default function ProductsCarousel() {
               Quality Materials for Every Build
             </h2>
             <p className="mt-4 text-[15px] leading-7 text-gray-500">
-              From fine river sand to large boulders — every grade, precision-sourced and delivered across Chattogram.
+              From fine river sand to large boulders — every grade, precision-sourced and delivered All Over Bangladesh.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">

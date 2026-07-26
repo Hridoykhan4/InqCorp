@@ -14,7 +14,7 @@ const SUPPORT_TEAM = [
     name: "Rahim Uddin",
     title: "Operations Manager",
     color: "#1B3A8A",
-    desc: "Oversees daily logistics, delivery scheduling, and warehouse operations ensuring every order ships accurately and on time across Chattogram.",
+    desc: "Oversees daily logistics, delivery scheduling, and warehouse operations ensuring every order ships accurately and on time All Over Bangladesh.",
   },
   {
     initials: "SA",

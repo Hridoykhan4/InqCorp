@@ -55,7 +55,7 @@ export const Gallery = () => {
     <>
       <SeoManager
         title="Gallery — Kawsar Anher | Inqilab Trading Corporation"
-        description="Photos of our construction aggregate products — fine sand, stone chips, boulder and more from Chattogram, Bangladesh."
+        description="Photos of our construction aggregate products — fine sand, stone chips, boulder and more from All Over Bangladesh."
         path="/gallery"
       />
 
@@ -75,7 +75,7 @@ export const Gallery = () => {
             Our Gallery
           </h1>
           <p className="mt-3 text-white/55 text-sm sm:text-base max-w-lg mx-auto">
-            A look at our products, operations, and team at work across Chattogram, Bangladesh.
+            A look at our products, operations, and team at work All Over Bangladesh.
           </p>
         </div>
         <div className="absolute inset-y-0 left-0 w-[3px]" style={{ background: "linear-gradient(to bottom, transparent, #C49B2B 40%, #C49B2B 60%, transparent)", opacity: 0.6 }} />

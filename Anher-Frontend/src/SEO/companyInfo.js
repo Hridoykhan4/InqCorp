@@ -7,20 +7,20 @@ const PHONE_DISPLAY = "+880 1718 427 703";
 const PHONE_TEL = "+8801718427703";
 
 const ADDRESS = {
-  line1: "Chattogram",
-  city: "Chattogram",
-  postalCode: "4000",
+  line1: "All Over Bangladesh",
+  city: "Bangladesh",
+  postalCode: "",
   country: "Bangladesh",
   countryCode: "BD",
 };
 
-const ADDRESS_FULL = `Chattogram-${ADDRESS.postalCode}, ${ADDRESS.country}.`;
+const ADDRESS_FULL = "All Over Bangladesh.";
 
-const GEO = { latitude: 22.3569, longitude: 91.7832 };
+const GEO = { latitude: 23.685, longitude: 90.3563 };
 
-const MAP_EMBED_QUERY = encodeURIComponent("Chattogram, Bangladesh");
+const MAP_EMBED_QUERY = encodeURIComponent("Bangladesh");
 const MAP_QUERY = encodeURIComponent(
-  `Inqilab Trading Corporation, Chattogram, Bangladesh`,
+  `Inqilab Trading Corporation, Bangladesh`,
 );
 
 export const COMPANY = {

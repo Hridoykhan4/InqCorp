@@ -38,7 +38,7 @@ export const Catelogue = () => {
     }
 
     const getSafeFileName = (title) => {
-        return `${title || 'SafetyPlus Catalogue'}.pdf`
+        return `${title || 'ITC Catalogue'}.pdf`
             .replace(/[\\/:*?"<>|]+/g, '')
             .replace(/\s+/g, '-')
     }
@@ -46,7 +46,7 @@ export const Catelogue = () => {
     const openCatalogue = (pdfUrl, title) => {
         if (!pdfUrl) return
 
-        const cleanedTitle = title?.trim() || 'SafetyPlus Catalogue'
+        const cleanedTitle = title?.trim() || 'ITC Catalogue'
         console.log(`Opening catalogue: ${cleanedTitle}`)
         window.open(pdfUrl, '_blank', 'noopener,noreferrer')
     }
@@ -116,16 +116,16 @@ export const Catelogue = () => {
     return (
         <section className="space-y-10 py-16 px-5 overflow-hidden min-h-screen bg-gradient-to-br from-white via-safety-surface to-white">
             <SeoManager
-                title="Product Catalogues | SafetyPlus Bangladesh"
-                description="View SafetyPlus catalogues for fire doors, hose cabinets, DB boxes, industrial racks, lockers, cabinets, and protective garments. Built for engineers, contractors, and procurement buyers in Bangladesh."
+                title="Product Catalogues | Inqilab Trading Corporation"
+                description="View ITC catalogues for fine sand, medium sand, coarse sand, stone chips, boulder, and construction aggregate supply All Over Bangladesh."
                 path="/catalogue"
-                keywords="SafetyPlus catalogue, fire safety catalogue, fire door catalogue, hose cabinet, DB box, industrial racks Bangladesh"
+                keywords="ITC catalogue, Inqilab Trading Corporation catalogue, sand catalogue Bangladesh, stone chips catalogue, boulder supplier Bangladesh"
                 structuredData={{
                     '@context': 'https://schema.org',
                     '@type': 'CollectionPage',
-                    name: 'SafetyPlus Catalogues',
-                    description: 'Fire safety and industrial equipment catalogues with technical specifications',
-                    url: `${import.meta.env.VITE_SITE_URL || 'https://safetyplusbd.com'}/catalogue`,
+                    name: 'ITC Catalogues',
+                    description: 'Sand, stone chips, boulder, and aggregate catalogues with supply details',
+                    url: `${import.meta.env.VITE_SITE_URL || 'https://inqilabtradingcorporation.com.bd'}/catalogue`,
                 }}
             />
 
@@ -133,7 +133,7 @@ export const Catelogue = () => {
             <div className="hero-panel mx-auto max-w-[1340px]" data-aos="fade-up" data-aos-duration="800">
                 <div className="text-center space-y-6">
                     <p className="section-tagline">Quick Catalogue Preview</p>
-                    <h1 className="heading-xl">SafetyPlus Product Catalogues</h1>
+                    <h1 className="heading-xl">ITC Product Catalogues</h1>
                     <p className="body-lead max-w-3xl mx-auto">
                         Click any card to preview a catalogue in a new tab, or use the download button for offline access on desktop and mobile.
                     </p>
@@ -198,7 +198,7 @@ export const Catelogue = () => {
                                     <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-safety-surface via-white to-safety-surface h-[280px] md:h-[320px] w-full">
                                         <img
                                             src={catalogue?.imageUrl || '/pdf/HVAC-Image.jpg.jpeg'}
-                                            alt={catalogue?.title || 'SafetyPlus Catalogue'}
+                                            alt={catalogue?.title || 'ITC Catalogue'}
                                             className="w-full h-full object-contain p-4 group-hover:scale-110 transition duration-500"
                                             loading="lazy"
                                         />
@@ -291,19 +291,19 @@ export const Catelogue = () => {
                         <div className="space-y-4" data-aos="fade-right">
                             <h2 className="heading-lg text-2xl">About Our Catalogues</h2>
                             <p className="body-lead">
-                                Our comprehensive product catalogues include detailed specifications, installation guides, technical
-                                datasheets, and maintenance procedures. All documents are optimized for both digital and print viewing.
+                                Our catalogues cover sand, stone chips, boulder grades, size ranges, CFT pricing references,
+                                sourcing notes, and delivery support for construction projects All Over Bangladesh.
                             </p>
                             {/* Customization: Update supported products list */}
                             <div className="space-y-2 pt-4">
                                 <p className="font-semibold text-safety-ink">Included in our catalogues:</p>
                                 <ul className="space-y-1 text-sm text-safety-muted">
-                                    <li>✓ Complete product specifications and dimensions</li>
-                                    <li>✓ Technical performance data and ratings</li>
-                                    <li>✓ Installation and commissioning guidelines</li>
-                                    <li>✓ Maintenance schedules and procedures</li>
-                                    <li>✓ Warranty information</li>
-                                    <li>✓ Contact and support details for Bangladesh</li>
+                                    <li>✓ Fine, medium, and coarse sand grade details</li>
+                                    <li>✓ Stone chips and boulder size options</li>
+                                    <li>✓ CFT unit, pricing, and bulk order notes</li>
+                                    <li>✓ Sourcing, loading, and delivery information</li>
+                                    <li>✓ Project and site supply guidance</li>
+                                    <li>✓ Contact details for All Over Bangladesh delivery</li>
                                 </ul>
                             </div>
                         </div>

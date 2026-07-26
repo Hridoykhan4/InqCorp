@@ -185,7 +185,7 @@ export const Login = () => {
                 <p
                     className="absolute bottom-6 text-[10px] font-bold uppercase tracking-[0.25em] text-white/20"
                 >
-                    Chattogram, Bangladesh
+                    All Over Bangladesh
                 </p>
             </div>
 

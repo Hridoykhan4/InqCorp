@@ -38,7 +38,6 @@ const ContactSection = () => {
         emails: COMPANY.emails,
         latitude: COMPANY.geo.latitude,
         longitude: COMPANY.geo.longitude,
-        directionsUrl: COMPANY.mapDirectionsUrl,
     }
 
     const businessHours = [
@@ -95,20 +94,17 @@ const ContactSection = () => {
         AOS.init({ duration: 900, offset: 80, once: true })
     }, [])
 
-    // Map embed pointing at the real company address (no API key required).
-    const mapEmbedUrl = COMPANY.mapEmbedSrc
-
     return (
         <section className="space-y-10 overflow-hidden bg-gradient-to-br from-white via-safety-surface to-white">
             <SeoManager
-                title="Contact SafetyPlus Bangladesh"
-                description="Get in touch with SafetyPlus Bangladesh. Fire safety equipment supply, factory-trained installation, and fast response support for industrial and commercial buyers."
+                title="Contact Inqilab Trading Corporation"
+                description="Get in touch with Inqilab Trading Corporation for sand, stone chips, boulder, and construction aggregate supply All Over Bangladesh."
                 path="/contact"
-                keywords="SafetyPlus Bangladesh, fire safety contact, industrial safety support, fire safety supplier Bangladesh"
+                keywords="Inqilab Trading Corporation contact, ITC Bangladesh, sand supplier Bangladesh, stone chips supplier Bangladesh"
                 structuredData={{
                     '@context': 'https://schema.org',
                     '@type': 'ContactPage',
-                    name: 'Contact SafetyPlus Bangladesh',
+                    name: 'Contact Inqilab Trading Corporation',
                     url: `${SEO_CONFIG.siteUrl}/contact`,
                     mainEntity: {
                         '@type': 'Organization',
@@ -180,15 +176,6 @@ const ContactSection = () => {
                                         Our Location
                                     </p>
                                     <p className="mt-2 text-safety-ink font-medium">{bangladeshLocation.address}</p>
-                                    {/* Link to Google Maps - can be customized */}
-                                    <a
-                                        href={bangladeshLocation.directionsUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="mt-2 inline-block text-sm text-safety-red hover:text-safety-red-dark font-semibold"
-                                    >
-                                        View on Google Maps →
-                                    </a>
                                 </div>
                             </div>
 
@@ -334,28 +321,6 @@ const ContactSection = () => {
                     </div>
                 </div>
 
-                {/* Map Section */}
-                <div
-                    className="map-panel overflow-hidden"
-                    data-aos="zoom-in"
-                    data-aos-duration="900"
-                >
-                    <div className="space-y-3 mb-0">
-                        <h2 className="heading-lg text-2xl px-8 pt-8">Find Us On The Map</h2>
-                        <p className="body-lead px-8 text-safety-muted">
-                            Visit our Bangladesh headquarters or get directions from your location.
-                        </p>
-                    </div>
-                    <iframe
-                        title="SafetyPlus Bangladesh Location"
-                        src={mapEmbedUrl}
-                        loading="lazy"
-                        className="w-full h-[400px] md:h-[500px] border-none"
-                        allowFullScreen=""
-                        referrerPolicy="no-referrer-when-downgrade"
-                    />
-                </div>
-
                 {/* FAQ / Quick Links */}
                 <div className="bg-safety-surface  rounded-[24px] border-2 mb-7 border-safety-border p-8" data-aos="fade-up">
                     <h2 className="heading-lg text-2xl mb-6">Frequently Asked Questions</h2>
@@ -378,7 +343,7 @@ const ContactSection = () => {
                         <div className="space-y-2">
                             <p className="font-bold text-safety-ink">What areas do you serve?</p>
                             <p className="text-safety-muted text-sm">
-                                We serve Dhaka, Chattogram, Sylhet, and all major cities across Bangladesh with nationwide support.
+                                We serve customers All Over Bangladesh with nationwide delivery and support.
                             </p>
                         </div>
                         <div className="space-y-2">

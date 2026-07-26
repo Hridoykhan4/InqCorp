@@ -64,7 +64,7 @@ const TICKER_FALLBACK = [
   "Stone Chips 10–20mm · ৳95/CFT",
 ];
 
-const TRUST = ["500+ Projects", "Chattogram Based", "On-Time Delivery"];
+const TRUST = ["500+ Projects", "All Over Bangladesh", "On-Time Delivery"];
 
 const STAT_CHIPS = [
   { icon: faTruck, label: "Fast Delivery", val: "Across BD",    color: "#60a5fa" },
@@ -230,7 +230,7 @@ export const HeroSection = () => {
             <p ref={subtitleRef} style={{ opacity: 0 }}
               className="mt-6 max-w-lg text-[15px] leading-7 text-white/60 sm:text-base sm:leading-8"
             >
-              Premium sand and stone aggregates sourced and supplied across Chattogram, Bangladesh.
+              Premium sand and stone aggregates sourced and supplied All Over Bangladesh.
               Fine sands to boulder — every grade, every project, delivered on time.
             </p>
 

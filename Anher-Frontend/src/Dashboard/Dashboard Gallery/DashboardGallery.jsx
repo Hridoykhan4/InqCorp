@@ -147,7 +147,7 @@ export const DashboardGallery = () => {
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Stone chips delivery — Chittagong port"
+              placeholder="e.g. Stone chips delivery - Bangladesh project site"
               className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-blue-400 transition-colors"
             />
           </div>

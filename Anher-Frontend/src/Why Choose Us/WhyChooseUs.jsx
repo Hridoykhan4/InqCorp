@@ -20,7 +20,7 @@ const features = [
   {
     title: "Fast, reliable delivery",
     subtitle:
-      "Based in Chattogram — Bangladesh's gateway city — we offer swift logistics to construction sites across the country. Bulk orders dispatched within 24 hours.",
+      "Bangladesh-wide supply coverage with swift logistics to construction sites across the country. Bulk orders dispatched within 24 hours.",
     icon: faTruckFast,
   },
   {
@@ -61,7 +61,7 @@ export default function WhyChooseUs() {
               <div>
                 <p className="text-lg font-black">ITC</p>
                 <p className="text-sm leading-5 text-white/70">
-                  Build with Strength · Chattogram, Bangladesh
+                  Build with Strength · All Over Bangladesh
                 </p>
               </div>
             </div>

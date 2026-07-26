@@ -15,7 +15,7 @@ const STATS = [
     value: 500,
     suffix: "+",
     label: "Projects Delivered",
-    desc: "Construction sites supplied across Chattogram and beyond.",
+    desc: "Construction sites supplied All Over Bangladesh.",
   },
   {
     icon: faCalendarCheck,

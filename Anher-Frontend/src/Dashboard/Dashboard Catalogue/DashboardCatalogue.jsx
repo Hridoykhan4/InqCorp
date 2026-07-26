@@ -53,7 +53,7 @@ export const DashboardCatalogue = () => {
   };
 
   const getSafeFileName = (title) => {
-    return `${title || "SafetyPlus Catalogue"}.pdf`
+    return `${title || "ITC Catalogue"}.pdf`
       .replace(/[\\/:*?"<>|]+/g, "")
       .replace(/\s+/g, "-");
   };

@@ -14,11 +14,11 @@ const TESTIMONIALS = [
     name: "Rahim Ahmed",
     title: "Project Manager",
     company: "Rahim Construction Ltd.",
-    location: "Chattogram",
+    location: "Bangladesh",
     rating: 5,
     initials: "RA",
     color: NAVY,
-    text: "We sourced Fine Sand and Stone Chips from ITC for a large residential complex. Material quality was consistent, delivery was on time, and the CFT pricing was the best in Chattogram. Our go-to supplier.",
+    text: "We sourced Fine Sand and Stone Chips from ITC for a large residential complex. Material quality was consistent, delivery was on time, and the CFT pricing was excellent for Bangladesh projects. Our go-to supplier.",
   },
   {
     name: "Al-Amin Hossain",
@@ -44,7 +44,7 @@ const TESTIMONIALS = [
     name: "Nasrin Begum",
     title: "Director",
     company: "Nasrin Developers",
-    location: "Chattogram",
+    location: "Bangladesh",
     rating: 5,
     initials: "NB",
     color: GOLD,
@@ -58,7 +58,7 @@ const TESTIMONIALS = [
     rating: 5,
     initials: "JA",
     color: NAVY,
-    text: "Medium Sand quality from ITC is excellent — no clay contamination, proper grading. We've now made them our sole sand supplier for all ongoing projects across Sylhet and Chattogram divisions.",
+    text: "Medium Sand quality from ITC is excellent — no clay contamination, proper grading. We've now made them our sole sand supplier for ongoing projects across Bangladesh.",
   },
 ];
 

@@ -97,7 +97,7 @@ const Footer = ({ categories }) => {
                 Ready to start your project?
               </p>
               <p className="mt-1 text-[15px] font-semibold text-white/80">
-                Get premium aggregates delivered to your site — Chattogram &amp; beyond.
+                Get premium aggregates delivered to your site — All Over Bangladesh.
               </p>
             </div>
             <button
