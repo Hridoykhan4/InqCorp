@@ -7,20 +7,20 @@ const PHONE_DISPLAY = "+880 1718 427 703";
 const PHONE_TEL = "+8801718427703";
 
 const ADDRESS = {
-  line1: "All Over Bangladesh",
-  city: "Bangladesh",
-  postalCode: "",
+  line1: "Razzak Plaza (12th Floor), 383, Moghbazar",
+  city: "Dhaka",
+  postalCode: "1217",
   country: "Bangladesh",
   countryCode: "BD",
 };
 
-const ADDRESS_FULL = "All Over Bangladesh.";
+const ADDRESS_FULL = "Razzak Plaza (12th Floor), 383, Moghbazar, Dhaka-1217.";
 
-const GEO = { latitude: 23.685, longitude: 90.3563 };
+const GEO = { latitude: 23.7495, longitude: 90.4113 };
 
-const MAP_EMBED_QUERY = encodeURIComponent("Bangladesh");
+const MAP_EMBED_QUERY = encodeURIComponent(ADDRESS_FULL);
 const MAP_QUERY = encodeURIComponent(
-  `Inqilab Trading Corporation, Bangladesh`,
+  `Inqilab Trading Corporation, ${ADDRESS_FULL}`,
 );
 
 export const COMPANY = {

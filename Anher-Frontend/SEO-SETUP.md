@@ -28,7 +28,7 @@ these, in order:
 ## 3. Google Business Profile (this is what makes "inqilab" surface fastest)
 - https://business.google.com → create/claim profile: name **Inqilab Trading Corporation**,
   category "Building materials supplier" / "Construction material wholesaler", address
-  All Over Bangladesh, phone **+880 1718 427 703**, website `https://inqilabtradingcorporation.com.bd`.
+  Razzak Plaza (12th Floor), 383, Moghbazar, Dhaka-1217, phone **+880 1718 427 703**, website `https://inqilabtradingcorporation.com.bd`.
 - Verify (postcard or phone). This is what puts the map pack + knowledge panel in front of
   anyone typing "inqilab", "inqilab corporation" or "inqilab trading" — it usually outranks
   organic results for exact-brand queries within days of verification.
