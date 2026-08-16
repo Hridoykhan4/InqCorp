@@ -31,7 +31,7 @@ const benefits = [
   },
   {
     title: "Future compliance roadmap",
-    text: "SafetyPlus can grow toward UL listed products without confusing current buyers.",
+    text: "Inqilab Trading Corporation can grow toward UL listed products without confusing current buyers.",
     icon: faChartLine,
   },
   {
@@ -43,7 +43,7 @@ const benefits = [
 
 export default function AdventureThrills() {
   return (
-    <section className="section-page bg-safety-ink text-white">
+    <section className="section-page bg-brand-ink text-white">
       <div className="container-page">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
@@ -54,7 +54,7 @@ export default function AdventureThrills() {
               Designed for Bangladeshi businesses that need safety decisions fast.
             </h2>
             <p className="mt-5 text-base leading-8 text-white/68">
-              The site should help visitors understand SafetyPlus quickly,
+              The site should help visitors understand Inqilab Trading Corporation quickly,
               compare product lines, and contact the team without fighting the UI.
             </p>
           </div>
@@ -65,7 +65,7 @@ export default function AdventureThrills() {
                 key={item.title}
                 className="rounded-lg border border-white/10 bg-white/[0.06] p-5 transition hover:-translate-y-1 hover:bg-white/[0.09]"
               >
-                <span className="grid h-11 w-11 place-items-center rounded-md bg-safety-amber text-safety-ink">
+                <span className="grid h-11 w-11 place-items-center rounded-md bg-brand-accent text-brand-ink">
                   <FontAwesomeIcon icon={item.icon} />
                 </span>
                 <h3 className="mt-5 text-lg font-extrabold">{item.title}</h3>

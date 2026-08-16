@@ -43,25 +43,11 @@ const getSlideImage = (item) =>
     ? item.imageUrl[0] || fallbackImage
     : item?.imageUrl || fallbackImage;
 
-const pickImg = (v) => (Array.isArray(v) ? v[0] : v) || null;
-
-const getShowcaseData = (showcase, categories) => {
-  const cat = categories?.find((c) => {
-    const hay = `${c?.name || ""} ${c?.label || ""}`.toLowerCase();
-    return hay.includes(showcase.match);
-  });
-  const img =
-    pickImg(cat?.bannerImgUrl) ||
-    pickImg(cat?.imageUrl) ||
-    fallbackImage;
-  return { image: img, category: cat || null };
-};
-
 const slideFallback = [
   {
     title: "Complete Fire Safety Solutions",
     description:
-      "SafetyPlus manufactures and supplies UL-grade fire doors, industrial hose cabinets, steel cable trays, DB boxes, and heavy-gauge racks — engineered in Bangladesh for factories, warehouses, and commercial buildings.",
+      "Inqilab Trading Corporation manufactures and supplies UL-grade fire doors, industrial hose cabinets, steel cable trays, DB boxes, and heavy-gauge racks — engineered in Bangladesh for factories, warehouses, and commercial buildings.",
     imageUrl: [fallbackImage],
   },
 ];
@@ -107,7 +93,7 @@ ArrowButton.displayName = "ArrowButton";
 
 // ── HeroSlide — isolated GSAP context per slide ──────────────────────────────
 const HeroSlide = memo(
-  ({ item, index, isActive, navigate, categoryChips, categories }) => {
+  ({ item, index, isActive, navigate, categoryChips }) => {
     const slideRef   = useRef(null);
     const gridRef    = useRef(null);
     const kickerRef  = useRef(null);
@@ -177,7 +163,7 @@ const HeroSlide = memo(
           {/* Background banner image */}
           <img
             src={image}
-            alt={item?.title || "SafetyPlus fire safety equipment"}
+            alt={item?.title || "Inqilab Trading Corporation fire safety equipment"}
             className="sp-i-bg absolute inset-0 h-full w-full object-cover"
             loading={index === 0 ? "eager" : "lazy"}
             decoding="async"
@@ -232,7 +218,7 @@ const HeroSlide = memo(
                 {/* Description — always fully visible; never animated/hidden (SEO) */}
                 <p className="mt-5 max-w-xl text-pretty text-sm leading-7 text-white/72 sm:text-base sm:leading-8">
                   {item?.description ||
-                    "SafetyPlus manufactures and supplies UL-grade fire doors, industrial hose cabinets, steel cable trays, DB boxes, and heavy-gauge racks — engineered in Bangladesh for factories, warehouses, and commercial buildings."}
+                    "Inqilab Trading Corporation manufactures and supplies UL-grade fire doors, industrial hose cabinets, steel cable trays, DB boxes, and heavy-gauge racks — engineered in Bangladesh for factories, warehouses, and commercial buildings."}
                 </p>
 
                 {/* CTA row */}
@@ -358,7 +344,6 @@ export const SliderBanner = memo(() => {
             isActive={index === activeSlide}
             navigate={navigate}
             categoryChips={categoryChips}
-            categories={categories}
           />
         ))}
       </Slider>

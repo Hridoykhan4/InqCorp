@@ -30,20 +30,20 @@ export const DynamicBanner = ({ item }) => {
 
   return (
     <div className='container-page pt-4'>
-      <div className='relative h-[160px] w-full overflow-hidden rounded-2xl border border-safety-border  shadow-[0_18px_50px_-20px_rgba(0,0,0,0.35)] sm:h-[200px] md:h-[240px]'>
+      <div className='relative h-[160px] w-full overflow-hidden rounded-2xl border border-brand-border  shadow-[0_18px_50px_-20px_rgba(0,0,0,0.35)] sm:h-[200px] md:h-[240px]'>
         <img
           src={banner}
-          alt={item?.name || 'SafetyPlus category banner'}
+          alt={item?.name || 'Inqilab Trading Corporation category banner'}
           loading='lazy'
           className='absolute inset-0 h-full w-full object-cover'
           style={{ objectPosition: 'center' }}
         />
         {/* Light left-only scrim — keeps text readable, image stays crisp */}
-        <div className='absolute inset-0 bg-gradient-to-r from-safety-ink/80 via-safety-ink/25 to-transparent sm:via-transparent sm:w-1/2' />
+        <div className='absolute inset-0 bg-gradient-to-r from-brand-ink/80 via-brand-ink/25 to-transparent sm:via-transparent sm:w-1/2' />
 
         <div className='relative z-10 flex h-full items-center'>
           <div className='px-5 sm:px-8 md:px-10' data-aos='fade-right'>
-            <p className='inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-safety-amber backdrop-blur-sm'>
+            <p className='inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-brand-accent backdrop-blur-sm'>
               Product Category
             </p>
             <h2 className='mt-3 max-w-xl text-2xl font-extrabold leading-tight text-white text-shadow-xl sm:text-3xl md:text-4xl'>

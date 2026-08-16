@@ -1,8 +1,7 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useOutletContext } from 'react-router';
 import Swal from 'sweetalert2';
-import { capitalizeWords } from '../../Functions/functions';
 
 export const AddService = () => {
     const [serviceData, setServiceData] = useState({
@@ -12,7 +11,7 @@ export const AddService = () => {
     })
     const [loading, setLoading] = useState(false);
 
-    const { setCategories, categories, products, setProducts,setServices } = useOutletContext();
+    const { setServices } = useOutletContext();
 
     const hanldeChange = (e) => {
         setServiceData({ ...serviceData, [e.target.name]: e.target.value })

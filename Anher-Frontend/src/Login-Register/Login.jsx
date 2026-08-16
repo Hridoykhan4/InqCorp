@@ -43,7 +43,8 @@ export const Login = () => {
             )
 
             if (res.status === 200) {
-                dispatch(addUser(res.data.user))
+                axios.defaults.headers.common.Authorization = `Bearer ${res.data.token}`
+                dispatch(addUser({ ...res.data.user, token: res.data.token }))
                 Swal.fire({
                     title: 'Login Successful!',
                     text: 'Welcome to the Admin Portal.',
@@ -51,7 +52,7 @@ export const Login = () => {
                     timer: 1500,
                     showConfirmButton: false,
                 })
-                navigate('/')
+                navigate('/dashboard', { replace: true })
             }
         } catch (err) {
             const msg =

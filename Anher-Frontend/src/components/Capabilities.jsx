@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHeroicEntry } from "../hooks/useHeroicEntry";
 
@@ -117,9 +118,7 @@ const Capabilities = () => {
               </span>
 
               {/* Icon */}
-              <div className="mb-5">
-                <Icon />
-              </div>
+              <div className="mb-5">{createElement(Icon)}</div>
 
               {/* Content */}
               <h3 className="text-[15px] font-bold leading-snug text-white">{title}</h3>

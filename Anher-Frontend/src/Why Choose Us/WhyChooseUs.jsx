@@ -1,106 +1,53 @@
-import React, { useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTruckFast,
-  faMountain,
-  faScaleBalanced,
-  faHandshake,
-} from "@fortawesome/free-solid-svg-icons";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import image from "../assets/image/Normal Image/image (3).png";
+import { useNavigate } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight, faCheck } from '@fortawesome/free-solid-svg-icons'
 
-const features = [
-  {
-    title: "Direct from source",
-    subtitle:
-      "We source aggregates directly from quarries and riverbeds, cutting out middlemen and ensuring you get the freshest, highest-grade material at the lowest possible price.",
-    icon: faMountain,
-  },
-  {
-    title: "Fast, reliable delivery",
-    subtitle:
-      "Bangladesh-wide supply coverage with swift logistics to construction sites across the country. Bulk orders dispatched within 24 hours.",
-    icon: faTruckFast,
-  },
-  {
-    title: "Precision grading",
-    subtitle:
-      "Every product is graded to exact specifications: Fine Sand (0.063–1mm), Coarse Sand (2–4.75mm), Stone Chips (5–10mm & 10–20mm), and Boulder (20mm+). Right material, every time.",
-    icon: faScaleBalanced,
-  },
-  {
-    title: "Transparent pricing",
-    subtitle:
-      "No hidden costs. Price per CFT is clearly listed and agreed before dispatch. Our clients trust us because we never change quoted prices after order confirmation.",
-    icon: faHandshake,
-  },
-];
+const STEPS = [
+  { number: '01', title: 'Requirement check', copy: 'We confirm material type, grading, volume, delivery point and unloading constraints.' },
+  { number: '02', title: 'Source alignment', copy: 'The supply source is selected around specification, availability and practical route planning.' },
+  { number: '03', title: 'Delivery control', copy: 'Dispatch is coordinated with your site contact so each load arrives against the agreed sequence.' },
+]
 
-export default function WhyChooseUs() {
-  useEffect(() => {
-    AOS.init({ duration: 700, offset: 60, once: true });
-  }, []);
+const WhyChooseUs = () => {
+  const navigate = useNavigate()
 
   return (
-    <section className="section-page bg-white">
-      <div className="container-page grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-        <div data-aos="fade-right" className="relative">
-          <div className="overflow-hidden rounded-2xl border border-safety-border bg-safety-surface p-3 shadow-xl">
-            <img
-              src={image}
-              alt="ITC — premium construction aggregate supply in Bangladesh"
-              className="aspect-[4/3] w-full rounded-xl object-cover"
-            />
+    <section className="section-page overflow-hidden bg-[#f5f3ed]">
+      <div className="container-page grid items-center gap-12 lg:grid-cols-[1.02fr_.98fr] lg:gap-20">
+        <div className="relative">
+          <div className="relative overflow-hidden rounded-[2rem] bg-white p-2 shadow-[0_35px_90px_-55px_rgba(19,35,58,.5)] sm:rounded-[2.6rem] sm:p-3">
+            <img src="/images/itc-site-delivery.webp" alt="Organized ITC aggregate delivery at a project site" loading="lazy" className="aspect-[4/3] w-full rounded-[1.6rem] object-cover sm:rounded-[2.1rem]" />
           </div>
-          <div className="absolute -bottom-6 left-5 right-5 rounded-xl bg-safety-red p-5 text-white shadow-2xl md:left-auto md:right-8 md:w-72">
-            <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-safety-amber/20">
-                <FontAwesomeIcon icon={faMountain} className="text-safety-amber" />
-              </span>
-              <div>
-                <p className="text-lg font-black">ITC</p>
-                <p className="text-sm leading-5 text-white/70">
-                  Build with Strength · All Over Bangladesh
-                </p>
-              </div>
-            </div>
+          <div className="absolute -bottom-7 -right-2 max-w-[250px] rounded-[1.4rem] border border-white bg-brand-primary p-5 text-white shadow-2xl sm:right-7">
+            <span className="inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.18em] text-[#e2bd70]"><FontAwesomeIcon icon={faCheck} /> Procurement clarity</span>
+            <p className="mt-2 text-sm font-semibold leading-6 text-white/82">One accountable conversation from product selection through delivery.</p>
           </div>
         </div>
 
-        <div data-aos="fade-left" className="pt-8 lg:pt-0">
-          <p className="eyebrow">Why Choose ITC</p>
-          <h2 className="heading-lg mt-3 text-balance">
-            The foundation your construction projects deserve.
-          </h2>
-          <p className="body-lead mt-5">
-            Bangladesh's construction sector demands consistent quality, competitive
-            pricing, and reliable delivery. ITC (Inqilab Trading Corporation)
-            is built around exactly that — premium aggregates, zero compromise.
-          </p>
+        <div>
+          <p className="eyebrow">Why choose ITC</p>
+          <h2 className="heading-lg mt-4 text-balance">Why projects choose ITC.</h2>
+          <p className="body-lead mt-6 max-w-xl">One team coordinates the material, quantity and delivery. You get clear updates from confirmation to site.</p>
 
-          <div className="mt-8 grid gap-4">
-            {features.map((item, index) => (
-              <div
-                key={item.title}
-                data-aos="fade-up"
-                data-aos-delay={index * 70}
-                className="group rounded-xl border border-safety-border bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-safety-red/40 hover:shadow-lg"
-              >
-                <div className="flex gap-4">
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-blue-50 text-safety-red transition group-hover:bg-safety-red group-hover:text-white">
-                    <FontAwesomeIcon icon={item.icon} />
-                  </span>
-                  <div>
-                    <h3 className="text-lg font-extrabold text-safety-ink">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-7 text-safety-muted">{item.subtitle}</p>
-                  </div>
+          <div className="mt-9 divide-y divide-brand-border border-y border-brand-border">
+            {STEPS.map((step) => (
+              <article key={step.number} className="grid grid-cols-[3.25rem_1fr] gap-4 py-5">
+                <span className="pt-1 text-xs font-black tracking-[.12em] text-brand-accent">{step.number}</span>
+                <div>
+                  <h3 className="font-extrabold text-brand-ink">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-brand-muted">{step.copy}</p>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
+
+          <button type="button" onClick={() => navigate('/about')} className="mt-8 inline-flex items-center gap-2 text-sm font-extrabold text-brand-primary transition hover:gap-3">
+            How ITC works <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+          </button>
         </div>
       </div>
     </section>
-  );
+  )
 }
+
+export default WhyChooseUs

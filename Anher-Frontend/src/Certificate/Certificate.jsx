@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import ModalImage from "react-modal-image"
 import { useOutletContext } from "react-router-dom"
 import AOS from 'aos';

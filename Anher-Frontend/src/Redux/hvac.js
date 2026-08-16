@@ -16,7 +16,7 @@ const HvacStoreSlice = createSlice({
 
 
     },
-    removeUser: (state, action) => {
+    removeUser: (state) => {
       state.users = null
     },
     addLogo:(state,action)=>{

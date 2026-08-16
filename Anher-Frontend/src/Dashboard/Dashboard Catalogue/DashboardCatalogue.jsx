@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -108,13 +108,14 @@ export const DashboardCatalogue = () => {
   }
 
   return (
-    <div className="space-y-6 w-full px-5 py-8">
-      <div className="flex justify-center mb-6">
+    <div className="w-full space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-border bg-white p-4 shadow-sm sm:p-5">
+        <div><p className="text-[10px] font-black uppercase tracking-[.18em] text-brand-accent">Download centre</p><p className="mt-1 text-sm font-bold text-brand-ink">{catalogues.length} PDF catalogue{catalogues.length === 1 ? '' : 's'} published</p></div>
         <label
           htmlFor="add_catalogue_modal"
-          className="btn text-base font-semibold hover:bg-cyan-400 bg-cyan-500 rounded-md text-white"
+          className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl bg-brand-primary px-4 text-xs font-extrabold text-white"
         >
-          Add Catalogue <FontAwesomeIcon icon={faPlus} />
+          Add catalogue <FontAwesomeIcon icon={faPlus} />
         </label>
       </div>
 
@@ -128,7 +129,7 @@ export const DashboardCatalogue = () => {
               aria-label={catalogue.pdfUrl ? `View catalogue: ${catalogue.title}` : undefined}
               onClick={() => openCatalogue(catalogue.pdfUrl)}
               onKeyDown={(event) => handleKeyDown(event, catalogue.pdfUrl, catalogue.title)}
-              className="relative group w-full h-[320px] overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white border border-blue-100 cursor-pointer"
+              className="group relative h-[320px] w-full cursor-pointer overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
             >
               {/* Image */}
               <div className="relative w-full h-[240px] overflow-hidden bg-gray-100">
@@ -269,7 +270,7 @@ const AddCatalogueForm = ({ onSuccess }) => {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             /> */}
-      <h1>Catalogue File</h1>
+      <label className="block text-xs font-bold text-brand-ink">Catalogue PDF</label>
       <input
         type="file"
         accept="application/pdf"
@@ -277,7 +278,7 @@ const AddCatalogueForm = ({ onSuccess }) => {
         onChange={(e) => setPdfFile(e.target.files[0])}
         required
       />
-      <h1>Catalogue Cover Image</h1>
+      <label className="block text-xs font-bold text-brand-ink">Catalogue cover image</label>
       <input
         type="file"
         accept="image/*"

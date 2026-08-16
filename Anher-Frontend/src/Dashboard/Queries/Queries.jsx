@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { QueryModal } from './QueryModal'
 import { useOutletContext } from 'react-router'
 import { capitalizeWords } from '../../Functions/functions'

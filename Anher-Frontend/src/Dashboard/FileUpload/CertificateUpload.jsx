@@ -5,19 +5,16 @@ import Swal from 'sweetalert2';
 
 export const CertificateUpload = () => {
     const [imageFile, setImageFile] = useState(null)
-    const [bannerFile, setBannerFile] = useState(null)
     const [name, setName] = useState('')
     const [loading, setLoading] = useState(false)
 
     const { setCertificate } = useOutletContext()
     const ImageFileInputRef = useRef();
-    const BannerFileInputRef = useRef()
-    const handleFileChange = (e, v) => {
+    const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
 
-            const path = URL.createObjectURL(file)
-            v == 'image' ? setImageFile(file) : setBannerFile(file)
+            setImageFile(file)
 
 
         } else {
@@ -111,7 +108,7 @@ export const CertificateUpload = () => {
                             <input type="text" value={name} onChange={(e) => setName(e.target.value)} className='border-2 font-semibold border-cyan-500 p-2  w-full rounded-lg' placeholder='Enter Certificate Name' id="" />
                             <div className='flex space-x-2 border-2 border-cyan-500 p-2 rounded-lg cursor-pointer'>
                                 <p className='font-semibold'>Certificate Image </p>
-                                <input type="file" ref={ImageFileInputRef} id="img" name="img" onChange={(e) => handleFileChange(e, 'image')} className='borer-1 border-gray-200' accept="image/*" />
+                                <input type="file" ref={ImageFileInputRef} id="img" name="img" onChange={handleFileChange} className='borer-1 border-gray-200' accept="image/*" />
                             </div>
                         </div>
 

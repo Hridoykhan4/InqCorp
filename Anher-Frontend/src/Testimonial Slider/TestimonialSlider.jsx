@@ -1,339 +1,139 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faQuoteLeft, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
-
-const NAVY = "#1B3A8A";
-const GOLD = "#C49B2B";
+import { useCallback, useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft, faArrowRight, faLocationDot, faPause, faPlay, faQuoteLeft } from '@fortawesome/free-solid-svg-icons'
 
 const TESTIMONIALS = [
   {
-    name: "Rahim Ahmed",
-    title: "Project Manager",
-    company: "Rahim Construction Ltd.",
-    location: "Bangladesh",
-    rating: 5,
-    initials: "RA",
-    color: NAVY,
-    text: "We sourced Fine Sand and Stone Chips from ITC for a large residential complex. Material quality was consistent, delivery was on time, and the CFT pricing was excellent for Bangladesh projects. Our go-to supplier.",
+    name: 'Rahim Ahmed', role: 'Project Manager', company: 'Rahim Construction Ltd.', location: 'Bangladesh', initials: 'RA', material: 'Sand & stone chips',
+    quote: 'We sourced Fine Sand and Stone Chips from ITC for a large residential complex. Material quality was consistent, delivery was on time, and communication stayed clear throughout the order.',
   },
   {
-    name: "Al-Amin Hossain",
-    title: "Site Engineer",
-    company: "Al-Amin Builders",
-    location: "Cumilla",
-    rating: 5,
-    initials: "AH",
-    color: GOLD,
-    text: "The Coarse Sand and Boulder met our civil engineering specs exactly. What impressed us most was the communication — Kawsar Alam personally ensured our bulk order was dispatched within 24 hours. Exceptional service.",
+    name: 'Al-Amin Hossain', role: 'Site Engineer', company: 'Al-Amin Builders', location: 'Cumilla', initials: 'AH', material: 'Coarse sand & boulder',
+    quote: 'The Coarse Sand and Boulder met our civil engineering requirements. What impressed us most was the communication and the way the bulk dispatch was coordinated.',
   },
   {
-    name: "Kamal Uddin",
-    title: "Procurement Head",
-    company: "Dhaka Infrastructure Ltd.",
-    location: "Dhaka",
-    rating: 5,
-    initials: "KU",
-    color: NAVY,
-    text: "We've been sourcing Stone Chips 10–20mm for three major road construction projects. Consistent grading, reliable delivery schedule, and transparent pricing. ITC is now our preferred aggregate partner.",
+    name: 'Kamal Uddin', role: 'Procurement Head', company: 'Dhaka Infrastructure Ltd.', location: 'Dhaka', initials: 'KU', material: 'Stone chips 10–20 mm',
+    quote: 'We sourced Stone Chips 10–20 mm for road construction work. The grading was consistent, the delivery schedule reliable, and the pricing process transparent.',
   },
   {
-    name: "Nasrin Begum",
-    title: "Director",
-    company: "Nasrin Developers",
-    location: "Bangladesh",
-    rating: 5,
-    initials: "NB",
-    color: GOLD,
-    text: "Ordered 500 CFT of mixed aggregates for our housing project. Delivery was prompt and material quality was exactly as described. The team is professional and responsive. Highly recommended for any construction project.",
+    name: 'Nasrin Begum', role: 'Director', company: 'Nasrin Developers', location: 'Bangladesh', initials: 'NB', material: 'Mixed aggregate order',
+    quote: 'Our mixed aggregate order arrived as discussed and the material matched the requirement. The team was professional, responsive and easy to coordinate with.',
   },
   {
-    name: "Jahangir Alam",
-    title: "Civil Engineer",
-    company: "Metro Constructions",
-    location: "Sylhet",
-    rating: 5,
-    initials: "JA",
-    color: NAVY,
-    text: "Medium Sand quality from ITC is excellent — no clay contamination, proper grading. We've now made them our sole sand supplier for ongoing projects across Bangladesh.",
+    name: 'Jahangir Alam', role: 'Civil Engineer', company: 'Metro Constructions', location: 'Sylhet', initials: 'JA', material: 'Medium river sand',
+    quote: 'The Medium Sand was clean and properly graded for our work. ITC kept us updated from confirmation through dispatch, which made site planning much easier.',
   },
-];
+]
 
-const AUTOPLAY = 6500;
-
-const StarRow = ({ count }) => (
-  <div className="flex items-center gap-1">
-    {Array.from({ length: count }).map((_, i) => (
-      <FontAwesomeIcon key={i} icon={faStar} className="text-xs" style={{ color: GOLD }} />
-    ))}
-  </div>
-);
-
-const TestimonialCard = ({ t, active, animate }) => (
-  <div
-    className={`testi-card relative h-full overflow-hidden rounded-3xl p-7 transition-all duration-500 ${active ? "ring-2" : "opacity-60 scale-95 hover:opacity-80"}`}
-    style={{
-      background: active
-        ? `linear-gradient(135deg, ${NAVY} 0%, #0d1f4a 100%)`
-        : "rgba(27,58,138,0.08)",
-      ringColor: GOLD,
-      boxShadow: active ? "0 24px 64px rgba(27,58,138,0.35)" : "none",
-      transform: active ? "scale(1)" : "scale(0.95)",
-      border: active ? `1px solid rgba(196,155,43,0.3)` : "1px solid rgba(27,58,138,0.12)",
-    }}
-  >
-    {/* Corner glow */}
-    {active && (
-      <div
-        className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(196,155,43,0.15), transparent)" }}
-      />
-    )}
-
-    {/* Quote icon */}
-    <FontAwesomeIcon
-      icon={faQuoteLeft}
-      className="mb-4 text-2xl"
-      style={{ color: active ? "rgba(196,155,43,0.5)" : "rgba(27,58,138,0.3)" }}
-    />
-
-    {/* Stars */}
-    <StarRow count={t.rating} />
-
-    {/* Text */}
-    <p
-      className="mt-4 text-[14px] leading-7 sm:text-[15px]"
-      style={{ color: active ? "rgba(255,255,255,0.8)" : "#4b5563" }}
-    >
-      "{t.text}"
-    </p>
-
-    {/* Divider */}
-    <div
-      className="my-5 h-px w-full"
-      style={{ background: active ? "rgba(196,155,43,0.2)" : "rgba(27,58,138,0.08)" }}
-    />
-
-    {/* Author */}
-    <div className="flex items-center gap-3">
-      <div
-        className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-sm font-black text-white shadow-lg"
-        style={{
-          background: active
-            ? `linear-gradient(135deg, ${GOLD}, #a07a1a)`
-            : `linear-gradient(135deg, ${t.color}, rgba(27,58,138,0.6))`,
-        }}
-      >
-        {t.initials}
-      </div>
-      <div className="min-w-0">
-        <p className="truncate text-sm font-extrabold" style={{ color: active ? "#fff" : "#111827" }}>
-          {t.name}
-        </p>
-        <p className="truncate text-[12px]" style={{ color: active ? "rgba(255,255,255,0.55)" : "#6b7280" }}>
-          {t.title} · {t.company}
-        </p>
-      </div>
-      <span
-        className="ml-auto shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
-        style={{
-          background: active ? "rgba(196,155,43,0.15)" : "rgba(27,58,138,0.06)",
-          color: active ? GOLD : NAVY,
-        }}
-      >
-        {t.location}
-      </span>
-    </div>
-  </div>
-);
+const AUTOPLAY_MS = 7000
 
 const TestimonialsSlider = () => {
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const sectionRef = useRef(null);
-  const headingRef = useRef(null);
-  const total = TESTIMONIALS.length;
+  const [active, setActive] = useState(0)
+  const [manualPaused, setManualPaused] = useState(false)
+  const [interacting, setInteracting] = useState(false)
+  const cardRef = useRef(null)
+  const touchStart = useRef(null)
+  const testimonial = TESTIMONIALS[active]
+  const paused = manualPaused || interacting
 
-  const goTo = useCallback((idx) => setActive(((idx % total) + total) % total), [total]);
-  const next = useCallback(() => goTo(active + 1), [active, goTo]);
-  const prev = useCallback(() => goTo(active - 1), [active, goTo]);
+  const move = useCallback((direction) => {
+    setActive((current) => (current + direction + TESTIMONIALS.length) % TESTIMONIALS.length)
+  }, [])
 
   useEffect(() => {
-    if (paused) return;
-    const id = setInterval(next, AUTOPLAY);
-    return () => clearInterval(id);
-  }, [paused, next]);
+    if (paused) return undefined
+    const timer = window.setInterval(() => move(1), AUTOPLAY_MS)
+    return () => window.clearInterval(timer)
+  }, [move, paused])
 
-  // GSAP scroll reveal
   useEffect(() => {
-    if (!headingRef.current) return;
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headingRef.current.children,
-        { y: 36, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.75, stagger: 0.1, ease: "power3.out",
-          scrollTrigger: { trigger: headingRef.current, start: "top 82%" },
-        }
-      );
-    });
-    return () => ctx.revert();
-  }, []);
+    if (!cardRef.current || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined
+    const animation = gsap.fromTo(cardRef.current, { y: 14, opacity: .45 }, { y: 0, opacity: 1, duration: .48, ease: 'power3.out' })
+    return () => animation.kill()
+  }, [active])
 
-  // Which cards to show (active + neighbours)
-  const getVisible = () => {
-    if (total <= 1) return [0];
-    const prev2 = ((active - 1) + total) % total;
-    const next2 = (active + 1) % total;
-    return [prev2, active, next2];
-  };
-  const visible = getVisible();
+  const endTouch = (event) => {
+    if (touchStart.current === null) return
+    const distance = event.changedTouches[0].clientX - touchStart.current
+    if (Math.abs(distance) > 45) move(distance > 0 ? -1 : 1)
+    touchStart.current = null
+  }
 
   return (
     <section
-      ref={sectionRef}
-      className="relative overflow-hidden py-20 lg:py-28"
-      style={{ background: "#F8F9FE" }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      id="testimonials"
+      className="section-page overflow-hidden bg-[#f3f5f7]"
+      onMouseEnter={() => setInteracting(true)}
+      onMouseLeave={() => setInteracting(false)}
+      onFocusCapture={() => setInteracting(true)}
+      onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false) }}
     >
-      {/* Background blobs */}
-      <div
-        className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full opacity-40"
-        style={{ background: `radial-gradient(circle, rgba(27,58,138,0.08), transparent)`, filter: "blur(60px)" }}
-      />
-      <div
-        className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full opacity-40"
-        style={{ background: `radial-gradient(circle, rgba(196,155,43,0.07), transparent)`, filter: "blur(60px)" }}
-      />
-
-      <div className="container mx-auto px-4 sm:px-8 lg:px-12">
-
-        {/* Heading */}
-        <div ref={headingRef} className="mb-14 text-center">
-          <p
-            className="inline-block text-[11px] font-bold uppercase tracking-[0.28em]"
-            style={{ color: GOLD }}
-          >
-            Client Testimonials
-          </p>
-          <h2
-            className="mt-3 text-[clamp(26px,4vw,44px)] font-black leading-tight tracking-tight"
-            style={{ color: "#0d1a36" }}
-          >
-            Trusted by Builders Across Bangladesh
-          </h2>
-          {/* Gold underline */}
-          <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-            <span className="block h-[3px] w-12 rounded-full" style={{ background: GOLD }} />
-            <span className="block h-2 w-2 rounded-full" style={{ background: GOLD }} />
-            <span className="block h-[3px] w-12 rounded-full" style={{ background: GOLD }} />
+      <div className="container-page">
+        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+          <div>
+            <p className="eyebrow">Client experience</p>
+            <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-[-.045em] text-brand-ink sm:text-5xl">What working with ITC feels like.</h2>
           </div>
-          {/* Rating pill */}
-          <div
-            className="mx-auto mt-5 inline-flex items-center gap-2.5 rounded-full px-5 py-2 shadow-sm"
-            style={{ background: "white", border: "1px solid rgba(27,58,138,0.1)" }}
-          >
-            <StarRow count={5} />
-            <span className="text-sm font-extrabold" style={{ color: NAVY }}>4.9 / 5</span>
-            <span className="text-xs font-semibold text-gray-400">average rating</span>
-          </div>
-        </div>
-
-        {/* Cards - 3 visible on desktop */}
-        <div
-          className="grid grid-cols-1 gap-5 md:grid-cols-3"
-          role="region"
-          aria-label="Client testimonials"
-          onKeyDown={(e) => {
-            if (e.key === "ArrowLeft") prev();
-            else if (e.key === "ArrowRight") next();
-          }}
-          tabIndex={0}
-        >
-          {visible.map((idx, pos) => (
-            <div
-              key={idx}
-              className="cursor-pointer"
-              onClick={() => setActive(idx)}
-            >
-              <TestimonialCard t={TESTIMONIALS[idx]} active={pos === 1} />
-            </div>
-          ))}
-        </div>
-
-        {/* Controls */}
-        <div className="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
-          {/* Dot indicators */}
           <div className="flex items-center gap-2">
-            {TESTIMONIALS.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => goTo(idx)}
-                className="h-2 rounded-full transition-all duration-300"
-                style={{
-                  width: idx === active ? 28 : 8,
-                  background: idx === active ? NAVY : "rgba(27,58,138,0.2)",
-                }}
-                aria-label={`Go to testimonial ${idx + 1}`}
-              />
+            <button type="button" onClick={() => setManualPaused((value) => !value)} className="grid h-10 w-10 place-items-center rounded-full border border-brand-border bg-white text-xs text-brand-muted" aria-label={manualPaused ? 'Resume testimonial autoplay' : 'Pause testimonial autoplay'}><FontAwesomeIcon icon={manualPaused ? faPlay : faPause} /></button>
+            <button type="button" onClick={() => move(-1)} className="grid h-10 w-10 place-items-center rounded-full border border-brand-border bg-white text-brand-primary transition hover:border-brand-primary/30" aria-label="Previous testimonial"><FontAwesomeIcon icon={faArrowLeft} /></button>
+            <button type="button" onClick={() => move(1)} className="grid h-10 w-10 place-items-center rounded-full bg-brand-primary text-white shadow-md" aria-label="Next testimonial"><FontAwesomeIcon icon={faArrowRight} /></button>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_330px]">
+          <article
+            ref={cardRef}
+            className="flex min-h-[360px] flex-col justify-between rounded-[1.7rem] border border-brand-border bg-white p-6 shadow-[0_28px_75px_-55px_rgba(19,35,58,.5)] sm:p-9 lg:p-11"
+            onTouchStart={(event) => { touchStart.current = event.touches[0].clientX }}
+            onTouchEnd={endTouch}
+            aria-live="polite"
+          >
+            <div>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <FontAwesomeIcon icon={faQuoteLeft} className="text-2xl text-brand-accent/55" />
+                <span className="rounded-full bg-brand-wash px-3 py-2 text-[9px] font-black uppercase tracking-[.13em] text-brand-primary">{testimonial.material}</span>
+              </div>
+              <blockquote className="mt-7 max-w-4xl text-xl font-bold leading-[1.55] tracking-[-.02em] text-brand-ink sm:text-2xl lg:text-[1.8rem]">“{testimonial.quote}”</blockquote>
+            </div>
+
+            <div className="mt-9 flex items-center gap-4 border-t border-brand-border pt-6">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-brand-primary text-sm font-black text-white">{testimonial.initials}</span>
+              <div className="min-w-0"><p className="font-black text-brand-ink">{testimonial.name}</p><p className="mt-1 text-xs font-semibold text-brand-muted">{testimonial.role} · {testimonial.company}</p></div>
+              <span className="ml-auto hidden items-center gap-2 text-[10px] font-bold text-brand-muted sm:inline-flex"><FontAwesomeIcon icon={faLocationDot} className="text-brand-accent" />{testimonial.location}</span>
+            </div>
+          </article>
+
+          <div className="no-scrollbar flex gap-2 overflow-x-auto pb-2 lg:grid lg:overflow-visible lg:pb-0" aria-label="Choose a testimonial">
+            {TESTIMONIALS.map((item, index) => (
+              <button key={item.name} type="button" onClick={() => setActive(index)} className={`min-w-[230px] rounded-[1.15rem] border p-4 text-left transition lg:min-w-0 ${index === active ? 'border-brand-primary/25 bg-brand-primary text-white shadow-lg' : 'border-brand-border bg-white text-brand-ink hover:border-brand-primary/25'}`} aria-label={`Show testimonial from ${item.name}`}>
+                <div className="flex items-center gap-3">
+                  <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xs font-black ${index === active ? 'bg-white/12 text-white' : 'bg-brand-wash text-brand-primary'}`}>{item.initials}</span>
+                  <div className="min-w-0"><p className="truncate text-xs font-black">{item.name}</p><p className={`mt-1 truncate text-[10px] ${index === active ? 'text-white/58' : 'text-brand-muted'}`}>{item.company}</p></div>
+                  <span className={`ml-auto text-[10px] font-black tabular-nums ${index === active ? 'text-[#e2bd70]' : 'text-brand-muted/55'}`}>0{index + 1}</span>
+                </div>
+              </button>
             ))}
           </div>
-
-          {/* Arrow controls */}
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold tabular-nums text-gray-400">
-              <span className="font-black" style={{ color: NAVY }}>{String(active + 1).padStart(2, "0")}</span>
-              {" / "}
-              {String(total).padStart(2, "0")}
-            </span>
-            <button
-              onClick={prev}
-              aria-label="Previous testimonial"
-              className="grid h-11 w-11 place-items-center rounded-full border transition-all duration-300 hover:-translate-y-0.5"
-              style={{ borderColor: "rgba(27,58,138,0.2)", color: NAVY }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = NAVY; e.currentTarget.style.color = "white"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = ""; e.currentTarget.style.color = NAVY; }}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </button>
-            <button
-              onClick={next}
-              aria-label="Next testimonial"
-              className="grid h-11 w-11 place-items-center rounded-full text-white shadow-md transition-all duration-300 hover:-translate-y-0.5"
-              style={{ background: `linear-gradient(135deg, ${NAVY}, #2a50b8)` }}
-            >
-              <FontAwesomeIcon icon={faArrowRight} />
-            </button>
-          </div>
         </div>
 
-        {/* Progress bar */}
-        <div
-          className="mt-5 h-0.5 w-full overflow-hidden rounded-full"
-          style={{ background: "rgba(27,58,138,0.1)" }}
-        >
-          <div
-            key={`${active}-${paused}`}
-            className="h-full rounded-full"
-            style={{
-              background: `linear-gradient(90deg, ${NAVY}, ${GOLD})`,
-              animation: paused ? "none" : `testiProgress ${AUTOPLAY}ms linear forwards`,
-            }}
-          />
+        <div className="mt-5 flex items-center gap-3">
+          <span className="text-[10px] font-black tabular-nums text-brand-primary">{String(active + 1).padStart(2, '0')}</span>
+          <div className="h-1 flex-1 overflow-hidden rounded-full bg-brand-primary/10">
+            <span key={`${active}-${paused}`} className={`block h-full origin-left rounded-full bg-brand-accent ${paused ? '' : 'testimonial-progress'}`} />
+          </div>
+          <span className="text-[10px] font-black tabular-nums text-brand-muted">{String(TESTIMONIALS.length).padStart(2, '0')}</span>
         </div>
       </div>
 
       <style>{`
-        @keyframes testiProgress { from { width: 0%; } to { width: 100%; } }
-        .testi-card { transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
-        @media (prefers-reduced-motion: reduce) { .testi-card { transition: none; } }
+        .testimonial-progress{animation:testimonialProgress ${AUTOPLAY_MS}ms linear both}
+        @keyframes testimonialProgress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+        @media(prefers-reduced-motion:reduce){.testimonial-progress{animation:none;transform:scaleX(1)}}
       `}</style>
     </section>
-  );
-};
+  )
+}
 
-export default TestimonialsSlider;
+export default TestimonialsSlider

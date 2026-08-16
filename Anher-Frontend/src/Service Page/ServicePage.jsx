@@ -135,13 +135,13 @@ const Tile = ({ title, icon: IconComp, featured, accentLine, dot }) => {
       {/* Content */}
       <div className="relative z-[1] flex h-full flex-col justify-between p-8">
         {/* Icon */}
-        <IconComp
-          cls={`h-8 w-8 transition-colors ${
+        {React.createElement(IconComp, {
+          cls: `h-8 w-8 transition-colors ${
             featured
               ? "text-white"
               : "text-[var(--orange)] group-hover:text-white"
-          }`}
-        />
+          }`,
+        })}
 
         {/* Title */}
         <h3
@@ -201,8 +201,8 @@ export const ServicePage = () => {
   return (
     <div>
       <SeoManager
-        title="SafetyPlus Services"
-        description="Explore SafetyPlus services including site safety audits, installation of fire doors and hose cabinets, equipment maintenance, and compliance support."
+        title="Inqilab Trading Corporation Services"
+        description="Explore Inqilab Trading Corporation services including site safety audits, installation of fire doors and hose cabinets, equipment maintenance, and compliance support."
         path="/services"
         keywords="fire safety services Bangladesh, fire door installation, hose cabinet installation, safety audit, fire equipment maintenance"
       />

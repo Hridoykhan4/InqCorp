@@ -32,21 +32,21 @@ export default function OfferAndStats() {
     <section className="section-page bg-white">
       <div className="container-page">
         <div className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-stretch">
-          <div className="overflow-hidden rounded-lg border border-safety-border bg-safety-surface p-3 shadow-lg">
+          <div className="overflow-hidden rounded-lg border border-brand-border bg-brand-surface p-3 shadow-lg">
             <img
               src={leftImage}
-              alt="SafetyPlus industrial safety products"
+              alt="Inqilab Trading Corporation industrial safety products"
               className="h-full min-h-[360px] w-full rounded-md object-cover"
               loading="lazy"
             />
           </div>
 
           <div className="grid gap-6">
-            <div className="rounded-lg border border-safety-border bg-white p-6 shadow-sm md:p-8">
+            <div className="rounded-lg border border-brand-border bg-white p-6 shadow-sm md:p-8">
               <div className="grid gap-6 md:grid-cols-[1fr_260px] md:items-center">
                 <div>
                   <p className="eyebrow">Fast Sales Conversation</p>
-                  <h2 className="mt-3 text-3xl font-black leading-tight text-safety-ink md:text-5xl">
+                  <h2 className="mt-3 text-3xl font-black leading-tight text-brand-ink md:text-5xl">
                     Send your safety requirement. We will help organize the product scope.
                   </h2>
                   <p className="body-lead mt-4">
@@ -59,15 +59,15 @@ export default function OfferAndStats() {
                     onClick={() => navigate("/contact")}
                     className="btn-brand mt-6"
                   >
-                    Contact SafetyPlus
+                    Contact Inqilab Trading Corporation
                     <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-xs" />
                   </button>
                 </div>
 
-                <div className="overflow-hidden rounded-lg bg-safety-surface">
+                <div className="overflow-hidden rounded-lg bg-brand-surface">
                   <img
                     src={rightImage}
-                    alt="SafetyPlus product consultation"
+                    alt="Inqilab Trading Corporation product consultation"
                     className="aspect-[4/5] w-full object-cover"
                     loading="lazy"
                   />
@@ -77,8 +77,8 @@ export default function OfferAndStats() {
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {stats.map((item) => (
-                <div key={item.label} className="rounded-lg bg-safety-ink p-5 text-white">
-                  <p className="text-3xl font-black text-safety-amber">{item.number}</p>
+                <div key={item.label} className="rounded-lg bg-brand-ink p-5 text-white">
+                  <p className="text-3xl font-black text-brand-accent">{item.number}</p>
                   <p className="mt-2 text-sm font-semibold text-white/70">{item.label}</p>
                 </div>
               ))}
@@ -88,12 +88,12 @@ export default function OfferAndStats() {
               {quickLines.map((item) => (
                 <div
                   key={item.label}
-                  className="flex items-center gap-3 rounded-lg border border-safety-border bg-safety-surface p-4"
+                  className="flex items-center gap-3 rounded-lg border border-brand-border bg-brand-surface p-4"
                 >
-                  <span className="grid h-10 w-10 place-items-center rounded-md bg-red-50 text-safety-red">
+                  <span className="grid h-10 w-10 place-items-center rounded-md bg-red-50 text-brand-primary">
                     <FontAwesomeIcon icon={item.icon} />
                   </span>
-                  <p className="text-sm font-extrabold text-safety-ink">{item.label}</p>
+                  <p className="text-sm font-extrabold text-brand-ink">{item.label}</p>
                 </div>
               ))}
             </div>

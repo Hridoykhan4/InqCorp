@@ -1,10 +1,8 @@
-import axios from 'axios';
-import React, { useRef, useState } from 'react';
-import { useOutletContext } from 'react-router';
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { socket } from '../Socket/socket';
 
-export const RequireCatelogue = ({ item }) => {
+export const RequireCatelogue = () => {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [cateLogueName, setCatelogueName] = useState('')

@@ -73,23 +73,23 @@ export const DashboardCategories = () => {
 
     return (
         <div className='space-y-5 p-2 sm:p-3'>
-            <div className='flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-safety-border bg-white p-4 shadow-sm'>
+            <div className='flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-border bg-white p-4 shadow-sm'>
                 <div>
-                    <p className='text-[11px] font-bold uppercase tracking-[0.22em] text-safety-red'>
+                    <p className='text-[11px] font-bold uppercase tracking-[0.22em] text-brand-primary'>
                         <FontAwesomeIcon icon={faLayerGroup} className='mr-1.5' />
                         Catalogue
                     </p>
-                    <h2 className='mt-1 text-lg font-extrabold text-safety-ink sm:text-xl'>
+                    <h2 className='mt-1 text-lg font-extrabold text-brand-ink sm:text-xl'>
                         Product Categories
                     </h2>
-                    <p className='text-xs text-safety-muted'>
+                    <p className='text-xs text-brand-muted'>
                         {categories?.length || 0} categor{(categories?.length || 0) === 1 ? 'y' : 'ies'} live on the storefront.
                     </p>
                 </div>
 
                 <label
                     htmlFor='my_modal_3'
-                    className='inline-flex cursor-pointer items-center gap-2 rounded-full bg-safety-red px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-safety-red-dark'
+                    className='inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-primary-dark'
                 >
                     <FontAwesomeIcon icon={faPlus} />
                     Add Category
@@ -106,15 +106,15 @@ export const DashboardCategories = () => {
                     ))}
                 </div>
             ) : categories.length === 0 ? (
-                <div className='rounded-2xl border border-dashed border-safety-border bg-white py-16 text-center'>
-                    <FontAwesomeIcon icon={faLayerGroup} className='text-5xl text-safety-border' />
-                    <h3 className='mt-3 text-lg font-bold text-safety-ink'>No categories yet</h3>
-                    <p className='mt-1 text-sm text-safety-muted'>
+                <div className='rounded-2xl border border-dashed border-brand-border bg-white py-16 text-center'>
+                    <FontAwesomeIcon icon={faLayerGroup} className='text-5xl text-brand-border' />
+                    <h3 className='mt-3 text-lg font-bold text-brand-ink'>No categories yet</h3>
+                    <p className='mt-1 text-sm text-brand-muted'>
                         Add your first product category to organise the catalogue.
                     </p>
                     <label
                         htmlFor='my_modal_3'
-                        className='mt-4 inline-flex cursor-pointer items-center gap-2 rounded-full bg-safety-red px-5 py-2.5 text-sm font-bold text-white'
+                        className='mt-4 inline-flex cursor-pointer items-center gap-2 rounded-full bg-brand-primary px-5 py-2.5 text-sm font-bold text-white'
                     >
                         <FontAwesomeIcon icon={faPlus} />
                         Add Category
@@ -127,22 +127,22 @@ export const DashboardCategories = () => {
                         return (
                             <article
                                 key={item._id}
-                                className='group relative overflow-hidden rounded-2xl border border-safety-border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl'
+                                className='group relative overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl'
                             >
                                 <button
                                     type='button'
                                     onClick={() => handleClick(item)}
                                     className='block w-full text-left'
                                 >
-                                    <div className='relative aspect-[16/10] overflow-hidden bg-safety-surface'>
+                                    <div className='relative aspect-[16/10] overflow-hidden bg-brand-surface'>
                                         <img
                                             src={getImage(item)}
                                             alt={item?.name || 'Category'}
                                             loading='lazy'
                                             className='h-full w-full object-cover transition duration-500 group-hover:scale-105'
                                         />
-                                        <div className='absolute inset-0 bg-gradient-to-t from-safety-ink/70 via-safety-ink/10 to-transparent' />
-                                        <span className='absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-safety-red shadow-sm'>
+                                        <div className='absolute inset-0 bg-gradient-to-t from-brand-ink/70 via-brand-ink/10 to-transparent' />
+                                        <span className='absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-primary shadow-sm'>
                                             {count} product{count !== 1 ? 's' : ''}
                                         </span>
                                         <div className='absolute inset-x-3 bottom-3'>
@@ -157,7 +157,7 @@ export const DashboardCategories = () => {
                                 <div className='flex items-center justify-between gap-2 px-4 py-3'>
                                     <label
                                         htmlFor={`updateCategory-${item.name}`}
-                                        className='inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-safety-border bg-white px-3 py-1.5 text-xs font-semibold text-safety-ink transition hover:border-safety-red hover:text-safety-red'
+                                        className='inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-brand-border bg-white px-3 py-1.5 text-xs font-semibold text-brand-ink transition hover:border-brand-primary hover:text-brand-primary'
                                     >
                                         <FontAwesomeIcon icon={faPenToSquare} className='text-[10px]' />
                                         Update
@@ -165,7 +165,7 @@ export const DashboardCategories = () => {
                                     <button
                                         type='button'
                                         onClick={(e) => handleDelete(item, e)}
-                                        className='inline-flex items-center gap-1.5 rounded-md bg-safety-red px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-safety-red-dark'
+                                        className='inline-flex items-center gap-1.5 rounded-md bg-brand-primary px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-primary-dark'
                                     >
                                         <FontAwesomeIcon icon={faTrash} className='text-[10px]' />
                                         Delete

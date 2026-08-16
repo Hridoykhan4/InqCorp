@@ -1,5 +1,4 @@
-import { useEffect } from "react"
-import { Navigate, replace, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const DescriptionModal = ({ description,index}) => {
 

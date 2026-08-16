@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { FaFolder, FaUser } from "react-icons/fa6";
 import { Description } from "../About/About Descrption/Description";
 import { BlogCard } from "./Blog Card/BlogCard";
-import { useLocation, useOutletContext, useParams } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 import { DescriptionModal } from "./Blog Description Modal/DescriptionModal";
 import { SeoManager } from "../SEO/SeoManager";
 // import banner from "../assets/image/Banner Image/Blog Banner.png";
 export const Blog = () => {
   const location = useLocation();
-  const { blogs, setBlogs } = useOutletContext();
+  const { blogs } = useOutletContext();
   const [currentBlog, setCurrentBlog] = useState(null);
 
   useEffect(() => {
     if (location.state?.blogID && blogs) {
       const blog = blogs?.filter(
-        (item, index) => item._id == location?.state?.blogID
+        (item) => item._id == location?.state?.blogID
       );
       if (blog.length == 1) {
         setCurrentBlog(blog[0]);
@@ -33,10 +33,10 @@ export const Blog = () => {
     <div className="space-y-10">
       {!location.pathname.startsWith("/dashboard") && (
         <SeoManager
-          title="SafetyPlus Blog"
-          description="Updates, guides, and insights from SafetyPlus on fire safety, industrial protection, compliance, and equipment installation in Bangladesh."
+          title="Inqilab Trading Corporation Blog"
+          description="Updates, guides, and insights from Inqilab Trading Corporation on fire safety, industrial protection, compliance, and equipment installation in Bangladesh."
           path="/blog"
-          keywords="fire safety blog, industrial safety Bangladesh, fire door guide, hose cabinet installation, SafetyPlus blog"
+          keywords="fire safety blog, industrial safety Bangladesh, fire door guide, hose cabinet installation, Inqilab Trading Corporation blog"
         />
       )}
       {!location.pathname.startsWith("/dashboard") && (

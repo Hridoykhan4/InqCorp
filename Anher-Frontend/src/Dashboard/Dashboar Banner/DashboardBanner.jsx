@@ -1,6 +1,6 @@
 import { faPenToSquare, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Swal from 'sweetalert2';
 import { UploadBanner } from '../Upload Banner/UploadBanner';
 import { useOutletContext } from 'react-router';
@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export const DashboardBanner = () => {
 
-    const { dashboardBanners, setDashboardBanners, banners, setBanners } = useOutletContext()
+    const { dashboardBanners, setDashboardBanners, setBanners } = useOutletContext()
 
     const [editing, setEditing] = useState(null) // banner being edited
     const [form, setForm] = useState({ title: '', description: '', region: '' })
@@ -83,36 +83,34 @@ export const DashboardBanner = () => {
     }
 
     return (
-        <div className='space-y-1 w-full'>
-            <div>
-                <h1 className='text-center md:text-5xl text-3xl font-bold text-gray-800 underline'>Banners</h1>
+        <div className='w-full space-y-5'>
+            <div className='flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-border bg-white p-4 shadow-sm sm:p-5'>
+                <div>
+                    <p className='text-[10px] font-black uppercase tracking-[.18em] text-brand-accent'>Homepage slider</p>
+                    <p className='mt-1 text-sm font-bold text-brand-ink'>{dashboardBanners?.length || 0} public update{dashboardBanners?.length === 1 ? '' : 's'} live</p>
+                </div>
+                <label htmlFor="uploadBanner" className='inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl bg-brand-primary px-4 text-xs font-extrabold text-white shadow-sm transition hover:bg-brand-primary-dark'>
+                    Add public update <FontAwesomeIcon icon={faPlus} />
+                </label>
             </div>
 
-            <br />
-            <section className='space-y-4 px-5'>
-                <div className='flex max-sm:justify-center max-sm:items-center '>
-                    <label htmlFor="uploadBanner" className='btn text-base font-semibold hover:bg-cyan-400 bg-cyan-500 rounded-md text-white '>
-                        Upload Banners <FontAwesomeIcon icon={faPlus} ></FontAwesomeIcon>
-                    </label>
-                </div>
-
-                <section className='flex max-sm:flex-col gap-5 items-center md:flex-wrap '>
+                <section className='grid gap-4 sm:grid-cols-2 xl:grid-cols-3'>
                     {
                         dashboardBanners && dashboardBanners?.map((item, index) => {
                             return (
-                                <div key={index} className="group relative w-[300px] max-sm:w-full overflow-hidden rounded-lg shadow-lg">
+                                <article key={index} className="group relative overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
                                     <img
                                         src={`${item?.imageUrl[0] || `https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png`}`}
                                         alt={item?.title || 'banner'}
                                         loading="lazy"
-                                        className="w-full h-[200px] object-cover transition-all duration-300 ease-in-out group-hover:scale-105"
+                                        className="aspect-[16/10] w-full object-cover transition-all duration-500 ease-out group-hover:scale-105"
                                     />
 
                                     {/* hover actions */}
                                     <div className="absolute right-2 top-2 flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition">
                                         <button
                                             onClick={() => openEdit(item)}
-                                            className="grid h-8 w-8 place-items-center rounded-full bg-white text-cyan-600 shadow hover:bg-cyan-50"
+                                            className="grid h-9 w-9 place-items-center rounded-xl bg-white text-brand-primary shadow hover:bg-brand-wash"
                                             title="Edit"
                                         >
                                             <FontAwesomeIcon icon={faPenToSquare} />
@@ -126,20 +124,18 @@ export const DashboardBanner = () => {
                                         </button>
                                     </div>
 
-                                    <div className='space-y-1 p-3'>
-                                        <p className='text-[10px] font-bold uppercase tracking-widest text-cyan-600'>
+                                    <div className='space-y-1 p-4'>
+                                        <p className='text-[9px] font-black uppercase tracking-[.15em] text-brand-accent'>
                                             {item?.region ? item.region.toUpperCase() : 'GLOBAL'}
                                         </p>
-                                        <p className='line-clamp-1 font-bold text-gray-800'>{item?.title || 'Untitled'}</p>
-                                        <p className='line-clamp-2 text-xs text-gray-500'>{item?.description || 'No description'}</p>
+                                        <p className='line-clamp-1 font-black text-brand-ink'>{item?.title || 'Untitled'}</p>
+                                        <p className='line-clamp-2 text-xs leading-5 text-brand-muted'>{item?.description || 'No description'}</p>
                                     </div>
-                                </div>
+                                </article>
                             )
                         })
                     }
                 </section>
-            </section>
-
             {/* Edit modal */}
             <input type="checkbox" id="editBanner" className="modal-toggle" />
             <div className="modal">

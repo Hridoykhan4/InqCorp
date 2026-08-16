@@ -1,349 +1,159 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowRight,
-  faBars,
-  faChevronDown,
-  faPenToSquare,
-  faMountain,
-} from "@fortawesome/free-solid-svg-icons";
-import { capitalizeWords } from "../Functions/functions";
-import { useSelector } from "react-redux";
-import { SideNavbar } from "./SideNav/SideNavbar";
-import {
-  getCategoryList,
-  isExternalCategory,
-  MAIN_NAV_ITEMS,
-  openCategoryDestination,
-} from "../config/navigation";
+import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight, faBars, faChevronDown, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { getCategoryHref, getCategoryList } from '../config/navigation'
+import { capitalizeWords } from '../Functions/functions'
 
-const fallbackImage =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Image_not_available.png/640px-Image_not_available.png";
-
-const HOVER_OPEN_DELAY = 160;
-const HOVER_CLOSE_DELAY = 220;
-
-const getCategoryImage = (item) => {
-  if (Array.isArray(item?.imageUrl)) {
-    return item.imageUrl[0] || fallbackImage;
-  }
-  return item?.imageUrl || fallbackImage;
-};
+const NAV_ITEMS = [
+  { label: 'Home', path: '/' },
+  { label: 'About', path: '/about' },
+  { label: 'Catalogue', path: '/catalogue' },
+  { label: 'Gallery', path: '/gallery' },
+  { label: 'Contact', path: '/contact' },
+]
 
 export const Navbar = ({ categories = [] }) => {
-  const [showProducts, setShowProducts] = useState(false);
-  const productsMenuRef = useRef(null);
-  const openTimer = useRef(null);
-  const closeTimer = useRef(null);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const logo = useSelector((state) => state.hvac.logo);
-  const admin = useSelector((state) => state.hvac.users);
-  const isDashboard = location.pathname.startsWith("/dashboard");
+  const [productsOpen, setProductsOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const menuRef = useRef(null)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const logo = useSelector((state) => state.hvac.logo)
+  const admin = useSelector((state) => state.hvac.users)
+  const categoryList = getCategoryList(categories)
+  const isDashboard = location.pathname.startsWith('/dashboard')
 
-  const productPreview = useMemo(() => getCategoryList(categories), [categories]);
-
-  const clearTimers = () => {
-    if (openTimer.current) {
-      clearTimeout(openTimer.current);
-      openTimer.current = null;
-    }
-    if (closeTimer.current) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
-    }
-  };
-
-  const scheduleOpen = () => {
-    if (showProducts) return;
-    if (closeTimer.current) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
-    }
-    if (openTimer.current) return;
-    openTimer.current = setTimeout(() => {
-      setShowProducts(true);
-      openTimer.current = null;
-    }, HOVER_OPEN_DELAY);
-  };
-
-  const scheduleClose = () => {
-    if (openTimer.current) {
-      clearTimeout(openTimer.current);
-      openTimer.current = null;
-    }
-    if (closeTimer.current) return;
-    closeTimer.current = setTimeout(() => {
-      setShowProducts(false);
-      closeTimer.current = null;
-    }, HOVER_CLOSE_DELAY);
-  };
-
-  const toggleClick = () => {
-    clearTimers();
-    setShowProducts((v) => !v);
-  };
+  const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname.startsWith(path)
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        productsMenuRef.current &&
-        !productsMenuRef.current.contains(event.target)
-      ) {
-        clearTimers();
-        setShowProducts(false);
+    setProductsOpen(false)
+    setMobileOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    const onPointerDown = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) setProductsOpen(false)
+    }
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setProductsOpen(false)
+        setMobileOpen(false)
       }
-    };
-    const handleEsc = (e) => {
-      if (e.key === "Escape") setShowProducts(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEsc);
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEsc);
-    };
-  }, []);
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [])
 
   useEffect(() => {
-    setShowProducts(false);
-    clearTimers();
-  }, [location.pathname]);
-
-  useEffect(() => () => clearTimers(), []);
-
-  const isActive = (path) =>
-    path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
-
-  const goToCategory = (item) => {
-    setShowProducts(false);
-    openCategoryDestination(item, navigate);
-  };
+    const previous = document.body.style.overflow
+    if (mobileOpen) document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previous }
+  }, [mobileOpen])
 
   return (
-    <div className="relative z-50">
-      <nav className="fixed inset-x-0 top-0 border-b border-safety-border/70 glass-panel shadow-[0_4px_24px_-12px_rgba(0,0,0,0.12)]">
-        <div className="container-page flex h-16 items-center justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
-            {admin && isDashboard && (
-              <label
-                htmlFor="dashboard-drawer"
-                className="grid h-10 w-10 cursor-pointer place-items-center rounded-md border border-safety-border text-safety-ink transition hover:border-safety-red hover:text-safety-red lg:hidden"
-                aria-label="Open dashboard menu"
-              >
-                <FontAwesomeIcon icon={faBars} />
-              </label>
-            )}
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-brand-border/80 bg-white/90 backdrop-blur-xl">
+      <div className="container-page flex h-[76px] items-center justify-between gap-4">
+        <button type="button" onClick={() => navigate('/')} className="group relative flex min-w-0 items-center gap-3 text-left" aria-label="ITC home">
+          <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl border border-brand-border bg-white p-1 shadow-sm">
+            <img src={logo || '/inqcorpLogo.jpeg'} alt="ITC logo" className="h-full w-full rounded-xl object-contain" onError={(event) => { event.currentTarget.src = '/inqcorpLogo.jpeg' }} />
+          </span>
+          <span className="hidden sm:block">
+            <span className="block text-lg font-black leading-5 tracking-[-.04em] text-brand-ink">ITC</span>
+            <span className="mt-1 block text-[9px] font-extrabold uppercase tracking-[.18em] text-brand-muted">Inqilab Trading Corporation</span>
+          </span>
+          {admin?.token && (
+            <label htmlFor="uploadLogo" onClick={(event) => event.stopPropagation()} className="absolute -right-1 -top-2 grid h-6 w-6 cursor-pointer place-items-center rounded-full bg-brand-primary text-[9px] text-white opacity-0 shadow transition group-hover:opacity-100" title="Update logo">
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </label>
+          )}
+        </button>
 
-            <button
-              type="button"
-              className="group relative flex min-w-0 items-center gap-3"
-              onClick={() => navigate("/")}
-              aria-label="Go to ITC home"
-            >
-              <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-md border border-safety-border bg-white shadow-sm">
-                <img
-                  src={logo || "/inqcorpLogo.jpeg"}
-                  alt="ITC logo"
-                  className="h-9 w-9 object-contain"
-                  onError={(e) => { e.currentTarget.src = "/inqcorpLogo.jpeg"; }}
-                />
-              </span>
-              <span className="hidden min-w-0 text-left sm:block">
-                <span className="block text-base font-extrabold leading-5 tracking-tight text-safety-ink">
-                  ITC
-                </span>
-                <span className="block text-[11px] font-semibold uppercase tracking-[0.16em] text-safety-muted">
-                  Inqilab Trading Corporation
-                </span>
-              </span>
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary navigation">
+          {NAV_ITEMS.slice(0, 2).map((item) => (
+            <Link key={item.path} to={item.path} className={`rounded-full px-4 py-2 text-[13px] font-bold transition ${isActive(item.path) ? 'bg-brand-wash text-brand-primary' : 'text-brand-muted hover:text-brand-ink'}`}>{item.label}</Link>
+          ))}
 
-              {admin && (
-                <label
-                  htmlFor="uploadLogo"
-                  className="absolute -right-2 -top-2 grid h-7 w-7 cursor-pointer place-items-center rounded-full bg-safety-red text-white shadow-md opacity-0 transition-opacity group-hover:opacity-100"
-                  title="Upload logo"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <FontAwesomeIcon icon={faPenToSquare} className="text-xs" />
-                </label>
-              )}
+          <div ref={menuRef} className="relative">
+            <button type="button" onClick={() => setProductsOpen((value) => !value)} className={`flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-bold transition ${location.pathname.includes('product') || location.pathname.includes('category') || productsOpen ? 'bg-brand-wash text-brand-primary' : 'text-brand-muted hover:text-brand-ink'}`} aria-expanded={productsOpen}>
+              Products <FontAwesomeIcon icon={faChevronDown} className={`text-[9px] transition ${productsOpen ? 'rotate-180' : ''}`} />
             </button>
+
+            {productsOpen && (
+              <div className="animate-rise absolute left-1/2 top-[calc(100%+16px)] w-[min(680px,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden rounded-[1.5rem] border border-brand-border bg-white shadow-[0_35px_90px_-35px_rgba(19,35,58,.35)]">
+                <div className="flex items-center justify-between border-b border-brand-border bg-[#fbfaf7] px-6 py-4">
+                  <div>
+                    <p className="text-xs font-black text-brand-ink">Construction materials</p>
+                    <p className="mt-1 text-[11px] text-brand-muted">Browse by supply range</p>
+                  </div>
+                  <Link to="/all-products" className="inline-flex items-center gap-2 text-xs font-extrabold text-brand-primary">View all <FontAwesomeIcon icon={faArrowRight} /></Link>
+                </div>
+                <div className="grid grid-cols-2 gap-2 p-3">
+                  {categoryList.map((item) => {
+                    const image = Array.isArray(item.imageUrl) ? item.imageUrl[0] : item.imageUrl
+                    return (
+                      <Link key={item._id || item.name} to={getCategoryHref(item)} className="group flex items-center gap-3 rounded-2xl p-3 transition hover:bg-brand-surface">
+                        <img src={image || '/images/itc-stone-chips.webp'} alt="" className="h-12 w-12 rounded-xl object-cover" />
+                        <span className="text-sm font-extrabold text-brand-ink group-hover:text-brand-primary">{capitalizeWords(item.name)}</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="hidden items-center gap-1 lg:flex">
-            {MAIN_NAV_ITEMS.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`relative rounded-md px-4 py-2 text-sm font-semibold transition ${isActive(item.path)
-                    ? "text-safety-red"
-                    : "text-safety-muted hover:text-safety-ink"
-                  }`}
-              >
-                {item.label}
-                {isActive(item.path) && (
-                  <span className="absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-safety-red" />
-                )}
-              </Link>
-            ))}
+          {NAV_ITEMS.slice(2).map((item) => (
+            <Link key={item.path} to={item.path} className={`rounded-full px-4 py-2 text-[13px] font-bold transition ${isActive(item.path) ? 'bg-brand-wash text-brand-primary' : 'text-brand-muted hover:text-brand-ink'}`}>{item.label}</Link>
+          ))}
 
-            <div
-              className="relative"
-              ref={productsMenuRef}
-              onMouseEnter={scheduleOpen}
-              onMouseLeave={scheduleClose}
-            >
-              <div
-                className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${location.pathname.includes("product") ||
-                    location.pathname.includes("category") ||
-                    showProducts
-                    ? "text-safety-red"
-                    : "text-safety-muted hover:text-safety-ink"
-                  }`}
-              >
-                <Link to="/all-products" onClick={() => setShowProducts(false)}>
-                  Products
-                </Link>
-                <button
-                  type="button"
-                  onClick={toggleClick}
-                  aria-expanded={showProducts}
-                  aria-haspopup="true"
-                  aria-label="Toggle product categories"
-                  className="grid place-items-center"
-                >
-                  <FontAwesomeIcon
-                    icon={faChevronDown}
-                    className={`text-xs transition-transform duration-300 ${showProducts ? "rotate-180" : ""}`}
-                  />
-                </button>
+          {admin?.token && <Link to="/dashboard" className={`rounded-full px-4 py-2 text-[13px] font-bold ${isDashboard ? 'bg-brand-primary text-white' : 'text-brand-primary'}`}>Dashboard</Link>}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Link to="/contact?subject=Today%27s%20delivered%20rate" className="hidden min-h-11 items-center rounded-full bg-brand-primary px-5 text-xs font-extrabold text-white shadow-[0_12px_24px_-15px_rgba(23,59,103,.9)] transition hover:-translate-y-0.5 sm:inline-flex">Get today’s rate</Link>
+          {admin?.token && isDashboard ? (
+            <label htmlFor="dashboard-drawer" className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-brand-border bg-white text-brand-ink lg:hidden" aria-label="Open dashboard menu"><FontAwesomeIcon icon={faBars} /></label>
+          ) : (
+            <button type="button" onClick={() => setMobileOpen(true)} className="grid h-11 w-11 place-items-center rounded-full border border-brand-border bg-white text-brand-ink lg:hidden" aria-label="Open menu"><FontAwesomeIcon icon={faBars} /></button>
+          )}
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <div className="fixed inset-0 z-[60] min-h-screen overflow-y-auto bg-[#fbfaf7] px-5 pb-10 pt-5 lg:hidden">
+          <div className="mx-auto max-w-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img src={logo || '/inqcorpLogo.jpeg'} alt="ITC" className="h-12 w-12 rounded-2xl object-contain" />
+                <div><p className="font-black text-brand-ink">ITC</p><p className="text-[9px] font-bold uppercase tracking-[.15em] text-brand-muted">Inqilab Trading Corporation</p></div>
               </div>
-
-              {showProducts && (
-                <>
-                  {/* invisible hover bridge prevents flicker between trigger & panel */}
-                  <div className="absolute inset-x-0 -bottom-3 h-3" />
-                  <div
-                    onMouseEnter={scheduleOpen}
-                    onMouseLeave={scheduleClose}
-                    className="absolute right-0 top-[calc(100%+10px)] w-[min(820px,calc(100vw-2rem))] origin-top-right overflow-hidden rounded-2xl border border-safety-border bg-white shadow-[0_30px_80px_-20px_rgba(15,23,42,0.25)] animate-rise"
-                  >
-                    <div className="flex items-center justify-between border-b border-safety-border/70 bg-gradient-to-r from-safety-surface to-white px-6 py-4">
-                      <div>
-                        <p className="eyebrow flex items-center gap-2">
-                          <FontAwesomeIcon icon={faMountain} />
-                          Product Categories
-                        </p>
-                        <p className="mt-1 text-sm text-safety-muted">
-                          {productPreview.length > 0
-                            ? `${productPreview.length} aggregate product lines`
-                            : "Categories populate from the dashboard"}
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        className="btn-brand min-h-10 px-4 py-2 text-xs uppercase tracking-[0.14em]"
-                        onClick={() => {
-                          setShowProducts(false);
-                          navigate("/all-products");
-                        }}
-                      >
-                        View All
-                        <FontAwesomeIcon icon={faArrowRight} className="ml-2 text-[10px]" />
-                      </button>
-                    </div>
-
-                    <div className="grid max-h-[440px] grid-cols-3 gap-2 overflow-y-auto no-scrollbar p-4">
-                      {productPreview.length > 0 ? (
-                        productPreview.map((item) => (
-                          <button
-                            type="button"
-                            key={item?._id || item?.name}
-                            className="group flex items-center gap-3 rounded-xl border border-transparent p-2.5 text-left transition duration-200 hover:-translate-y-0.5 hover:scale-[1.02] hover:border-safety-red/30 hover:bg-blue-50"
-                            onClick={() => goToCategory(item)}
-                          >
-                            <img
-                              loading="lazy"
-                              src={getCategoryImage(item)}
-                              className="h-12 w-12 shrink-0 rounded-md border border-safety-border bg-white object-cover transition duration-300 group-hover:scale-105"
-                              alt={item?.name || "ITC product"}
-                            />
-                            <span className="min-w-0 flex-1">
-                              <span className="block truncate text-sm font-bold text-safety-ink group-hover:text-safety-red">
-                                {capitalizeWords(item?.label || item?.name) || "Category"}
-                              </span>
-                              <span className="mt-0.5 block text-[11px] leading-4 text-safety-muted">
-                                {isExternalCategory(item) ? "Open site" : "Open category"}
-                              </span>
-                            </span>
-                            <FontAwesomeIcon
-                              icon={faArrowRight}
-                              className="text-[10px] text-safety-border transition-all group-hover:translate-x-0.5 group-hover:text-safety-red"
-                            />
-                          </button>
-                        ))
-                      ) : (
-                        <div className="col-span-3 rounded-md bg-safety-surface p-5 text-sm text-safety-muted">
-                          Categories will appear here after they are added.
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
+              <button type="button" onClick={() => setMobileOpen(false)} className="grid h-11 w-11 place-items-center rounded-full border border-brand-border bg-white" aria-label="Close menu"><FontAwesomeIcon icon={faXmark} /></button>
             </div>
 
-            <Link
-              to="/gallery"
-              className={`relative rounded-md px-4 py-2 text-sm font-semibold transition ${isActive("/gallery")
-                  ? "text-safety-red"
-                  : "text-safety-muted hover:text-safety-ink"
-                }`}
-            >
-              Gallery
-              {isActive("/gallery") && (
-                <span className="absolute inset-x-3 -bottom-0.5 h-[2px] rounded-full bg-safety-red" />
-              )}
-            </Link>
+            <nav className="mt-10 grid gap-2" aria-label="Mobile navigation">
+              {[...NAV_ITEMS.slice(0, 2), { label: 'All Products', path: '/all-products' }, ...NAV_ITEMS.slice(2)].map((item) => (
+                <Link key={item.path} to={item.path} className={`flex items-center justify-between rounded-2xl px-5 py-4 text-lg font-black ${isActive(item.path) ? 'bg-brand-primary text-white' : 'border border-brand-border bg-white text-brand-ink'}`}>
+                  {item.label}<FontAwesomeIcon icon={faArrowRight} className="text-xs opacity-55" />
+                </Link>
+              ))}
+              {admin?.token && <Link to="/dashboard" className="flex items-center justify-between rounded-2xl border border-brand-border bg-white px-5 py-4 text-lg font-black text-brand-ink">Dashboard <FontAwesomeIcon icon={faArrowRight} className="text-xs" /></Link>}
+            </nav>
 
-            {admin && (
-              <Link
-                to="/dashboard"
-                className={`rounded-md px-4 py-2 text-sm font-semibold transition ${isDashboard
-                    ? "bg-red-50 text-safety-red"
-                    : "text-safety-muted hover:bg-safety-surface hover:text-safety-ink"
-                  }`}
-              >
-                Dashboard
-              </Link>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => navigate("/contact")}
-              className="hidden sm:inline-flex btn-brand min-h-10 px-4 py-2"
-            >
-              Get Quote
-            </button>
-
-            <label
-              htmlFor="navbar-drawer"
-              className="grid h-10 w-10 cursor-pointer place-items-center rounded-md border border-safety-border text-safety-ink transition hover:border-safety-red hover:text-safety-red lg:hidden"
-              aria-label="Open navigation menu"
-            >
-              <FontAwesomeIcon icon={faBars} />
-            </label>
+            <div className="mt-8">
+              <p className="text-[10px] font-extrabold uppercase tracking-[.18em] text-brand-accent">Material ranges</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {categoryList.map((item) => <Link key={item._id || item.name} to={getCategoryHref(item)} className="feature-pill">{capitalizeWords(item.name)}</Link>)}
+              </div>
+            </div>
           </div>
         </div>
-
-        <SideNavbar categories={categories} />
-      </nav>
-
-      <div className="h-16" />
-    </div>
-  );
-};
+      )}
+    </header>
+  )
+}

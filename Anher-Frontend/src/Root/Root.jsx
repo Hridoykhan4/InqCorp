@@ -1,296 +1,214 @@
-import React, { useEffect, useState } from "react";
-import { Navbar } from "../Navbar/Navbar";
-import { Outlet, useLocation } from "react-router-dom";
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import { Bounce, toast, ToastContainer } from 'react-toastify'
 
-import { useDispatch, useSelector } from "react-redux";
-
-import { socket } from "../Socket/socket";
-import axios from "axios";
-import { addLogo } from "../Redux/hvac";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import { Bounce, toast, ToastContainer } from "react-toastify";
-import { ScrollTop } from "../Custom Hooks/ScrollTop";
-import Footer from "../Footer/Footer";
-import { useMemo } from "react";
-import { FloatingWhatsApp } from "react-floating-whatsapp";
-import Swal from "sweetalert2";
-import { SeoManager } from "../SEO/SeoManager";
+import { Navbar } from '../Navbar/Navbar'
+import { socket } from '../Socket/socket'
+import { addLogo, removeUser } from '../Redux/hvac'
+import { ScrollTop } from '../Custom Hooks/ScrollTop'
+import Footer from '../Footer/Footer'
+import { Preloader } from '../Preloader/Preloader'
+import { ContactDock } from '../components/ContactDock'
 import {
-  organizationStructuredData,
-  SEO_CONFIG,
-  websiteStructuredData,
-} from "../SEO/seo";
-import { COMPANY } from "../SEO/companyInfo";
-import { UpdateLogoModal } from "../Dashboard/Logo/UpdateLogoModal";
-import { Preloader } from "../Preloader/Preloader";
+  FALLBACK_CATEGORIES,
+  FALLBACK_GALLERY,
+  FALLBACK_PRODUCTS,
+} from '../data/siteData'
+
+const API_BASE = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '')
+const api = (path) => `${API_BASE}/api/${path}`
+const asArray = (value) => (Array.isArray(value) ? value : [])
+const UpdateLogoModal = lazy(() => import('../Dashboard/Logo/UpdateLogoModal').then((module) => ({ default: module.UpdateLogoModal })))
 
 export const Root = () => {
-  const location = useLocation();
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const admin = useSelector((state) => state.hvac.users)
 
-  // Global safety: restore scroll whenever route changes
-  useEffect(() => {
-    document.body.style.overflow = "";
-  }, [location.pathname]);
-  const [products, setProducts] = useState(null);
-  const [categories, setCategories] = useState(null);
-  const [queries, setQueries] = useState([]);
-  const [banners, setBanners] = useState([]);
-  const [dashboardBanners, setDashboardBanners] = useState([]);
-  const [blogs, setBlogs] = useState([]);
-  const [services, setServices] = useState([]);
-  const [businessProducts, setBusinessProducts] = useState(null);
-  const [certificate, setCertificate] = useState(null);
-  const [country, setCountry] = useState([]);
-  const [priceList, setPriceList] = useState([]);
-  const [gallery, setGallery] = useState([]);
-  const dispatch = useDispatch();
-  const admin = useSelector((state) => state.hvac.users);
-  useEffect(() => {
-    // Skip scroll animations on phones — they fight with touch scrolling
-    AOS.init({ disable: "phone", once: true, duration: 600 });
-  }, []);
-  const data = useMemo(
-    () => ({
-      products,
-      categories,
-      setCategories,
-      setProducts,
-      queries,
-      setQueries,
-      banners,
-      setBanners,
-      blogs,
-      setBlogs,
-      services,
-      setServices,
-      businessProducts,
-      setBusinessProducts,
-      certificate,
-      setCertificate,
-      country,
-      setCountry,
-      dashboardBanners,
-      setDashboardBanners,
-      priceList,
-      setPriceList,
-      gallery,
-      setGallery,
-    }),
-    [
-      products,
-      categories,
-      queries,
-      banners,
-      blogs,
-      services,
-      businessProducts,
-      certificate,
-      country,
-      dashboardBanners,
-      priceList,
-      gallery,
-    ]
-  );
+  const [products, setProducts] = useState(FALLBACK_PRODUCTS)
+  const [categories, setCategories] = useState(FALLBACK_CATEGORIES)
+  const [queries, setQueries] = useState([])
+  const [banners, setBanners] = useState([])
+  const [dashboardBanners, setDashboardBanners] = useState([])
+  const [blogs, setBlogs] = useState([])
+  const [services, setServices] = useState([])
+  const [businessProducts, setBusinessProducts] = useState(FALLBACK_PRODUCTS.slice(0, 4))
+  const [certificate, setCertificate] = useState([])
+  const [country, setCountry] = useState([])
+  const [priceList, setPriceList] = useState([])
+  const [gallery, setGallery] = useState(FALLBACK_GALLERY)
+  const [contentStatus, setContentStatus] = useState('loading')
 
   useEffect(() => {
-    if (admin && !socket.connected) {
-      socket.emit("join");
+    document.body.style.overflow = ''
+  }, [location.pathname])
+
+  useEffect(() => {
+    const token = admin?.token
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+    } else {
+      delete axios.defaults.headers.common.Authorization
     }
-    socket.on("queries", (data) => {
-      setQueries((prev) => [data.data, ...prev]);
 
-      toast.info("New Queries!!", {
-        position: "top-center",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    });
+    // Keep browser automation finite; real visitors and the admin dashboard
+    // still receive the live socket connection.
+    if (!navigator.webdriver) {
+      socket.auth = token ? { token } : {}
+      if (socket.connected) socket.disconnect()
+      socket.connect()
+    }
 
-    socket.on("bannerUpdated", (updated) => {
-      if (Array.isArray(updated)) setBanners(updated);
-    });
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error?.response?.status === 401 && admin?.token) dispatch(removeUser())
+        return Promise.reject(error)
+      },
+    )
 
-    return () => {
-      socket.off("queries");
-      socket.off("bannerUpdated");
-    };
-  }, [admin]);
+    return () => axios.interceptors.response.eject(responseInterceptor)
+  }, [admin?.token, dispatch])
 
   useEffect(() => {
-    socket.connect();
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getLogo`)
-      .then((res) => {
-        if (res.status == 200) {
-          dispatch(addLogo(res.data.data));
-        }
-      })
-      .catch((err) => console.log(err));
+    const controller = new AbortController()
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getBanners`)
-      .then((res) => {
-        if (res.status == 200) {
-          setBanners(res.data.data);
-        }
-      })
-      .catch((err) => console.log(err));
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/dashboardBanners`)
-      .then((res) => {
-        if (res.status == 200) {
-          setDashboardBanners(res.data.data);
-        }
-      })
-      .catch((err) => console.log(err));
+    const requests = [
+      ['logo', 'getLogo'],
+      ['banners', 'getBanners'],
+      ['blogs', 'getBlogs'],
+      ['products', 'getProducts'],
+      ['services', 'getServices'],
+      ['categories', 'getCategories'],
+      ['businessProducts', 'getBusinessProducts'],
+      ['certificate', 'getCertificate'],
+      ['country', 'getCountry'],
+      ['priceList', 'getPriceList'],
+      ['gallery', 'getGallery'],
+    ]
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getBlogs`)
-      .then((res) => {
-        if (res.status == 200) {
-          setBlogs(res.data.data);
+    Promise.allSettled(
+      requests.map(async ([key, endpoint]) => {
+        const response = await axios.get(api(endpoint), {
+          signal: controller.signal,
+          timeout: 12_000,
+        })
+        return [key, response.data]
+      }),
+    ).then((results) => {
+      if (controller.signal.aborted) return
+      let liveCoreData = false
+
+      for (const result of results) {
+        if (result.status !== 'fulfilled') continue
+        const [key, payload] = result.value
+        const list = asArray(payload?.data ?? payload)
+
+        if (key === 'logo' && payload?.data) dispatch(addLogo(payload.data))
+        if (key === 'banners') setBanners(list)
+        if (key === 'blogs') setBlogs(list)
+        if (key === 'services') setServices(list)
+        if (key === 'certificate') setCertificate(list)
+        if (key === 'country') setCountry(list)
+        if (key === 'priceList') setPriceList(list)
+
+        if (key === 'products' && list.length) {
+          setProducts(list)
+          liveCoreData = true
         }
-      })
-      .catch((err) => console.log(err));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+        if (key === 'categories' && list.length) setCategories(list)
+        if (key === 'businessProducts' && list.length) setBusinessProducts(list)
+        if (key === 'gallery' && list.length) setGallery(list)
+      }
+
+      setContentStatus(liveCoreData ? 'live' : 'fallback')
+    })
+
+    return () => controller.abort()
+  }, [dispatch])
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getProducts`)
-      .then((res) => {
-        setProducts(res.data);
-      })
-      .catch((err) => console.log(err));
+    const handleQuery = (payload) => {
+      if (!payload?.data) return
+      setQueries((current) => [payload.data, ...current])
+      toast.info('A new project enquiry has arrived.', { autoClose: 5000 })
+    }
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getServices`)
-      .then((res) => {
-        setServices(res.data.data);
-      })
-      .catch((err) => console.log(err));
+    socket.on('queries', handleQuery)
+    return () => socket.off('queries', handleQuery)
+  }, [])
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getCategories`)
-      .then((res) => {
-        setCategories(res.data);
-      })
-      .catch((err) => console.log(err));
+  useEffect(() => {
+    if (!admin?.token) {
+      setQueries([])
+      setDashboardBanners([])
+      return
+    }
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getQueries`)
-      .then((res) => setQueries(res.data.data))
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: err.response.data.message || err.message,
-        });
-      });
+    socket.emit('join', admin.token)
+    const controller = new AbortController()
+    Promise.allSettled([
+      axios.get(api('getQueries'), { signal: controller.signal, timeout: 12_000 }),
+      axios.get(api('dashboardBanners'), { signal: controller.signal, timeout: 12_000 }),
+    ]).then(([queryResult, bannerResult]) => {
+      if (controller.signal.aborted) return
+      if (queryResult.status === 'fulfilled') setQueries(asArray(queryResult.value.data?.data))
+      if (bannerResult.status === 'fulfilled') setDashboardBanners(asArray(bannerResult.value.data?.data))
+    })
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getBusinessProducts`)
-      .then((res) => setBusinessProducts(res.data.data))
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: err.response.data.message || err.message,
-        });
-      });
+    return () => controller.abort()
+  }, [admin?.token])
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getCertificate`)
-      .then((res) => setCertificate(res.data.data))
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: err.response.data.message || err.message,
-        });
-      });
+  const data = useMemo(() => ({
+    products,
+    categories,
+    setCategories,
+    setProducts,
+    queries,
+    setQueries,
+    banners,
+    setBanners,
+    blogs,
+    setBlogs,
+    services,
+    setServices,
+    businessProducts,
+    setBusinessProducts,
+    certificate,
+    setCertificate,
+    country,
+    setCountry,
+    dashboardBanners,
+    setDashboardBanners,
+    priceList,
+    setPriceList,
+    gallery,
+    setGallery,
+    contentStatus,
+  }), [
+    products, categories, queries, banners, blogs, services,
+    businessProducts, certificate, country, dashboardBanners,
+    priceList, gallery, contentStatus,
+  ])
 
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getCountry`)
-      .then((res) => setCountry(res.data.data))
-      .catch((err) => {
-        Swal.fire({
-          icon: "error",
-          title: err.response.data.message || err.message,
-        });
-      });
-
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getPriceList`)
-      .then((res) => setPriceList(res.data.data || []))
-      .catch((err) => console.log(err));
-
-    axios
-      .get(`${import.meta.env.VITE_BACKEND_URL}/api/getGallery`)
-      .then((res) => setGallery(res.data.data || []))
-      .catch((err) => console.log(err));
-  }, []);
-  // eslint-disable-next-line no-unused-vars
-  const handleToast = () => {
-    toast.info("New Queries😱😱😱!!", {
-      position: "top-center",
-      autoClose: false,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
-  };
+  const isDashboard = location.pathname.startsWith('/dashboard')
 
   return (
-    <div>
-      <Preloader />
-      <SeoManager
-        structuredData={[organizationStructuredData, websiteStructuredData]}
-        path="/"
-      />
-      {admin && <UpdateLogoModal />}
-      <Navbar categories={categories} country={country}></Navbar>
-      <ScrollTop></ScrollTop>
+    <div className={`min-h-screen ${isDashboard ? 'bg-[#f3f5f7]' : 'bg-white'}`}>
+      {!isDashboard && <Preloader />}
+      {admin?.token && <Suspense fallback={null}><UpdateLogoModal /></Suspense>}
+      {!isDashboard && <Navbar categories={categories} country={country} />}
+      <ScrollTop />
 
-      {/* Native scroll — one scrollbar, no jank during reveal animations.
-          (Replaced smooth-scrollbar, which double-scrolled because the Footer
-          lived outside its 100vh container.) */}
-      <Outlet context={data}></Outlet>
+      <Outlet context={data} />
 
-      <Footer categories={categories}></Footer>
-      <FloatingWhatsApp
-        phoneNumber={COMPANY.phoneTel}
-        accountName={SEO_CONFIG.siteName}
-        avatar="/inqcorpLogo.jpeg"
-        statusMessage="Typically replies within 30 Minutes"
-        placeholder="Type your message here..."
-        messageDelay={1}
-        allowClickAway={true}
-        allowEsc={true}
-        notification={true}
-        notificationDelay={10}
-        notificationSound={true}
-        chatMessage="Hello! How can we help you? Ask us about our sand, stone chips, or boulder pricing."
-        buttonStyle={{
-          backgroundColor: "#25D366",
-          color: "white",
-        }}
-        chatboxStyle={{
-          backgroundColor: "#F0F0F0",
-        }}
-      />
+      {!isDashboard && <Footer categories={categories} />}
+      {!isDashboard && <ContactDock />}
       <ToastContainer
         position="top-right"
         autoClose={3500}
-        hideProgressBar={false}
         newestOnTop
         closeOnClick
         pauseOnFocusLoss
@@ -298,9 +216,9 @@ export const Root = () => {
         pauseOnHover
         theme="light"
         transition={Bounce}
-        toastClassName="!rounded-lg !shadow-lg !border !border-safety-border !text-safety-ink !font-medium"
-        progressClassName="!bg-safety-red"
+        toastClassName="!rounded-xl !border !border-brand-border !font-medium !text-brand-ink !shadow-xl"
+        progressClassName="!bg-brand-primary"
       />
     </div>
-  );
-};
+  )
+}

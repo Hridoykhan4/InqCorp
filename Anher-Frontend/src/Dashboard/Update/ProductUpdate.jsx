@@ -19,7 +19,7 @@ export const ProductUpdate = ({ item }) => {
     const [packingData, setPackingData] = useState([{ key: '', value: '' }]);
     const [loading, setLoading] = useState(false);
 
-    const { setCategories, categories, products, setProducts } = useOutletContext();
+    const { categories, setProducts } = useOutletContext();
     const fileInputRef = useRef();
     const pdfInputRefs = useRef([]);
 
@@ -94,15 +94,6 @@ export const ProductUpdate = ({ item }) => {
     const addParameterField = () => setParameter(prev => [...prev, { key: '', value: '' }]);
     const removeParameterField = (index) => setParameter(prev => prev.filter((_, i) => i !== index));
 
-    // ----------- Packing Data -----------
-    const handlePackingData = (index, field, value) => {
-        const newPackingData = [...packingData];
-        newPackingData[index][field] = value;
-        setPackingData(newPackingData);
-    };
-    const addPackingDataField = () => setPackingData(prev => [...prev, { key: '', value: '' }]);
-    const removePackingDataField = (index) => setPackingData(prev => prev.filter((_, i) => i !== index));
-
     // ----------- PDFs -----------
     const handlePdfFieldChange = (idx, field, value) => {
         const updated = [...pdfs];
@@ -165,8 +156,8 @@ export const ProductUpdate = ({ item }) => {
 
         // PDFs for info
         const pdfInfo = [
-            ...existingPdfs?.map(pdf => ({ [pdf.key]: pdf.url })),
-            ...pdfs.filter(pdf => pdf.key)?.map(pdf => ({ [pdf.key]: "" }))
+            ...existingPdfs.map(pdf => ({ [pdf.key]: pdf.url })),
+            ...pdfs.filter(pdf => pdf.key).map(pdf => ({ [pdf.key]: "" }))
         ];
 
         const info = {
@@ -264,7 +255,7 @@ export const ProductUpdate = ({ item }) => {
     return createPortal(
         <div>
             <input type='checkbox' id={`ProductUpdate-${item?._id}`} className='modal-toggle peer' />
-            <div className='fixed inset-0 z-[200] hidden peer-checked:flex items-center justify-center bg-safety-ink/60 backdrop-blur-sm p-4 animate-fade' role='dialog' aria-modal='true'>
+            <div className='fixed inset-0 z-[200] hidden peer-checked:flex items-center justify-center bg-brand-ink/60 backdrop-blur-sm p-4 animate-fade' role='dialog' aria-modal='true'>
                 <div className='relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl animate-rise'>
                     <button
                         type='button'
@@ -275,24 +266,24 @@ export const ProductUpdate = ({ item }) => {
                         <FontAwesomeIcon icon={faXmark} size='lg' />
                     </button>
 
-                    <div className='mb-6 border-b border-safety-border pb-4'>
-                        <h2 className='text-xl font-bold text-safety-ink'>Update Product</h2>
-                        <p className='mt-2 text-sm text-safety-muted'>Edit product details, upload images, and keep your product data dashboard-ready.</p>
+                    <div className='mb-6 border-b border-brand-border pb-4'>
+                        <h2 className='text-xl font-bold text-brand-ink'>Update Product</h2>
+                        <p className='mt-2 text-sm text-brand-muted'>Edit product details, upload images, and keep your product data dashboard-ready.</p>
                     </div>
 
                     <section className='space-y-6'>
                         <div className='grid gap-4 lg:grid-cols-[1.2fr_0.8fr]'>
                             <div className='space-y-4'>
-                                <label className='block text-sm font-medium text-safety-ink'>Model Name</label>
+                                <label className='block text-sm font-medium text-brand-ink'>Model Name</label>
                                 <input value={model} onChange={(e) => setModel(e.target.value)} className='input input-bordered w-full' placeholder='Model Name' />
 
-                                <label className='block text-sm font-medium text-safety-ink'>Product Name</label>
+                                <label className='block text-sm font-medium text-brand-ink'>Product Name</label>
                                 <input value={name} onChange={(e) => setName(e.target.value)} className='input input-bordered w-full' placeholder='Product Name' />
 
-                                <label className='block text-sm font-medium text-safety-ink'>Description</label>
+                                <label className='block text-sm font-medium text-brand-ink'>Description</label>
                                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={5} className='textarea textarea-bordered w-full' placeholder='Product description' />
 
-                                <label className='block text-sm font-medium text-safety-ink'>Category</label>
+                                <label className='block text-sm font-medium text-brand-ink'>Category</label>
                                 <select value={category} onChange={(e) => setCategory(e.target.value)} className='select select-bordered w-full'>
                                     <option disabled value=''>Select Category</option>
                                     {categories?.map((cat, i) => (
@@ -304,12 +295,12 @@ export const ProductUpdate = ({ item }) => {
                             <div className='space-y-4'>
                                 <div>
                                     <div className='flex items-center justify-between'>
-                                        <p className='text-sm font-medium text-safety-ink'>Current Images</p>
+                                        <p className='text-sm font-medium text-brand-ink'>Current Images</p>
                                         <span className='text-xs text-gray-500'>Preview only</span>
                                     </div>
                                     <div className='mt-3 grid grid-cols-3 gap-3'>
                                         {images?.map((img, i) => (
-                                            <div key={i} className='relative overflow-hidden rounded-2xl border border-safety-border bg-white shadow-sm'>
+                                            <div key={i} className='relative overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm'>
                                                 <img
                                                     src={imagePreviewUrls[i]}
                                                     alt={`Preview ${i + 1}`}
@@ -319,7 +310,7 @@ export const ProductUpdate = ({ item }) => {
                                                 <button
                                                     type='button'
                                                     onClick={() => removeImage(i)}
-                                                    className='absolute top-2 right-2 rounded-full bg-white/90 p-1 text-safety-red shadow'
+                                                    className='absolute top-2 right-2 rounded-full bg-white/90 p-1 text-brand-primary shadow'
                                                     aria-label={`Remove image ${i + 1}`}
                                                 >
                                                     ✕
@@ -330,20 +321,20 @@ export const ProductUpdate = ({ item }) => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-safety-ink'>Upload Images</label>
+                                    <label className='block text-sm font-medium text-brand-ink'>Upload Images</label>
                                     <input type='file' ref={fileInputRef} onChange={handleFileChange} className='file-input file-input-bordered w-full' accept='image/*' multiple />
                                 </div>
 
-                                <div className='rounded-2xl border border-safety-border bg-safety-surface p-4'>
+                                <div className='rounded-2xl border border-brand-border bg-brand-surface p-4'>
                                     <div className='flex items-center justify-between'>
-                                        <p className='text-sm font-semibold text-safety-ink'>Existing PDFs</p>
+                                        <p className='text-sm font-semibold text-brand-ink'>Existing PDFs</p>
                                         <span className='text-xs text-gray-500'>Download or remove</span>
                                     </div>
                                     {existingPdfs.length > 0 ? (
                                         <div className='mt-3 space-y-2'>
                                             {existingPdfs.map((pdf) => (
-                                                <div key={pdf.key} className='flex items-center justify-between gap-3 rounded-xl border border-safety-border bg-white px-3 py-2'>
-                                                    <button type='button' className='inline-flex items-center gap-2 text-sm font-medium text-safety-red' onClick={() => window.open(pdf.url, '_blank')}>
+                                                <div key={pdf.key} className='flex items-center justify-between gap-3 rounded-xl border border-brand-border bg-white px-3 py-2'>
+                                                    <button type='button' className='inline-flex items-center gap-2 text-sm font-medium text-brand-primary' onClick={() => window.open(pdf.url, '_blank')}>
                                                         <FontAwesomeIcon icon={faFilePdf} />
                                                         {pdf.key}
                                                     </button>
@@ -363,7 +354,7 @@ export const ProductUpdate = ({ item }) => {
                         <div className='grid gap-4 lg:grid-cols-2'>
                             <div className='space-y-4'>
                                 <div className='flex items-center justify-between'>
-                                    <p className='text-sm font-semibold text-safety-ink'>Parameters</p>
+                                    <p className='text-sm font-semibold text-brand-ink'>Parameters</p>
                                     <button type='button' className='btn btn-sm btn-outline' onClick={addParameterField}>Add Field</button>
                                 </div>
                                 {parameter.map((spec, index) => (
@@ -390,11 +381,11 @@ export const ProductUpdate = ({ item }) => {
 
                             <div className='space-y-4'>
                                 <div className='flex items-center justify-between'>
-                                    <p className='text-sm font-semibold text-safety-ink'>PDF Uploads</p>
+                                    <p className='text-sm font-semibold text-brand-ink'>PDF Uploads</p>
                                     <button type='button' className='btn btn-sm btn-outline' onClick={addPdfField}>Add PDF</button>
                                 </div>
                                 {pdfs.map((pdf, idx) => (
-                                    <div key={idx} className='grid gap-2 rounded-xl border border-safety-border bg-white p-3 md:grid-cols-[1fr_1.4fr_auto]'>
+                                    <div key={idx} className='grid gap-2 rounded-xl border border-brand-border bg-white p-3 md:grid-cols-[1fr_1.4fr_auto]'>
                                         <input
                                             type='text'
                                             placeholder='Key (e.g. dataSheet)'
@@ -410,12 +401,12 @@ export const ProductUpdate = ({ item }) => {
                                             ref={(ref) => pdfInputRefs.current[idx] = ref}
                                             className='file-input file-input-bordered file-input-sm w-full'
                                         />
-                                        <button type='button' className='btn btn-sm btn-ghost text-safety-red' onClick={() => removePdfField(idx)} aria-label='Remove PDF row'>
+                                        <button type='button' className='btn btn-sm btn-ghost text-brand-primary' onClick={() => removePdfField(idx)} aria-label='Remove PDF row'>
                                             <FontAwesomeIcon icon={faXmark} />
                                         </button>
                                         {pdf.file && (
-                                            <p className='md:col-span-3 text-xs text-safety-muted truncate'>
-                                                Selected: <span className='font-semibold text-safety-ink'>{pdf.file.name}</span>
+                                            <p className='md:col-span-3 text-xs text-brand-muted truncate'>
+                                                Selected: <span className='font-semibold text-brand-ink'>{pdf.file.name}</span>
                                                 <span className='ml-2'>({Math.round(pdf.file.size / 1024)} KB)</span>
                                             </p>
                                         )}

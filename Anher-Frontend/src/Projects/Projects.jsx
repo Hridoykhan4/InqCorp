@@ -7,10 +7,10 @@ export const Projects = () => {
   return (
     <div className="bg-[#f6f8fb] px-4 py-10 md:px-6 md:py-16">
       <SeoManager
-        title="SafetyPlus Projects"
-        description="Upcoming SafetyPlus project showcases featuring completed fire safety, hose cabinet, fire door, and industrial protection installations across Bangladesh."
+        title="Inqilab Trading Corporation Projects"
+        description="Upcoming Inqilab Trading Corporation project showcases featuring completed fire safety, hose cabinet, fire door, and industrial protection installations across Bangladesh."
         path="/projects"
-        keywords="fire safety projects, SafetyPlus portfolio, industrial safety projects Bangladesh"
+        keywords="fire safety projects, Inqilab Trading Corporation portfolio, industrial safety projects Bangladesh"
       />
       <section className="mx-auto flex min-h-[70vh] w-full max-w-[1200px] items-center justify-center overflow-hidden rounded-[28px] bg-[#0A3161] px-6 py-16 text-center md:px-10">
         <div className="max-w-3xl">

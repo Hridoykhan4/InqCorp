@@ -21,8 +21,6 @@ export const GameCursor = () => {
     const trails = trailRefs.current;
 
     // GSAP quick setters for performance
-    const setRingX = gsap.quickSetter(ring, "x", "px");
-    const setRingY = gsap.quickSetter(ring, "y", "px");
     const setDotX = gsap.quickSetter(dot, "x", "px");
     const setDotY = gsap.quickSetter(dot, "y", "px");
 
@@ -79,7 +77,7 @@ export const GameCursor = () => {
       });
     };
 
-    const onLeave = (e) => {
+    const onLeave = () => {
       if (!isHovering.current) return;
       isHovering.current = false;
       gsap.to(ring, {

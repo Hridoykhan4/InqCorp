@@ -1,7 +1,7 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import { addLogo } from '../../Redux/hvac'
@@ -10,33 +10,16 @@ import { addLogo } from '../../Redux/hvac'
 
 export const UpdateLogoModal = () => {
   const updatelogo = useRef(null)
-  const PhotoInputRef = useRef();
-
   const admin = useSelector((state) => state.hvac.users)
-
-  const [imagePath, setImagePath] = useState(null)
   const [File, setFile] = useState(null)
   const [Loading, setLoading] = useState(false)
-  const user = useSelector((state) => state.hvac.users)
   const dispatch=useDispatch()  
   const logo=useSelector((state)=>state.hvac.logo)
 
-
-  const handleClick = (v) => {
-
-    if (v == 'photo') {
-      PhotoInputRef.current.click()
-    } else {
-      VideoInputRef.current.click()
-    }
-
-  };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
 
-      const path = URL.createObjectURL(file)
-      setImagePath(path)
       setFile(file)
 
     } else {
@@ -73,9 +56,8 @@ export const UpdateLogoModal = () => {
                 title: 'Logo Successfully Updated',
               });
             }
-            setImagePath(null)
             setFile(null)
-            updatelogo.current.value = null
+            if (updatelogo.current) updatelogo.current.value = null
 
 
 
@@ -84,7 +66,7 @@ export const UpdateLogoModal = () => {
           .catch((err) => {
             Swal.fire({
               icon: "error",
-              title: err.response.data.message|| err.message,
+              title: err?.response?.data?.message || err.message,
               text: "Something went wrong!",
 
             });
@@ -120,9 +102,9 @@ export const UpdateLogoModal = () => {
 
   const handleClose = () => {
     setFile(null)
-    updatelogo.current.value = null
-    setImagePath(null)
-    document.getElementById('uploadLogo').checked = false
+    if (updatelogo.current) updatelogo.current.value = null
+    const modal = document.getElementById('uploadLogo')
+    if (modal) modal.checked = false
 
   }
 

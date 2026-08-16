@@ -1,14 +1,5 @@
 import React, { useMemo } from "react";
 import welcomGif from "../assets/image/gif/welcome.gif"
-// Replace this with your Air Wheeler image import or url
-const airWheelerImg =
-  "https://www.airwheel.net/images/se3/Airwheel-SE3.gif"; // Example image url
-
-
-
-
-
-
 export default function FeatureWithIntro() {
 
   const features = useMemo(() => (

@@ -82,19 +82,19 @@ export const ImageModal = () => {
 
             <div className='modal'>
                 <div className='modal-box w-[95vw] max-w-xl max-h-[90vh] overflow-y-auto relative p-0'>
-                    <div className='flex items-center justify-between border-b border-safety-border px-5 py-4'>
+                    <div className='flex items-center justify-between border-b border-brand-border px-5 py-4'>
                         <div>
-                            <p className='text-xs font-bold uppercase tracking-[0.2em] text-safety-red'>
+                            <p className='text-xs font-bold uppercase tracking-[0.2em] text-brand-primary'>
                                 New Category
                             </p>
-                            <h3 className='mt-1 text-lg font-bold text-safety-ink'>
+                            <h3 className='mt-1 text-lg font-bold text-brand-ink'>
                                 Add Product Category
                             </h3>
                         </div>
                         <button
                             type='button'
                             onClick={handleClose}
-                            className='grid h-9 w-9 place-items-center rounded-full text-safety-muted hover:bg-safety-surface hover:text-safety-red'
+                            className='grid h-9 w-9 place-items-center rounded-full text-brand-muted hover:bg-brand-surface hover:text-brand-primary'
                             aria-label='Close add category'
                         >
                             <FontAwesomeIcon icon={faXmark} />
@@ -103,7 +103,7 @@ export const ImageModal = () => {
 
                     <form onSubmit={handleSubmit} className='space-y-5 px-5 py-5'>
                         <div>
-                            <label className='mb-1.5 block text-sm font-semibold text-safety-ink'>
+                            <label className='mb-1.5 block text-sm font-semibold text-brand-ink'>
                                 Category Name
                             </label>
                             <input
@@ -116,8 +116,8 @@ export const ImageModal = () => {
                         </div>
 
                         <div>
-                            <label className='mb-1.5 flex items-center gap-2 text-sm font-semibold text-safety-ink'>
-                                <FontAwesomeIcon icon={faImage} className='text-safety-red' />
+                            <label className='mb-1.5 flex items-center gap-2 text-sm font-semibold text-brand-ink'>
+                                <FontAwesomeIcon icon={faImage} className='text-brand-primary' />
                                 Category Thumbnail
                             </label>
                             <input
@@ -128,7 +128,7 @@ export const ImageModal = () => {
                                 accept='image/*'
                             />
                             {previewImage && (
-                                <div className='mt-3 overflow-hidden rounded-xl border border-safety-border'>
+                                <div className='mt-3 overflow-hidden rounded-xl border border-brand-border'>
                                     <img
                                         src={previewImage}
                                         alt='Thumbnail preview'
@@ -139,8 +139,8 @@ export const ImageModal = () => {
                         </div>
 
                         <div>
-                            <label className='mb-1.5 flex items-center gap-2 text-sm font-semibold text-safety-ink'>
-                                <FontAwesomeIcon icon={faPanorama} className='text-safety-red' />
+                            <label className='mb-1.5 flex items-center gap-2 text-sm font-semibold text-brand-ink'>
+                                <FontAwesomeIcon icon={faPanorama} className='text-brand-primary' />
                                 Banner Image
                             </label>
                             <input
@@ -151,7 +151,7 @@ export const ImageModal = () => {
                                 accept='image/*'
                             />
                             {previewBanner && (
-                                <div className='mt-3 overflow-hidden rounded-xl border border-safety-border'>
+                                <div className='mt-3 overflow-hidden rounded-xl border border-brand-border'>
                                     <img
                                         src={previewBanner}
                                         alt='Banner preview'

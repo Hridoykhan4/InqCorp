@@ -1,12 +1,14 @@
 {
-  "name": "liberty-tools-backend",
+  "name": "inqilab-trading-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "npx nodemon index.js",
-    "dev": "nodemon index.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "setup": "node scripts/setupDatabase.js",
+    "check": "node --check index.js && node --check Routes/route.js && node --check Controller/AuthController.js && node --check \"Database Connection/seedData.js\" && node --check Functions/mailer.js"
   },
-  "author": "R & D Team",
+  "author": "Inqilab Trading Corporation",
   "license": "ISC",
   "description": "",
   "dependencies": {
@@ -19,7 +21,7 @@
     "express-json": "^1.0.0",
     "mongoose": "^8.16.0",
     "multer": "^2.0.1",
-    "nodemailer": "^8.0.10",
+    "nodemailer": "^9.0.5",
     "socket.io": "^4.8.1"
   }
 }

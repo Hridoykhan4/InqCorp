@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { createElement, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -71,11 +71,7 @@ export const Reveal = ({
     return () => ctx.revert();
   }, [delay, variant]);
 
-  return (
-    <Tag ref={ref} style={initialStyle(variant)} className={className} {...rest}>
-      {children}
-    </Tag>
-  );
+  return createElement(Tag, { ref, style: initialStyle(variant), className, ...rest }, children);
 };
 
 export default Reveal;

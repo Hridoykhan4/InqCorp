@@ -56,10 +56,10 @@ export const BlogCard = ({ post }) => {
   const hasImg = Boolean(imgSrc);
   const pdfUrl = post?.pdfUrl || "";
   const category = post?.category || "Fire Safety";
-  const title = post?.title || "SafetyPlus Update";
+  const title = post?.title || "Inqilab Trading Corporation Update";
   const body =
     post?.description ||
-    "Read SafetyPlus updates, product information, and practical fire safety insights for Bangladesh.";
+    "Read Inqilab Trading Corporation updates, product information, and practical fire safety insights for Bangladesh.";
 
   return (
     <div className="group relative px-2" 
@@ -68,7 +68,7 @@ export const BlogCard = ({ post }) => {
       {/* Card frame (no border; rounded big) */}
       <article className="relative">
         {/* Image / Gray placeholder */}
-        <div className="overflow-hidden rounded-lg bg-safety-surface">
+        <div className="overflow-hidden rounded-lg bg-brand-surface">
           {hasImg ? (
             <img
               src={imgSrc}
@@ -76,7 +76,7 @@ export const BlogCard = ({ post }) => {
               className="h-[220px] w-full object-cover"
             />
           ) : (
-            <div className="flex h-[220px] w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-safety-red/90 to-safety-red-dark text-white">
+            <div className="flex h-[220px] w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-brand-primary/90 to-brand-primary-dark text-white">
               <svg viewBox="0 0 24 24" className="h-12 w-12" fill="none" stroke="currentColor" strokeWidth="1.6">
                 <path d="M7 3h7l5 5v13a0 0 0 0 1 0 0H7a0 0 0 0 1 0 0V3z" />
                 <path d="M14 3v5h5" />
@@ -91,10 +91,10 @@ export const BlogCard = ({ post }) => {
           <div className="pointer-events-auto rounded-lg bg-white px-6 py-5 shadow-[0_10px_20px_rgba(0,0,0,0.06)]">
             <div className="flex items-start gap-4">
               <div className="flex-1">
-                <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-safety-red">
+                <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-brand-primary">
                   {category}
                 </p>
-                <h3 className="mt-1 text-lg font-extrabold text-safety-ink">
+                <h3 className="mt-1 text-lg font-extrabold text-brand-ink">
                   {title}
                 </h3>
                 <p className="mt-1 text-[13.5px] leading-6 text-slate-500">
@@ -111,7 +111,7 @@ export const BlogCard = ({ post }) => {
                     navigate(`/blog/${post?._id}`, { state: { blogID: post?._id } });
                   }
                 }}
-                className="grid h-11 w-11 cursor-pointer place-items-center rounded-md bg-safety-red text-white transition hover:translate-x-0.5 hover:-translate-y-0.5 hover:bg-safety-red-dark"
+                className="grid h-11 w-11 cursor-pointer place-items-center rounded-md bg-brand-primary text-white transition hover:translate-x-0.5 hover:-translate-y-0.5 hover:bg-brand-primary-dark"
                 aria-label={pdfUrl ? "View PDF" : "Read more"}
                 title={pdfUrl ? "View PDF" : "Read more"}
               >

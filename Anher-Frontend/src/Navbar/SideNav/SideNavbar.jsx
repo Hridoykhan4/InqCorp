@@ -61,7 +61,7 @@ export const SideNavbar = ({ categories = [] }) => {
         <label
           htmlFor="navbar-drawer"
           aria-label="Close navigation menu"
-          className="drawer-overlay bg-safety-ink/40"
+          className="drawer-overlay bg-brand-ink/40"
         />
 
         <aside className="flex h-full w-[88vw] max-w-[420px] flex-col bg-white shadow-2xl">
@@ -105,7 +105,7 @@ export const SideNavbar = ({ categories = [] }) => {
 
               <label
                 htmlFor="navbar-drawer"
-                className="grid h-10 w-10 cursor-pointer place-items-center rounded-xl border border-safety-border text-safety-muted transition hover:border-safety-red hover:text-safety-red"
+                className="grid h-10 w-10 cursor-pointer place-items-center rounded-xl border border-brand-border text-brand-muted transition hover:border-brand-primary hover:text-brand-primary"
                 aria-label="Close navigation menu"
               >
                 <FontAwesomeIcon icon={faXmark} />
@@ -121,7 +121,7 @@ export const SideNavbar = ({ categories = [] }) => {
                   type="button"
                   key={item.path}
                   onClick={() => goTo(item.path)}
-                  className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition hover:text-white"
+                  className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-brand-ink transition hover:text-white"
                   style={{}}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = NAVY;
@@ -157,7 +157,7 @@ export const SideNavbar = ({ categories = [] }) => {
                   >
                     Our Products
                   </span>
-                  <span className="mt-0.5 block text-sm font-bold text-safety-ink">
+                  <span className="mt-0.5 block text-sm font-bold text-brand-ink">
                     Browse Aggregate Categories
                   </span>
                 </span>
@@ -187,21 +187,21 @@ export const SideNavbar = ({ categories = [] }) => {
                         <img
                           src={getCategoryImage(item)}
                           alt={item?.label || item?.name || "ITC product"}
-                          className="h-12 w-12 shrink-0 rounded-lg border border-safety-border object-cover"
+                          className="h-12 w-12 shrink-0 rounded-lg border border-brand-border object-cover"
                           loading="lazy"
                         />
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-bold text-safety-ink">
+                          <span className="block truncate text-sm font-bold text-brand-ink">
                             {capitalizeWords(item?.label || item?.name) || "Product Category"}
                           </span>
-                          <span className="block text-xs text-safety-muted">
+                          <span className="block text-xs text-brand-muted">
                             {isExternalCategory(item) ? "Open site" : "View products"}
                           </span>
                         </span>
                       </button>
                     ))
                   ) : (
-                    <p className="rounded-xl p-4 text-sm text-safety-muted" style={{ background: "rgba(27,58,138,0.04)" }}>
+                    <p className="rounded-xl p-4 text-sm text-brand-muted" style={{ background: "rgba(27,58,138,0.04)" }}>
                       Product categories will appear after they are added.
                     </p>
                   )}
@@ -222,7 +222,7 @@ export const SideNavbar = ({ categories = [] }) => {
             <button
               type="button"
               onClick={() => goTo("/gallery")}
-              className="mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition"
+              className="mt-4 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-brand-ink transition"
               style={{ background: "rgba(196,155,43,0.06)", border: `1px solid rgba(196,155,43,0.2)` }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(196,155,43,0.12)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(196,155,43,0.06)"; }}
@@ -235,7 +235,7 @@ export const SideNavbar = ({ categories = [] }) => {
               <button
                 type="button"
                 onClick={() => goTo("/dashboard")}
-                className="mt-2 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-safety-ink transition"
+                className="mt-2 flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-bold text-brand-ink transition"
                 style={{ background: "rgba(27,58,138,0.05)", border: `1px solid rgba(27,58,138,0.12)` }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(27,58,138,0.1)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(27,58,138,0.05)"; }}
@@ -267,7 +267,7 @@ export const SideNavbar = ({ categories = [] }) => {
                   dispatch(removeUser());
                   closeDrawer();
                 }}
-                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-safety-border px-4 py-3 text-sm font-bold text-safety-muted transition hover:border-red-400 hover:text-red-500"
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-brand-border px-4 py-3 text-sm font-bold text-brand-muted transition hover:border-red-400 hover:text-red-500"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
                 Logout

@@ -20,7 +20,6 @@ export const UpdateCategory = ({ item }) => {
         const file = e.target.files[0];
         if (file) {
 
-            const path = URL.createObjectURL(file)
             v == 'image' ? setImageFile(file) : setBannerFile(file)
 
 
@@ -44,7 +43,7 @@ export const UpdateCategory = ({ item }) => {
             setBannerFile(null);
             setImageFile(null);
         }
-    }, [item?._id]);
+    }, [item]);
 
     // const handleFileChange = (e) => {
     //     const selectedFile = e.target.files[0];
@@ -111,7 +110,7 @@ export const UpdateCategory = ({ item }) => {
         <div>
             <input type="checkbox" id={`updateCategory-${item.name}`} className="modal-toggle peer sr-only" />
             <div
-                className="fixed inset-0 z-[200] hidden peer-checked:flex items-center justify-center bg-safety-ink/60 backdrop-blur-sm p-4 animate-fade"
+                className="fixed inset-0 z-[200] hidden peer-checked:flex items-center justify-center bg-brand-ink/60 backdrop-blur-sm p-4 animate-fade"
                 role="dialog"
                 aria-modal="true"
             >
@@ -119,20 +118,20 @@ export const UpdateCategory = ({ item }) => {
                     <button
                         type="button"
                         onClick={handleModalClose}
-                        className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-safety-muted transition hover:bg-safety-surface hover:text-safety-red"
+                        className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-brand-muted transition hover:bg-brand-surface hover:text-brand-primary"
                         aria-label="Close"
                     >
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
 
-                    <div className="mb-5 border-b border-safety-border pb-3">
-                        <h2 className="text-xl font-bold text-safety-ink">Update Category</h2>
-                        <p className="mt-1 text-sm text-safety-muted">Edit category name and replace image or banner if needed.</p>
+                    <div className="mb-5 border-b border-brand-border pb-3">
+                        <h2 className="text-xl font-bold text-brand-ink">Update Category</h2>
+                        <p className="mt-1 text-sm text-brand-muted">Edit category name and replace image or banner if needed.</p>
                     </div>
 
                     <section className="space-y-5">
                         <div>
-                            <label className="mb-1.5 block text-sm font-semibold text-safety-ink">Category Name</label>
+                            <label className="mb-1.5 block text-sm font-semibold text-brand-ink">Category Name</label>
                             <input
                                 type="text"
                                 value={name}
@@ -144,17 +143,17 @@ export const UpdateCategory = ({ item }) => {
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <p className="text-sm font-semibold text-safety-ink">Category Image</p>
+                                <p className="text-sm font-semibold text-brand-ink">Category Image</p>
                                 {imagePreview && (
-                                    <div className="aspect-square w-full overflow-hidden rounded-xl border border-safety-border bg-safety-surface">
+                                    <div className="aspect-square w-full overflow-hidden rounded-xl border border-brand-border bg-brand-surface">
                                         <img loading="lazy" src={imagePreview} alt="Category preview" className="h-full w-full object-cover" />
                                     </div>
                                 )}
                             </div>
                             <div className="space-y-2">
-                                <p className="text-sm font-semibold text-safety-ink">Banner Image</p>
+                                <p className="text-sm font-semibold text-brand-ink">Banner Image</p>
                                 {bannerImage && (
-                                    <div className="aspect-square w-full overflow-hidden rounded-xl border border-safety-border bg-safety-surface">
+                                    <div className="aspect-square w-full overflow-hidden rounded-xl border border-brand-border bg-brand-surface">
                                         <img loading="lazy" src={bannerImage} alt="Banner preview" className="h-full w-full object-cover" />
                                     </div>
                                 )}
@@ -163,7 +162,7 @@ export const UpdateCategory = ({ item }) => {
 
                         <div className="space-y-3">
                             <div>
-                                <label className="mb-1.5 block text-sm font-semibold text-safety-ink">Replace Category Image</label>
+                                <label className="mb-1.5 block text-sm font-semibold text-brand-ink">Replace Category Image</label>
                                 <input
                                     type="file"
                                     ref={ImageFileInputRef}
@@ -173,7 +172,7 @@ export const UpdateCategory = ({ item }) => {
                                 />
                             </div>
                             <div>
-                                <label className="mb-1.5 block text-sm font-semibold text-safety-ink">Replace Banner Image</label>
+                                <label className="mb-1.5 block text-sm font-semibold text-brand-ink">Replace Banner Image</label>
                                 <input
                                     type="file"
                                     ref={BannerFileInputRef}
@@ -187,7 +186,7 @@ export const UpdateCategory = ({ item }) => {
                         <button
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-safety-red px-4 py-2.5 text-sm font-bold text-white transition hover:bg-safety-red-dark disabled:opacity-60"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-primary-dark disabled:opacity-60"
                         >
                             {loading && <span className="loading loading-spinner loading-sm"></span>}
                             {loading ? 'Updating...' : 'Save Changes'}

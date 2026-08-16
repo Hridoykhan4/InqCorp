@@ -1,23 +1,18 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
-import React, { useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
-import { addLogo } from '../../Redux/hvac'
 import { useOutletContext } from 'react-router-dom'
 
 
 
 export const CountryUpload = () => {
     const updatelogo = useRef(null)
-    const PhotoInputRef = useRef();
-
     const admin = useSelector((state) => state.hvac.users)
-    const [imagePath, setImagePath] = useState(null)
     const [File, setFile] = useState(null)
     const [Loading, setLoading] = useState(false)
-    const dispatch = useDispatch()
     const { setCountry } = useOutletContext()
     const [data, setData] = useState({
         name: '',
@@ -26,22 +21,10 @@ export const CountryUpload = () => {
         imageUrl: ''
     })
 
-
-    const handleClick = (v) => {
-
-        if (v == 'photo') {
-            PhotoInputRef.current.click()
-        } else {
-            VideoInputRef.current.click()
-        }
-
-    };
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
 
-            const path = URL.createObjectURL(file)
-            setImagePath(path)
             setFile(file)
 
         } else {
@@ -92,7 +75,6 @@ export const CountryUpload = () => {
 
 
                         }
-                        setImagePath(null)
                         setFile(null)
                         setData({
                             name: '',
@@ -109,7 +91,7 @@ export const CountryUpload = () => {
                     .catch((err) => {
                         Swal.fire({
                             icon: "error",
-                            title: err.response.data.message || err.message,
+                            title: err?.response?.data?.message || err.message,
                             text: "Something went wrong!",
 
                         });
@@ -136,14 +118,14 @@ export const CountryUpload = () => {
 
     const handleClose = () => {
         setFile(null)
-        setImagePath(null)
         setData({
             name: '',
             region: '',
             subDomain: '',
             imageUrl: ''
         })
-        document.getElementById('uploadCountry').checked = false
+        const modal = document.getElementById('uploadCountry')
+        if (modal) modal.checked = false
 
     }
 

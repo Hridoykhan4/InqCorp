@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import "./ProductImages.css"; // Custom styles for zoom effect
-import { useOutletContext } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -29,7 +28,6 @@ export default function ProductImages({ item }) {
     const [current, setCurrent] = useState(0);
     const [isZoomed, setIsZoomed] = useState(false);
     const [zoomStyles, setZoomStyles] = useState({});
-    const { products } = useOutletContext()
     const zoomRef = useRef(null);
 
     const goPrev = () =>
@@ -72,13 +70,6 @@ export default function ProductImages({ item }) {
             cursor: "zoom-in",
         });
     };
-
-    // Thumbnail highlight style
-    const thumbHighlight = "ring-2 ring-cyan-500";
-
-    // Responsive container width
-    const containerWidth = mobile ? "100vw" : "400px";
-    const containerHeight = mobile ? "55vw" : "400px";
 
     const PrevArrow = ({ onClick }) => (
 

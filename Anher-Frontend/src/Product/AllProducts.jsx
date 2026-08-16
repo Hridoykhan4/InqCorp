@@ -1,466 +1,207 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { createPortal } from 'react-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilter, faPlus, faTimes, faSearch, faDownload, faTag, faSliders } from '@fortawesome/free-solid-svg-icons'
-import { useLocation, useOutletContext } from 'react-router-dom'
-import { capitalizeWords } from '../Functions/functions'
-import { ProductUpload } from '../Dashboard/FileUpload/ProductUpload'
-import { ProductCard } from '../Product Card/ProductCard'
-import { Searching } from '../Searching/Searching'
-import { SeoManager } from '../SEO/SeoManager'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
-import CountUp from 'react-countup'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useLocation, useOutletContext, useSearchParams } from 'react-router-dom'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { EXTERNAL_CATEGORY_LINKS, getCategoryHref } from '../config/navigation'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowRight, faDownload, faMagnifyingGlass, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { ProductUpload } from '../Dashboard/FileUpload/ProductUpload'
+import { SeoManager } from '../SEO/SeoManager'
+import { usePageEntrance } from '../components/usePageEntrance'
 
-const SORT_OPTIONS = [
-    { value: 'name-asc', label: 'Name (A → Z)' },
-    { value: 'name-desc', label: 'Name (Z → A)' },
-    { value: 'createdAt-desc', label: 'Newest First' },
-    { value: 'createdAt-asc', label: 'Oldest First' },
-    { value: 'category-asc', label: 'Category (A → Z)' },
+const API_BASE = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '')
+const SORTS = [
+  { value: 'featured', label: 'Featured' },
+  { value: 'name-asc', label: 'Name A–Z' },
+  { value: 'name-desc', label: 'Name Z–A' },
+  { value: 'category', label: 'Category' },
 ]
 
+const imageOf = (item) => Array.isArray(item?.imageUrl) ? item.imageUrl[0] : item?.imageUrl
+
+const firstSpec = (item) => {
+  const spec = item?.parameter?.find((entry) => entry && typeof entry === 'object')
+  if (!spec) return null
+  const [label, value] = Object.entries(spec)[0] || []
+  return label && value ? `${label}: ${value}` : null
+}
+
 export const AllProducts = () => {
-    const [limit, setLimit] = useState(12)
-    const { products, categories, setProducts } = useOutletContext()
-    const [categoryFilter, setCategoryFilter] = useState([])
-    const [search, setSearch] = useState('')
-    const [showFilter, setShowFilter] = useState(false)
-    const [sortBy, setSortBy] = useState('name-asc')
-    const [selectedProducts, setSelectedProducts] = useState([])
-    const [debouncedSearch, setDebouncedSearch] = useState('')
-    const location = useLocation()
-    const isDashboard = location.pathname.startsWith('/dashboard')
+  const { products = [], categories = [], setProducts, contentStatus } = useOutletContext() || {}
+  const location = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const isDashboard = location.pathname.startsWith('/dashboard')
+  const [search, setSearch] = useState(searchParams.get('search') || '')
+  const [category, setCategory] = useState(searchParams.get('category') || 'All')
+  const [sort, setSort] = useState('featured')
+  const [limit, setLimit] = useState(12)
+  const [selected, setSelected] = useState([])
+  const pageRef = useRef(null)
+  usePageEntrance(pageRef, [isDashboard])
 
-    useEffect(() => {
-        const timer = setTimeout(() => setDebouncedSearch(search), 250)
-        return () => clearTimeout(timer)
-    }, [search])
+  useEffect(() => {
+    const next = {}
+    if (search.trim()) next.search = search.trim()
+    if (category !== 'All') next.category = category
+    setSearchParams(next, { replace: true })
+    setLimit(12)
+  }, [search, category, setSearchParams])
 
-    useEffect(() => {
-        AOS.init({ duration: 600, once: true })
-    }, [])
+  const categoryNames = useMemo(() => {
+    const values = categories.map((item) => item?.name).filter(Boolean)
+    if (!values.length) products.forEach((item) => item?.category && values.push(item.category))
+    return ['All', ...new Set(values)]
+  }, [categories, products])
 
-    useEffect(() => {
-        if (showFilter) {
-            const prev = document.body.style.overflow
-            document.body.style.overflow = 'hidden'
-            return () => { document.body.style.overflow = prev }
-        }
-    }, [showFilter])
+  const filtered = useMemo(() => {
+    const query = search.trim().toLowerCase()
+    const result = products.filter((item) => {
+      const matchCategory = category === 'All' || item?.category === category
+      const haystack = `${item?.name || ''} ${item?.model || ''} ${item?.category || ''} ${item?.description || ''}`.toLowerCase()
+      return matchCategory && (!query || haystack.includes(query))
+    })
 
-    useEffect(() => {
-        setLimit(12)
-    }, [debouncedSearch, categoryFilter, sortBy])
+    if (sort === 'name-asc') result.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+    if (sort === 'name-desc') result.sort((a, b) => (b.name || '').localeCompare(a.name || ''))
+    if (sort === 'category') result.sort((a, b) => (a.category || '').localeCompare(b.category || ''))
+    return result
+  }, [products, search, category, sort])
 
-    const filterProducts = useMemo(() => {
-        if (!products) return []
-        const q = debouncedSearch.trim().toLowerCase()
-        const keys = ['model', 'category', 'name', 'description']
+  const removeSelected = async () => {
+    if (!selected.length) return
+    const confirmation = await Swal.fire({
+      title: `Delete ${selected.length} product${selected.length > 1 ? 's' : ''}?`,
+      text: 'This cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#b42318',
+      confirmButtonText: 'Delete',
+    })
+    if (!confirmation.isConfirmed) return
 
-        let out = products.filter((item) => {
-            const matchesSearch = q
-                ? keys.some((k) => item?.[k]?.toString().toLowerCase().includes(q))
-                : true
-            const matchesCategory = categoryFilter.length > 0
-                ? categoryFilter.includes((item?.category || '').toLowerCase())
-                : true
-            return matchesSearch && matchesCategory
-        })
-
-        const [field, dir] = sortBy.split('-')
-        out.sort((a, b) => {
-            let av = a?.[field]
-            let bv = b?.[field]
-            if (field === 'createdAt') {
-                av = new Date(av || 0).getTime()
-                bv = new Date(bv || 0).getTime()
-            } else {
-                av = (av || '').toString().toLowerCase()
-                bv = (bv || '').toString().toLowerCase()
-            }
-            if (av < bv) return dir === 'asc' ? -1 : 1
-            if (av > bv) return dir === 'asc' ? 1 : -1
-            return 0
-        })
-
-        return out
-    }, [products, debouncedSearch, categoryFilter, sortBy])
-
-    const handleCategoryChange = useCallback((category, checked) => {
-        const v = (category || '').toLowerCase()
-        setCategoryFilter((prev) =>
-            checked ? [...prev, v] : prev.filter((c) => c !== v)
-        )
-    }, [])
-
-    const clearAllFilters = useCallback(() => {
-        setCategoryFilter([])
-        setSearch('')
-        setSortBy('name-asc')
-        setSelectedProducts([])
-    }, [])
-
-    const handleBulkDelete = async () => {
-        if (selectedProducts.length === 0) return
-        const result = await Swal.fire({
-            title: `Delete ${selectedProducts.length} product${selectedProducts.length > 1 ? 's' : ''}?`,
-            text: 'This action cannot be undone.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete',
-        })
-        if (!result.isConfirmed) return
-        try {
-            await Promise.all(
-                selectedProducts.map((id) =>
-                    axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/deleteProduct`, { data: { id } })
-                )
-            )
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/getProducts`)
-            setProducts(response.data?.data || response.data)
-            setSelectedProducts([])
-            Swal.fire('Deleted', 'Selected products removed.', 'success')
-        } catch (error) {
-            Swal.fire('Error', error?.response?.data?.message || error.message, 'error')
-        }
+    try {
+      await Promise.all(selected.map((id) => axios.delete(`${API_BASE}/api/deleteProduct`, { data: { id } })))
+      setProducts((current) => current.filter((item) => !selected.includes(item._id)))
+      setSelected([])
+      Swal.fire({ title: 'Products deleted', icon: 'success', timer: 1300, showConfirmButton: false })
+    } catch (error) {
+      Swal.fire('Could not delete', error?.response?.data?.message || 'Please try again.', 'error')
     }
+  }
 
-    const exportProducts = () => {
-        const dataStr = JSON.stringify(filterProducts.slice(0, limit), null, 2)
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr)
-        const link = document.createElement('a')
-        link.setAttribute('href', dataUri)
-        link.setAttribute('download', 'products-export.json')
-        link.click()
-    }
+  const exportProducts = () => {
+    const blob = new Blob([JSON.stringify(filtered, null, 2)], { type: 'application/json' })
+    const href = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = href
+    anchor.download = 'itc-products.json'
+    anchor.click()
+    URL.revokeObjectURL(href)
+  }
 
-    const activeFiltersCount = useMemo(() => {
-        let n = 0
-        if (categoryFilter.length > 0) n++
-        if (debouncedSearch) n++
-        return n
-    }, [categoryFilter, debouncedSearch])
-
-    const categoryBuckets = useMemo(() => {
-        const map = new Map()
-        ;(categories || []).forEach((c) => map.set((c?.name || '').toLowerCase(), { name: c?.name, count: 0 }))
-        ;(products || []).forEach((p) => {
-            const key = (p?.category || '').toLowerCase()
-            if (map.has(key)) map.get(key).count += 1
-        })
-        return Array.from(map.values()).filter((c) => c.name)
-    }, [categories, products])
-
-    const FilterPanel = ({ inDrawer = false }) => (
-        <div className={`${inDrawer ? '' : 'sticky top-24'} space-y-5 rounded-2xl border border-safety-border bg-white p-5 shadow-sm`}>
-            <div className='flex items-center justify-between'>
-                <h3 className='text-base font-bold text-safety-ink'>
-                    <FontAwesomeIcon icon={faFilter} className='mr-2 text-safety-red' />
-                    Filters
-                    {activeFiltersCount > 0 && (
-                        <span className='ml-2 rounded-full bg-safety-red px-2 py-0.5 text-xs text-white'>
-                            {activeFiltersCount}
-                        </span>
-                    )}
-                </h3>
-                {activeFiltersCount > 0 && (
-                    <button onClick={clearAllFilters} className='text-xs font-semibold text-safety-red hover:underline'>
-                        Clear All
-                    </button>
-                )}
+  return (
+    <main ref={pageRef} className={isDashboard ? 'min-h-0 bg-transparent' : 'min-h-screen bg-white pt-[76px]'}>
+      {!isDashboard && (
+        <>
+          <SeoManager
+            title="Construction Aggregate Catalogue — Sand, Stone Chips & Boulder"
+            description="Browse ITC construction aggregates: screened plaster sand, river sand, graded stone chips, natural boulder and filling materials with nationwide supply coordination."
+            path="/all-products"
+            keywords="sand supplier Bangladesh, stone chips Bangladesh, boulder supplier, aggregate catalogue, construction materials Dhaka"
+          />
+          <section className="overflow-hidden border-b border-brand-border bg-[#fbfaf7] py-8 sm:py-11">
+            <div className="container-page grid items-end gap-7 lg:grid-cols-[1fr_auto]">
+              <div data-page-reveal>
+                <div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.16em] text-brand-muted"><Link to="/">Home</Link><span aria-hidden="true">/</span><span className="text-brand-accent">Materials</span></div>
+                <h1 className="mt-3 max-w-3xl text-[clamp(2.35rem,5vw,4.5rem)] font-black leading-[.98] tracking-[-.055em] text-brand-ink">Choose the right material.</h1>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-brand-muted sm:text-base">Filter by material, check the grade, then share quantity and delivery location for a current delivered quote.</p>
+              </div>
+              <div data-page-reveal className="flex flex-wrap gap-2 lg:max-w-[340px] lg:justify-end">
+                {['CFT / Ton', 'Grade matched', 'Site delivery'].map((label) => <span key={label} className="rounded-full border border-brand-border bg-white px-4 py-2 text-[10px] font-extrabold uppercase tracking-[.1em] text-brand-ink">{label}</span>)}
+                {contentStatus === 'fallback' && <span className="w-full text-right text-[10px] font-bold text-brand-muted">Live inventory reconnecting · Core range shown</span>}
+              </div>
             </div>
+          </section>
+        </>
+      )}
 
-            <div>
-                <h4 className='mb-3 text-sm font-semibold text-safety-ink'>
-                    <FontAwesomeIcon icon={faTag} className='mr-2 text-safety-muted' />
-                    Categories
-                </h4>
-                <div className='space-y-1  overflow-y-auto no-scrollbar pr-1'>
-                    {categoryBuckets.length === 0 && (
-                        <p className='text-xs text-safety-muted'>No categories yet.</p>
-                    )}
-                    {categoryBuckets.map((c) => {
-                        const value = c.name.toLowerCase()
-                        const checked = categoryFilter.includes(value)
-                        return (
-                            <label
-                                key={value}
-                                className={`flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 text-sm transition ${
-                                    checked ? 'bg-red-50 text-safety-red' : 'hover:bg-safety-surface text-safety-ink'
-                                }`}
-                            >
-                                <span className='flex items-center gap-2'>
-                                    <input
-                                        type='checkbox'
-                                        checked={checked}
-                                        onChange={(e) => handleCategoryChange(c.name, e.target.checked)}
-                                        className='checkbox checkbox-xs checkbox-error'
-                                    />
-                                    {capitalizeWords(c.name)}
-                                </span>
-                                <span className='text-xs text-safety-muted'>{c.count}</span>
-                            </label>
-                        )
-                    })}
-                </div>
+      <section className={isDashboard ? '' : 'pb-20 pt-6 sm:pt-8'}>
+        <div className={isDashboard ? 'mx-auto max-w-[1500px]' : 'container-page'}>
+          {isDashboard && (
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+              <div><p className="eyebrow">Dashboard</p><h1 className="mt-2 text-3xl font-black text-brand-ink">Products</h1></div>
+              <div className="flex flex-wrap gap-2">
+                <button type="button" onClick={exportProducts} className="btn-brand-outline gap-2"><FontAwesomeIcon icon={faDownload} /> Export</button>
+                {selected.length > 0 && <button type="button" onClick={removeSelected} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-red-700 px-5 text-sm font-bold text-white"><FontAwesomeIcon icon={faTrash} /> Delete ({selected.length})</button>}
+                <label htmlFor="my_modal_4" className="btn-brand cursor-pointer gap-2"><FontAwesomeIcon icon={faPlus} /> Add product</label>
+              </div>
             </div>
+          )}
 
-            <div>
-                <h4 className='mb-2 text-sm font-semibold text-safety-ink'>Sort By</h4>
-                <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className='select select-bordered select-sm w-full'
-                >
-                    {SORT_OPTIONS.map((o) => (
-                        <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                </select>
+          <div data-page-reveal className={`sticky z-20 rounded-[1.5rem] border border-brand-border bg-white/92 p-3 shadow-[0_20px_50px_-36px_rgba(19,35,58,.32)] backdrop-blur-xl sm:p-4 ${isDashboard ? 'top-[88px]' : 'top-[84px]'}`}>
+            <div className="grid gap-3 lg:grid-cols-[1fr_auto]">
+              <label className="relative block">
+                <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-brand-muted" />
+                <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search material, model or application" className="h-12 w-full rounded-full border border-brand-border bg-brand-surface pl-11 pr-4 text-sm font-semibold text-brand-ink outline-none transition focus:border-brand-primary focus:bg-white" />
+              </label>
+              <select value={sort} onChange={(event) => setSort(event.target.value)} className="h-12 rounded-full border border-brand-border bg-white px-5 text-sm font-bold text-brand-ink outline-none focus:border-brand-primary">
+                {SORTS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+              </select>
             </div>
+            <div className="mt-3 flex flex-wrap gap-2 pb-1">
+              {categoryNames.map((name) => (
+                <button key={name} type="button" onClick={() => setCategory(name)} className={`shrink-0 rounded-full px-4 py-2 text-xs font-extrabold transition ${category === name ? 'bg-brand-primary text-white' : 'border border-brand-border bg-white text-brand-muted hover:text-brand-primary'}`}>{name}</button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-7 flex items-center justify-between gap-4">
+            <p className="text-sm font-bold text-brand-ink">{filtered.length} material{filtered.length === 1 ? '' : 's'} <span className="font-medium text-brand-muted">matched</span></p>
+            {(search || category !== 'All') && <button type="button" onClick={() => { setSearch(''); setCategory('All') }} className="text-xs font-extrabold text-brand-primary">Clear filters</button>}
+          </div>
+
+          {filtered.length ? (
+            <>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {filtered.slice(0, limit).map((item) => {
+                  const checked = selected.includes(item._id)
+                  return (
+                    <article key={item._id || item.model} className={`product-card group flex min-h-full flex-col ${checked ? 'ring-2 ring-brand-primary ring-offset-2' : ''}`}>
+                      <div className="relative aspect-[16/10] overflow-hidden bg-brand-surface">
+                        <img src={imageOf(item) || '/images/itc-stone-chips.webp'} alt={item.name} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" onError={(event) => { event.currentTarget.src = '/images/itc-stone-chips.webp' }} />
+                        <span className="absolute left-4 top-4 rounded-full bg-white/92 px-3 py-1.5 text-[9px] font-black uppercase tracking-[.15em] text-brand-primary shadow backdrop-blur">{item.category}</span>
+                        {isDashboard && <label className="absolute right-4 top-4 grid h-9 w-9 cursor-pointer place-items-center rounded-full bg-white shadow"><input type="checkbox" className="checkbox checkbox-sm" checked={checked} onChange={(event) => setSelected((current) => event.target.checked ? [...current, item._id] : current.filter((id) => id !== item._id))} /></label>}
+                      </div>
+                      <div className="flex flex-1 flex-col p-6">
+                        <p className="text-[10px] font-extrabold uppercase tracking-[.14em] text-brand-muted">{item.model}</p>
+                        <h2 className="mt-2 text-xl font-black tracking-tight text-brand-ink">{item.name}</h2>
+                        {firstSpec(item) && <p className="mt-3 text-xs font-bold text-brand-accent">{firstSpec(item)}</p>}
+                        <p className="mt-3 line-clamp-3 text-sm leading-6 text-brand-muted">{item.description}</p>
+                        <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+                          <Link to={`/products/${encodeURIComponent(item.model)}`} className="inline-flex items-center gap-2 text-xs font-extrabold text-brand-primary">View details <FontAwesomeIcon icon={faArrowRight} className="transition group-hover:translate-x-1" /></Link>
+                          {!isDashboard && <Link to={`/contact?product=${encodeURIComponent(item.name)}`} className="rounded-full border border-brand-border px-3 py-2 text-[10px] font-extrabold text-brand-ink hover:border-brand-primary">Get quote</Link>}
+                        </div>
+                      </div>
+                    </article>
+                  )
+                })}
+              </div>
+
+              {limit < filtered.length && <div className="mt-10 text-center"><button type="button" onClick={() => setLimit((value) => value + 12)} className="btn-brand-outline">Load more materials</button></div>}
+            </>
+          ) : (
+            <div className="mt-8 rounded-[2rem] border border-dashed border-brand-border bg-[#fbfaf7] px-6 py-20 text-center">
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="mx-auto text-3xl text-brand-accent/55" />
+              <h2 className="mt-5 text-2xl font-black text-brand-ink">No matching material</h2>
+              <p className="mt-2 text-sm text-brand-muted">Try a broader search or clear the selected category.</p>
+              <button type="button" onClick={() => { setSearch(''); setCategory('All') }} className="btn-brand mt-6">Reset catalogue</button>
+            </div>
+          )}
         </div>
-    )
+      </section>
 
-    return (
-        <section className='w-full py-4 sm:py-8'>
-            {!isDashboard && (
-                <SeoManager
-                    title='All Safety Products - Safety Plus'
-                    description='Browse our complete catalogue of professional fire safety and industrial products.'
-                    path='/all-products'
-                    keywords='safety products, fire safety equipment, industrial safety, safety catalogue, Bangladesh safety products'
-                />
-            )}
-
-            {!isDashboard && (
-                <div
-                    className='container-page mb-6 sm:mb-8'
-                    data-aos='fade-up'
-                ><div className='rounded-2xl border border-safety-border bg-white/90 px-4 py-5 shadow-sm backdrop-blur-xl sm:px-6 sm:py-8'>
-                    <div className='flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:gap-6'>
-                        <div className='max-w-2xl'>
-                            <p className='section-tagline text-[11px] sm:text-sm'>Complete Product Catalogue</p>
-                            <h1 className='mt-1.5 text-2xl font-extrabold leading-tight text-safety-ink sm:mt-2 sm:text-4xl md:text-5xl'>
-                                Premium Sand, Stone Chips & Construction Aggregates
-                            </h1>
-                            <p className='mt-2 text-sm text-safety-muted sm:mt-3 sm:text-base sm:leading-7'>
-                                Filter by category, search by product, and request a quote.
-                            </p>
-                        </div>
-                        <div className='inline-flex shrink-0 items-center gap-3 self-start rounded-xl bg-safety-red/10 px-4 py-2.5 sm:gap-4 sm:px-5 sm:py-4'>
-                            <span className='text-[10px] font-semibold uppercase tracking-[0.18em] text-safety-red sm:text-[11px]'>
-                                Available
-                            </span>
-                            <span className='text-2xl font-extrabold leading-none text-safety-ink sm:text-3xl'>
-                                <CountUp end={filterProducts?.length ?? 0} duration={1.2} />
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className='mt-4 flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar mask-fade-r pb-1 sm:mt-6 sm:flex-wrap'>
-                        <button
-                            type='button'
-                            onClick={() => setCategoryFilter([])}
-                            className={
-                                categoryFilter.length === 0
-                                    ? 'feature-pill border-safety-red bg-safety-red/10 text-safety-red'
-                                    : 'feature-pill'
-                            }
-                        >
-                            All ({products?.length || 0})
-                        </button>
-                        {categoryBuckets.slice(0, 8).map((c) => {
-                            const value = c.name.toLowerCase()
-                            const active = categoryFilter.includes(value)
-                            return (
-                                <button
-                                    key={value}
-                                    type='button'
-                                    onClick={() => handleCategoryChange(c.name, !active)}
-                                    className={
-                                        active
-                                            ? 'feature-pill border-safety-red bg-safety-red/10 text-safety-red'
-                                            : 'feature-pill'
-                                    }
-                                >
-                                    {capitalizeWords(c.name)} ({c.count})
-                                </button>
-                            )
-                        })}
-                        {EXTERNAL_CATEGORY_LINKS.map((item) => (
-                            <a
-                                key={item._id}
-                                href={getCategoryHref(item)}
-                                className='feature-pill'
-                            >
-                                {item.label}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-                </div>
-            )}
-
-            <div data-aos='fade-in'>
-                <Searching search={search} setSearch={setSearch} />
-            </div>
-
-            <div
-                className={`${isDashboard ? 'w-full px-3' : 'container-page'} mb-12 space-y-4 sm:mb-16`}
-                data-aos='fade-up'
-                data-aos-delay='150'
-            >
-                {isDashboard && (
-                    <div className='flex flex-wrap items-center justify-between gap-3 rounded-xl border border-safety-border bg-white p-3 shadow-sm'>
-                        <div className='flex flex-wrap gap-2'>
-                            <label htmlFor='my_modal_4' className='btn btn-primary btn-sm'>
-                                <FontAwesomeIcon icon={faPlus} className='mr-1' />
-                                Add Product
-                            </label>
-                            {selectedProducts.length > 0 && (
-                                <button onClick={handleBulkDelete} className='btn btn-error btn-sm'>
-                                    <FontAwesomeIcon icon={faTimes} className='mr-1' />
-                                    Delete ({selectedProducts.length})
-                                </button>
-                            )}
-                        </div>
-                        <button onClick={exportProducts} className='btn btn-outline btn-sm'>
-                            <FontAwesomeIcon icon={faDownload} className='mr-1' />
-                            Export
-                        </button>
-                    </div>
-                )}
-
-                <div className='flex flex-col gap-6 lg:flex-row'>
-                    <aside className='hidden w-72 shrink-0 lg:block'>
-                        <FilterPanel />
-                    </aside>
-
-                    <div className='min-w-0 flex-1'>
-                        <div className='mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-safety-border bg-white px-3 py-2 shadow-sm sm:mb-4 sm:gap-3 sm:px-4 sm:py-3'>
-                            <div className='flex items-center gap-3'>
-                                <button
-                                    onClick={() => setShowFilter(true)}
-                                    className='btn btn-sm btn-outline lg:hidden'
-                                >
-                                    <FontAwesomeIcon icon={faSliders} className='mr-1' />
-                                    Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
-                                </button>
-                                <span className='text-sm font-medium text-safety-ink'>
-                                    {filterProducts.length}
-                                    <span className='text-safety-muted'> result{filterProducts.length !== 1 ? 's' : ''}</span>
-                                </span>
-                            </div>
-
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
-                                className='select select-bordered select-sm hidden sm:inline-flex'
-                            >
-                                {SORT_OPTIONS.map((o) => (
-                                    <option key={o.value} value={o.value}>{o.label}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {showFilter && createPortal(
-                            <div className='fixed inset-0 z-[200] lg:hidden animate-fade' role='dialog' aria-modal='true'>
-                                <div
-                                    className='absolute inset-0 bg-safety-ink/55 backdrop-blur-sm'
-                                    onClick={() => setShowFilter(false)}
-                                />
-                                <div className='absolute inset-x-0 bottom-0 flex max-h-[88vh] flex-col rounded-t-3xl bg-white shadow-2xl animate-rise'>
-                                    <div className='shrink-0 px-5 pt-4'>
-                                        <div className='mx-auto mb-3 h-1.5 w-12 rounded-full bg-safety-border' />
-                                        <div className='flex items-center justify-between'>
-                                            <h3 className='text-base font-bold text-safety-ink'>Filters</h3>
-                                            <button
-                                                onClick={() => setShowFilter(false)}
-                                                aria-label='Close filters'
-                                                className='grid h-9 w-9 place-items-center rounded-full text-safety-muted transition hover:bg-safety-surface hover:text-safety-red'
-                                            >
-                                                <FontAwesomeIcon icon={faTimes} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className='min-h-0 flex-1 overflow-y-auto no-scrollbar px-5 py-3'>
-                                        <FilterPanel inDrawer />
-                                    </div>
-                                    <div className='shrink-0 border-t border-safety-border bg-white p-4'>
-                                        <button
-                                            onClick={() => setShowFilter(false)}
-                                            className='btn-brand w-full'
-                                        >
-                                            Show {filterProducts.length} result{filterProducts.length !== 1 ? 's' : ''}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>,
-                            document.body
-                        )}
-
-                        {!products ? (
-                            <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3'>
-                                {Array.from({ length: 6 }).map((_, i) => (
-                                    <div key={i} className='skeleton h-72 w-full rounded-2xl' />
-                                ))}
-                            </div>
-                        ) : filterProducts.length > 0 ? (
-                            <>
-                                <div className='grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3'>
-                                    {filterProducts.slice(0, limit).map((item, index) => (
-                                        <ProductCard
-                                            key={item._id || index}
-                                            item={item}
-                                            isSelected={selectedProducts.includes(item._id)}
-                                            onSelect={(selected) =>
-                                                setSelectedProducts((prev) =>
-                                                    selected ? [...prev, item._id] : prev.filter((id) => id !== item._id)
-                                                )
-                                            }
-                                        />
-                                    ))}
-                                </div>
-
-                                {limit < filterProducts.length && (
-                                    <div className='mt-8 text-center'>
-                                        <button
-                                            onClick={() => setLimit((prev) => prev + 12)}
-                                            className='btn btn-primary'
-                                        >
-                                            Load More
-                                            <FontAwesomeIcon icon={faPlus} className='ml-2' />
-                                        </button>
-                                        <p className='mt-2 text-xs text-safety-muted'>
-                                            Showing {Math.min(limit, filterProducts.length)} of {filterProducts.length}
-                                        </p>
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <div className='rounded-2xl border border-dashed border-safety-border bg-white py-16 text-center'>
-                                <FontAwesomeIcon icon={faSearch} className='text-5xl text-safety-border' />
-                                <h3 className='mt-4 text-lg font-bold text-safety-ink'>No Products Found</h3>
-                                <p className='mt-1 text-sm text-safety-muted'>
-                                    Try clearing filters or adjusting your search.
-                                </p>
-                                <button onClick={clearAllFilters} className='btn btn-primary btn-sm mt-4'>
-                                    Clear Filters
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            <ProductUpload />
-        </section>
-    )
+      {isDashboard && <ProductUpload />}
+    </main>
+  )
 }
 
 export default AllProducts

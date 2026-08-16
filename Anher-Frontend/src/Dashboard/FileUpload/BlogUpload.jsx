@@ -11,7 +11,7 @@ export const BlogUpload = () => {
     const [loading, setLoading] = useState(false)
 
     const ImageFileInputRef = useRef();
-    const { blogs, setBlogs } = useOutletContext()
+    const { setBlogs } = useOutletContext()
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && file.type === 'application/pdf') {

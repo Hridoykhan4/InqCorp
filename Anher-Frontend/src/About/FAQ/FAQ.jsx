@@ -79,8 +79,6 @@ export default function FaqSection({
           <div className="space-y-4">
             {faqs.map((item, i) => {
               const isOpen = active === i;
-              const isLast = i === faqs.length - 1;
-
               if (isOpen) {
                 // Expanded orange card
                 return (

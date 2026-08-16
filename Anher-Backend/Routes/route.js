@@ -1,104 +1,143 @@
-
-
 const express = require('express')
-const { seedDatabase, getProducts, addProduct, deleteProduct, getCategories, addCategory, deleteCategory, updateProduct, updateCategory, downloadPdfFiles, getLogo, pdfUpload, uploadBanner, getBanners, deleteBanner, updateBanner, AddBlog, getBlogs, deleteBlog, addService, getServices, updateService, deleteService, businessProducts, addCertificate, deleteCertificate, getCertificate, addCountry, getCountry, deleteCountry, addCatalogue, getCatalogues, deleteCatalogue, getPriceList, addPriceItem, updatePriceItem, deletePriceItem, getGallery, addGalleryImages, deleteGalleryImage } = require('../Controller/Controller')
-const { register, login } = require('../Controller/AuthController')
-const router = express.Router()
 const multer = require('multer')
+const {
+    seedDatabase,
+    getProducts,
+    addProduct,
+    deleteProduct,
+    getCategories,
+    addCategory,
+    deleteCategory,
+    updateProduct,
+    updateCategory,
+    downloadPdfFiles,
+    getLogo,
+    pdfUpload,
+    uploadBanner,
+    getBanners,
+    deleteBanner,
+    updateBanner,
+    AddBlog,
+    getBlogs,
+    deleteBlog,
+    addService,
+    getServices,
+    updateService,
+    deleteService,
+    businessProducts,
+    addCertificate,
+    deleteCertificate,
+    getCertificate,
+    addCountry,
+    getCountry,
+    deleteCountry,
+    addCatalogue,
+    getCatalogues,
+    deleteCatalogue,
+    getPriceList,
+    addPriceItem,
+    updatePriceItem,
+    deletePriceItem,
+    getGallery,
+    addGalleryImages,
+    deleteGalleryImage,
+} = require('../Controller/Controller')
+const { authenticate, login, session } = require('../Controller/AuthController')
 const { uploadLogo, getQueries, UploadPdf, dashboardBanners } = require('../Controller/AdminController')
-const { cloudinary } = require('../Cloudinary/cloudinary')
-const { extractPublicId } = require('cloudinary-build-url')
+const { isDatabaseReady, requireDatabase } = require('../Database Connection/DB_Connection')
 
-const upload = multer({ dest: 'uploads/' })
-
-// __________Api testing Route______________
-router.get('/', (req, res) => {
-    res.send('The Server Is Working')
+const router = express.Router()
+const upload = multer({
+    dest: 'uploads/',
+    limits: { fileSize: 15 * 1024 * 1024, files: 20 },
 })
 
-// Seed default products & categories (safe — skips if data exists)
-router.get('/seed', seedDatabase)
+router.get('/', (_req, res) => {
+    res.json({ service: 'ITC API', status: 'online' })
+})
 
-// ====== GET Routes ======
+router.get('/health', (_req, res) => {
+    const database = isDatabaseReady() ? 'connected' : 'reconnecting'
+    res.status(200).json({
+        service: 'ITC API',
+        status: 'online',
+        database,
+        ready: database === 'connected',
+        timestamp: new Date().toISOString(),
+    })
+})
+
+// Every route below this line needs a live database. The middleware responds
+// immediately with a friendly 503 instead of allowing buffered queries to hang.
+router.use(requireDatabase)
+
+router.post('/login', login)
+router.get('/session', authenticate, session)
+
+// Public catalogue/content routes.
 router.get('/getProducts', getProducts)
 router.get('/getCategories', getCategories)
 router.get('/getCertificate', getCertificate)
 router.get('/getLogo', getLogo)
 router.get('/getCountry', getCountry)
 router.get('/getBanners', getBanners)
-router.get('/dashboardBanners', dashboardBanners)
 router.get('/getBlogs', getBlogs)
 router.get('/download/:fileId', downloadPdfFiles)
-router.get('/getQueries', getQueries)
 router.get('/getServices', getServices)
 router.get('/getBusinessProducts', businessProducts)
 router.get('/getCatalogues', getCatalogues)
 router.get('/getPriceList', getPriceList)
 router.get('/getGallery', getGallery)
 
-// ====== POST Routes ======
-router.post('/register', register)
-router.post('/login', login)
-router.post('/addProduct', upload.any(), addProduct)
-router.post('/addCategory', upload.fields([
-    { name: 'image' },
-    { name: 'bannerImage' }
+// Private dashboard reads.
+router.get('/getQueries', authenticate, getQueries)
+router.get('/dashboardBanners', authenticate, dashboardBanners)
+
+// Private setup and content mutations.
+router.post('/admin/seed', authenticate, seedDatabase)
+router.post('/addProduct', authenticate, upload.any(), addProduct)
+router.post('/addCategory', authenticate, upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'bannerImage', maxCount: 1 },
 ]), addCategory)
-router.post('/addCertificate', upload.fields([
-    { name: 'image' },
+router.post('/addCertificate', authenticate, upload.fields([
+    { name: 'image', maxCount: 1 },
 ]), addCertificate)
-router.post('/addBlog', upload.fields([
-    { name: 'images' },
-    { name: 'pdf' }
+router.post('/addBlog', authenticate, upload.fields([
+    { name: 'images', maxCount: 10 },
+    { name: 'pdf', maxCount: 1 },
 ]), AddBlog)
-router.post('/uploadBanner', upload.array('images', 10), uploadBanner)
-router.post('/logoUpload', upload.array('images', 5), uploadLogo)
-router.post('/upload-pdf', UploadPdf)
-router.post('/pdf', upload.single('pdf'), pdfUpload)
-router.post('/addService', addService)
-router.post('/addCountry'  ,upload.array('images'),addCountry)
-router.post('/addCatalogue', upload.fields([
-    { name: 'pdf' },
-    { name: 'image' }
+router.post('/uploadBanner', authenticate, upload.array('images', 10), uploadBanner)
+router.post('/logoUpload', authenticate, upload.array('images', 5), uploadLogo)
+router.post('/upload-pdf', authenticate, UploadPdf)
+router.post('/pdf', authenticate, upload.single('pdf'), pdfUpload)
+router.post('/addService', authenticate, addService)
+router.post('/addCountry', authenticate, upload.array('images', 5), addCountry)
+router.post('/addCatalogue', authenticate, upload.fields([
+    { name: 'pdf', maxCount: 1 },
+    { name: 'image', maxCount: 1 },
 ]), addCatalogue)
-router.post('/addPriceItem', upload.any(), addPriceItem)
-router.post('/addGalleryImages', upload.array('images', 20), addGalleryImages)
-// ====== PUT Routes ======
-router.put('/updateBanner/:id', upload.fields([{ name: 'images' }]), updateBanner)
-router.put('/updatePriceItem/:id', upload.any(), updatePriceItem)
-router.put('/updateProduct/:id', upload.any(), updateProduct)
-router.put('/updateService/:id', updateService)
-router.put('/updateCategory/:id', upload.fields([
-    { name: 'image' },
-    { name: 'bannerImage' }
+router.post('/addPriceItem', authenticate, upload.any(), addPriceItem)
+router.post('/addGalleryImages', authenticate, upload.array('images', 20), addGalleryImages)
+
+router.put('/updateBanner/:id', authenticate, upload.fields([{ name: 'images', maxCount: 1 }]), updateBanner)
+router.put('/updatePriceItem/:id', authenticate, upload.any(), updatePriceItem)
+router.put('/updateProduct/:id', authenticate, upload.any(), updateProduct)
+router.put('/updateService/:id', authenticate, updateService)
+router.put('/updateCategory/:id', authenticate, upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'bannerImage', maxCount: 1 },
 ]), updateCategory)
 
-// ====== DELETE Routes ======
-router.delete('/deleteProduct', deleteProduct)
-router.delete('/deleteCategory', deleteCategory)
-router.delete('/deleteBanner', deleteBanner)
-router.delete('/deleteBlog', deleteBlog)
-router.delete('/deleteCountry', deleteCountry)
-router.delete('/deleteService', deleteService)
-router.delete('/deleteCertificate', deleteCertificate)
-router.delete('/deleteCatalogue/:id', deleteCatalogue)
-router.delete('/deletePriceItem', deletePriceItem)
-router.delete('/deleteGalleryImage', deleteGalleryImage)
+router.delete('/deleteProduct', authenticate, deleteProduct)
+router.delete('/deleteCategory', authenticate, deleteCategory)
+router.delete('/deleteBanner', authenticate, deleteBanner)
+router.delete('/deleteBlog', authenticate, deleteBlog)
+router.delete('/deleteCountry', authenticate, deleteCountry)
+router.delete('/deleteService', authenticate, deleteService)
+router.delete('/deleteCertificate', authenticate, deleteCertificate)
+router.delete('/deleteCatalogue/:id', authenticate, deleteCatalogue)
+router.delete('/deletePriceItem', authenticate, deletePriceItem)
+router.delete('/deleteGalleryImage', authenticate, deleteGalleryImage)
 
-router.post('/del', async (req, res) => {
-    try {
-
-        cloudinary.uploader.destroy('vutxydvmew4iwzbvvdfx')
-        .then((result)=> res.send(result) )
-        .catch((err)=>console.log('Error',err))
-        
-           
-    } catch (error) {
-        return res.send(error.message)
-    }
-
-})
-
-module.exports = {
-    router
-}
+module.exports = { router }

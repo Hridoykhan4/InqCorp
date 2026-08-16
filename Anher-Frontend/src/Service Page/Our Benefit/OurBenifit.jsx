@@ -39,44 +39,44 @@ const items = [
     icon: Globe,
     title: "100% Customer Satisfaction",
     text:
-      "At SafetyPlus, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
+      "At Inqilab Trading Corporation, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
   },
   {
     icon: Cylinder,
     title: "Fast & Reliable Service",
     text:
-      "At SafetyPlus, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
+      "At Inqilab Trading Corporation, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
   },
   {
     icon: Binoculars,
     title: "Certified & Experience Technician",
     text:
-      "At SafetyPlus, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
+      "At Inqilab Trading Corporation, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
   },
   {
     icon: Diamond,
     title: "Energy–Efficient Solutions",
     text:
-      "At SafetyPlus, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
+      "At Inqilab Trading Corporation, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
   },
   {
     icon: Magnet,
     title: "Locally Owned & Operated",
     text:
-      "At SafetyPlus, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
+      "At Inqilab Trading Corporation, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
   },
   {
     icon: Diamond,
     title: "Satisfaction Guaranteed",
     text:
-      "At SafetyPlus, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
+      "At Inqilab Trading Corporation, we specialize in delivering dependable fire safety and industrial protection equipment with a focus on quality and compliance.",
   },
 ];
 
 /* --- row item --- */
 const BenefitRow = ({ Icon, title, text }) => (
   <div className="flex items-start gap-5 py-6">
-    <Icon />
+    {React.createElement(Icon)}
     <div>
       <h4 className="text-white font-semibold text-lg">{title}</h4>
       <p className="text-white/80 text-[15px] leading-7 max-w-[520px]">{text}</p>
@@ -112,7 +112,7 @@ export default function OurBenefits() {
               </h2>
             </div>
             <p className="text-white/80 text-[15px] leading-7">
-              At SafetyPlus, we manufacture and install fire safety and industrial protection
+              At Inqilab Trading Corporation, we manufacture and install fire safety and industrial protection
               equipment with a focus on compliance and reliability. With over 15 years of industry
               experience, our factory-trained technicians ensure quality and timely delivery
             </p>

@@ -66,13 +66,16 @@ export const ProductGallery = ({ item }) => {
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (!isLightboxOpen) return
-            if (e.key === 'Escape') closeLightbox()
-            if (e.key === 'ArrowLeft') goToPrev()
-            if (e.key === 'ArrowRight') goToNext()
+            if (e.key === 'Escape') {
+                setIsLightboxOpen(false)
+                document.body.style.overflow = ''
+            }
+            if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+            if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
         }
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [isLightboxOpen])
+    }, [images.length, isLightboxOpen])
 
     // Lightbox zoom controls
     const handleZoom = (delta) => {
@@ -100,8 +103,8 @@ export const ProductGallery = ({ item }) => {
 
     if (!images || images.length === 0) {
         return (
-            <div className="flex items-center justify-center h-[400px] bg-safety-surface rounded-[24px]">
-                <p className="text-safety-muted">No images available</p>
+            <div className="flex items-center justify-center h-[400px] bg-brand-surface rounded-[24px]">
+                <p className="text-brand-muted">No images available</p>
             </div>
         )
     }
@@ -112,7 +115,7 @@ export const ProductGallery = ({ item }) => {
             <div className="space-y-4" data-aos="fade-up" data-aos-duration="600">
                 {/* Main Image Display */}
                 <div
-                    className={`relative w-full ${config.mainHeight} bg-safety-surface overflow-hidden ${config.borderRadius} border-2 border-safety-border shadow-[0_20px_60px_rgba(0,0,0,0.1)] group`}
+                    className={`relative w-full ${config.mainHeight} bg-brand-surface overflow-hidden ${config.borderRadius} border-2 border-brand-border shadow-[0_20px_60px_rgba(0,0,0,0.1)] group`}
                 >
                     {/* Main Image */}
                     <img
@@ -124,7 +127,7 @@ export const ProductGallery = ({ item }) => {
                     {/* Fullscreen Button */}
                     <button
                         onClick={openLightbox}
-                        className="absolute top-4 right-4 bg-safety-red/90 hover:bg-safety-red text-white p-3 rounded-full shadow-lg transition z-10 flex items-center justify-center"
+                        className="absolute top-4 right-4 bg-brand-primary/90 hover:bg-brand-primary text-white p-3 rounded-full shadow-lg transition z-10 flex items-center justify-center"
                         title="Open fullscreen"
                     >
                         <FontAwesomeIcon icon={faExpand} size="lg" />
@@ -135,21 +138,21 @@ export const ProductGallery = ({ item }) => {
                         <>
                             <button
                                 onClick={goToPrev}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-safety-ink p-3 rounded-full shadow-lg transition z-10"
+                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-ink p-3 rounded-full shadow-lg transition z-10"
                                 title="Previous image"
                             >
                                 <FontAwesomeIcon icon={faChevronLeft} size="lg" />
                             </button>
                             <button
                                 onClick={goToNext}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-safety-ink p-3 rounded-full shadow-lg transition z-10"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-brand-ink p-3 rounded-full shadow-lg transition z-10"
                                 title="Next image"
                             >
                                 <FontAwesomeIcon icon={faChevronRight} size="lg" />
                             </button>
 
                             {/* Image Counter */}
-                            <div className="absolute bottom-4 left-4 bg-safety-ink/80 text-white px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
+                            <div className="absolute bottom-4 left-4 bg-brand-ink/80 text-white px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
                                 {currentIndex + 1} / {images.length}
                             </div>
                         </>
@@ -166,8 +169,8 @@ export const ProductGallery = ({ item }) => {
                                     key={idx}
                                     onClick={() => goToImage(idx)}
                                     className={`relative ${config.thumbHeight} rounded-[12px] overflow-hidden border-2 transition-all duration-200 cursor-pointer ${currentIndex === idx
-                                            ? 'border-safety-red ring-2 ring-safety-red shadow-md'
-                                            : 'border-safety-border hover:border-safety-red'
+                                            ? 'border-brand-primary ring-2 ring-brand-primary shadow-md'
+                                            : 'border-brand-border hover:border-brand-primary'
                                         }`}
                                     title={`Go to image ${idx + 1}`}
                                 >
@@ -178,7 +181,7 @@ export const ProductGallery = ({ item }) => {
                                     />
                                     {/* Active indicator */}
                                     {currentIndex === idx && (
-                                        <div className="absolute inset-0 bg-safety-red/10 pointer-events-none" />
+                                        <div className="absolute inset-0 bg-brand-primary/10 pointer-events-none" />
                                     )}
                                 </button>
                             ))}
@@ -186,7 +189,7 @@ export const ProductGallery = ({ item }) => {
 
                         {/* Thumbnail Info */}
                         <div className="flex items-center justify-between px-2">
-                            <p className="text-sm text-safety-muted font-medium">
+                            <p className="text-sm text-brand-muted font-medium">
                                 Click thumbnail to view • Click expand to fullscreen
                             </p>
                         </div>
@@ -198,7 +201,7 @@ export const ProductGallery = ({ item }) => {
             {isLightboxOpen && (
                 <div
                     ref={lightboxRef}
-                    className="fixed inset-0 bg-safety-ink/95 backdrop-blur-sm z-50 flex items-center justify-center"
+                    className="fixed inset-0 bg-brand-ink/95 backdrop-blur-sm z-50 flex items-center justify-center"
                     onMouseMove={handleLightboxMouseMove}
                     onMouseUp={handleLightboxMouseUp}
                     onMouseLeave={handleLightboxMouseUp}
@@ -206,7 +209,7 @@ export const ProductGallery = ({ item }) => {
                     {/* Close Button */}
                     <button
                         onClick={closeLightbox}
-                        className="absolute top-6 right-6 bg-white text-safety-ink p-3 rounded-full shadow-lg hover:bg-safety-red hover:text-white transition z-50"
+                        className="absolute top-6 right-6 bg-white text-brand-ink p-3 rounded-full shadow-lg hover:bg-brand-primary hover:text-white transition z-50"
                         title="Close (ESC)"
                     >
                         <FontAwesomeIcon icon={faTimes} size="lg" />
@@ -232,11 +235,11 @@ export const ProductGallery = ({ item }) => {
                     </div>
 
                     {/* Navigation Controls */}
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-safety-ink/80 backdrop-blur-md rounded-full px-6 py-3 z-50">
+                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-brand-ink/80 backdrop-blur-md rounded-full px-6 py-3 z-50">
                         {/* Previous Button */}
                         <button
                             onClick={goToPrev}
-                            className="text-white hover:text-safety-red transition p-2 rounded-full hover:bg-white/10"
+                            className="text-white hover:text-brand-primary transition p-2 rounded-full hover:bg-white/10"
                             title="Previous (←)"
                         >
                             <FontAwesomeIcon icon={faChevronLeft} size="lg" />
@@ -250,7 +253,7 @@ export const ProductGallery = ({ item }) => {
                         {/* Next Button */}
                         <button
                             onClick={goToNext}
-                            className="text-white hover:text-safety-red transition p-2 rounded-full hover:bg-white/10"
+                            className="text-white hover:text-brand-primary transition p-2 rounded-full hover:bg-white/10"
                             title="Next (→)"
                         >
                             <FontAwesomeIcon icon={faChevronRight} size="lg" />

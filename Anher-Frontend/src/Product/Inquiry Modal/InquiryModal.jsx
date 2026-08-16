@@ -1,21 +1,17 @@
-import axios from 'axios';
-import React, { useRef, useState } from 'react';
-import { useOutletContext } from 'react-router';
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { capitalizeWords } from '../../Functions/functions';
 import { socket } from '../../Socket/socket';
 
 export const InquiryModal = ({item}) => {
     const [contact, setContact] = useState({
         name: '',
         email: '',
-        subject: `${item?.model.toUpperCase()} Related Inquiry`,
+        subject: `${item?.model?.toUpperCase() || 'Product'} Related Inquiry`,
         description: '',
         phone: '',
         type: 'Inquiry'
     })
 
-    const [loading, setLoading] = useState(false)
     const handleSubmit = () => {
 
 
@@ -45,7 +41,7 @@ export const InquiryModal = ({item}) => {
         setContact({
             name: '',
             email: '',
-            subject: `${item?.model.toUpperCase()} Related Inquiry`,
+            subject: `${item?.model?.toUpperCase() || 'Product'} Related Inquiry`,
             description: '',
             phone: '',
             type: 'Inquiry'

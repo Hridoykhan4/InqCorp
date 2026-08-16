@@ -16,7 +16,7 @@ const BlogSlider = () => {
             <p className="eyebrow">Safety Resources</p>
             <h2 className="heading-lg mt-3">Updates, datasheets, and safety knowledge.</h2>
             <p className="body-lead mt-4">
-              As SafetyPlus grows, this area can support search traffic with
+              As Inqilab Trading Corporation grows, this area can support search traffic with
               fire safety guides, product explainers, and Bangladesh-focused
               technical content.
             </p>
@@ -34,12 +34,12 @@ const BlogSlider = () => {
             ))}
           </div>
         ) : (
-          <div className="mt-10 rounded-lg border border-dashed border-safety-border bg-safety-surface p-8 text-center">
-            <FontAwesomeIcon icon={faNewspaper} className="text-3xl text-safety-red" />
-            <h3 className="mt-4 text-xl font-extrabold text-safety-ink">
+          <div className="mt-10 rounded-lg border border-dashed border-brand-border bg-brand-surface p-8 text-center">
+            <FontAwesomeIcon icon={faNewspaper} className="text-3xl text-brand-primary" />
+            <h3 className="mt-4 text-xl font-extrabold text-brand-ink">
               Safety articles will appear here soon.
             </h3>
-            <p className="mx-auto mt-2 max-w-xl text-safety-muted">
+            <p className="mx-auto mt-2 max-w-xl text-brand-muted">
               Add blog posts from the dashboard for fire safety SEO, product
               education, and buyer trust.
             </p>

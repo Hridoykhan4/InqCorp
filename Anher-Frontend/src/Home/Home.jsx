@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { HeroSection } from "../Hero/HeroSection";
 import { Reveal } from "../components/Reveal";
+import { QuickQuoteBar } from "../components/QuickQuoteBar";
 
 // Below-the-fold sections — lazy chunks so the hero paints without waiting for
 // react-slick, ScrollTrigger, countup, etc.
@@ -17,8 +18,6 @@ import {
   websiteStructuredData,
   organizationStructuredData,
 } from "../SEO/seo";
-import { COMPANY } from "../SEO/companyInfo";
-
 const productOfferSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -29,45 +28,27 @@ const productOfferSchema = {
   makesOffer: [
     {
       "@type": "Offer",
-      itemOffered: { "@type": "Product", name: "Fine Sand", description: "0.063–1mm fine river sand for plastering and mortar" },
-      price: "65",
-      priceCurrency: "BDT",
-      unitCode: "CFT",
+      itemOffered: { "@type": "Product", name: "Screened Plaster Sand", description: "Fine-graded sand for plaster and masonry applications" },
     },
     {
       "@type": "Offer",
-      itemOffered: { "@type": "Product", name: "Medium Sand", description: "1–2mm medium sand for concrete mixing" },
-      price: "60",
-      priceCurrency: "BDT",
-      unitCode: "CFT",
+      itemOffered: { "@type": "Product", name: "Medium River Sand", description: "General-purpose river sand for concrete and blockwork" },
     },
     {
       "@type": "Offer",
-      itemOffered: { "@type": "Product", name: "Coarse Sand", description: "2–4.75mm coarse sand for structural concrete" },
-      price: "55",
-      priceCurrency: "BDT",
-      unitCode: "CFT",
+      itemOffered: { "@type": "Product", name: "Coarse Construction Sand", description: "Coarse aggregate sand for structural concrete" },
     },
     {
       "@type": "Offer",
-      itemOffered: { "@type": "Product", name: "Stone Chips 5–10mm", description: "Fine stone chips for concrete and road base" },
-      price: "85",
-      priceCurrency: "BDT",
-      unitCode: "CFT",
+      itemOffered: { "@type": "Product", name: "Stone Chips 5–10 mm", description: "Small-size crushed stone aggregate" },
     },
     {
       "@type": "Offer",
-      itemOffered: { "@type": "Product", name: "Stone Chips 10–20mm", description: "Standard stone chips for RCC and structural work" },
-      price: "95",
-      priceCurrency: "BDT",
-      unitCode: "CFT",
+      itemOffered: { "@type": "Product", name: "Stone Chips 10–20 mm", description: "Structural crushed aggregate for RCC work" },
     },
     {
       "@type": "Offer",
-      itemOffered: { "@type": "Product", name: "Boulder / Pathor 20mm+", description: "Large stones for foundation and retaining walls" },
-      price: "120",
-      priceCurrency: "BDT",
-      unitCode: "CFT",
+      itemOffered: { "@type": "Product", name: "Natural Stone Boulder", description: "Natural boulder for foundation and civil applications" },
     },
   ],
 };
@@ -77,7 +58,7 @@ export const Home = () => {
     <div className="overflow-x-clip bg-white">
       <SeoManager
         title="Inqilab Trading Corporation | Inqilab Corporation (ITC) — Premium Sand & Stone Supplier Bangladesh"
-        description="Inqilab Trading Corporation (ITC) — Bangladesh's trusted supplier of premium construction aggregates nationwide. Fine Sand, Medium Sand, Coarse Sand, Stone Chips & Boulder at competitive CFT prices."
+        description="Inqilab Trading Corporation (ITC) coordinates quality-checked sand, stone chips, boulder and filling materials for projects across Bangladesh."
         path="/"
         keywords="inqilab, inqilab corporation, inqilab trading, inqilab trading corporation, inqilab group, inqilab bd, ITC, Kawsar Anher, ইনকিলাব, ইনকিলাব ট্রেডিং, sand supplier Bangladesh, stone chips Bangladesh, fine sand Bangladesh, coarse sand Bangladesh, boulder supplier bd, construction aggregate Bangladesh, building materials Bangladesh"
         structuredData={[
@@ -89,6 +70,10 @@ export const Home = () => {
       />
 
       <HeroSection />
+
+      <Reveal variant="up">
+        <QuickQuoteBar />
+      </Reveal>
 
       <Suspense fallback={null}>
         <Reveal variant="up">
@@ -105,9 +90,7 @@ export const Home = () => {
           <WhyChooseUs />
         </Reveal>
 
-        <Reveal variant="up">
-          <TestimonialsSlider />
-        </Reveal>
+        <TestimonialsSlider />
       </Suspense>
     </div>
   );

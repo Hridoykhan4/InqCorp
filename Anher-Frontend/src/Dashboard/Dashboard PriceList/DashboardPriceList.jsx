@@ -139,7 +139,7 @@ export const DashboardPriceList = () => {
                     </div>
                 )}
 
-                {priceList.map((item, idx) => (
+                {priceList.map((item) => (
                     <div
                         key={item._id}
                         className="grid items-center px-5 py-3.5 border-b border-gray-50 hover:bg-gray-50/80 transition-colors"

@@ -24,7 +24,7 @@ const CheckDot = () => (
 
 const FeatureCard = ({ Icon, title, points }) => (
   <div className="rounded-2xl bg-white/5 p-6 md:p-7 text-white/90 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
-    <Icon />
+    {React.createElement(Icon)}
     <h4 className="mt-4 text-lg font-semibold text-white">{title}</h4>
     <p className="mt-2 text-sm leading-6 text-white/80">
       Before any repair, we walk you through the issue with clarity.

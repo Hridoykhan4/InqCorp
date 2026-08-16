@@ -48,18 +48,18 @@ export const ProductDetails = ({ item }) => {
     return (
         <div className='space-y-5'>
             <div className='space-y-2'>
-                <h2 className='text-2xl font-extrabold leading-tight text-safety-ink sm:text-3xl'>
+                <h2 className='text-2xl font-extrabold leading-tight text-brand-ink sm:text-3xl'>
                     {item?.name || item?.model || 'Product'}
                 </h2>
                 <div className='flex flex-wrap items-center gap-2'>
                     {item?.category && (
-                        <span className='inline-flex items-center gap-1.5 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-safety-red'>
+                        <span className='inline-flex items-center gap-1.5 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-brand-primary'>
                             <FontAwesomeIcon icon={faTag} className='text-[10px]' />
                             {capitalizeWords(item.category)}
                         </span>
                     )}
                     {item?.model && (
-                        <span className='inline-flex items-center gap-1.5 rounded-full bg-safety-surface px-3 py-1 text-xs font-semibold text-safety-ink'>
+                        <span className='inline-flex items-center gap-1.5 rounded-full bg-brand-surface px-3 py-1 text-xs font-semibold text-brand-ink'>
                             <FontAwesomeIcon icon={faBarcode} className='text-[10px]' />
                             {String(item.model).toUpperCase()}
                         </span>
@@ -68,17 +68,17 @@ export const ProductDetails = ({ item }) => {
             </div>
 
             {item?.description && (
-                <p className='rounded-2xl bg-safety-surface p-4 text-sm leading-7 text-safety-ink sm:text-base'>
+                <p className='rounded-2xl bg-brand-surface p-4 text-sm leading-7 text-brand-ink sm:text-base'>
                     {item.description}
                 </p>
             )}
 
             {params.length > 0 && (
-                <div className='rounded-2xl border border-safety-border bg-white p-4 sm:p-5'>
-                    <p className='mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-safety-red'>
+                <div className='rounded-2xl border border-brand-border bg-white p-4 sm:p-5'>
+                    <p className='mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-brand-primary'>
                         Specifications
                     </p>
-                    <dl className='divide-y divide-safety-border'>
+                    <dl className='divide-y divide-brand-border'>
                         {params.map((p, i) => {
                             const k = Object.keys(p || {})[0]
                             const v = k ? p[k] : ''
@@ -88,10 +88,10 @@ export const ProductDetails = ({ item }) => {
                                     key={i}
                                     className='flex flex-col gap-1 py-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6'
                                 >
-                                    <dt className='text-xs font-semibold uppercase tracking-wider text-safety-muted sm:w-2/5 sm:text-sm sm:normal-case sm:tracking-normal sm:text-safety-ink'>
+                                    <dt className='text-xs font-semibold uppercase tracking-wider text-brand-muted sm:w-2/5 sm:text-sm sm:normal-case sm:tracking-normal sm:text-brand-ink'>
                                         {k}
                                     </dt>
-                                    <dd className='text-sm text-safety-ink sm:w-3/5 sm:text-right sm:text-safety-muted'>
+                                    <dd className='text-sm text-brand-ink sm:w-3/5 sm:text-right sm:text-brand-muted'>
                                         {v}
                                     </dd>
                                 </div>
