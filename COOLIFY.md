@@ -1,6 +1,23 @@
 # Coolify deployment
 
-Deploy the repository with `docker-compose.yml`. The frontend nginx container proxies `/api` and `/socket.io` to the internal backend service, so a separate public backend domain is not required.
+The project supports both separate Coolify resources and the included Docker Compose stack.
+
+## Existing separate resources
+
+Keep the backend on `https://api.inqilabtradingcorporation.com.bd` and use these frontend runtime variables:
+
+```dotenv
+VITE_BACKEND_URL=https://api.inqilabtradingcorporation.com.bd
+VITE_SITE_URL=https://inqilabtradingcorporation.com.bd
+```
+
+Do not use `localhost` in a production browser-facing URL. The frontend image injects these values when the container starts, so they do not need to be baked into Git or manually added as Docker build arguments.
+
+The nginx image has no mandatory backend hostname. This lets a standalone frontend container start even when the backend is a separate Coolify resource.
+
+## Docker Compose
+
+Deploy the repository with `docker-compose.yml`. Compose sets `BACKEND_UPSTREAM=http://backend:5000`, which enables the optional same-origin `/api` and `/socket.io` proxy inside the frontend container.
 
 ## Required environment variables
 
@@ -12,7 +29,7 @@ URLS=https://inqilabtradingcorporation.com.bd,https://www.inqilabtradingcorporat
 ADMIN_EMAIL=admin@inqilab.com
 ADMIN_PASSWORD=<the private admin password>
 SESSION_SECRET=<at least 64 random characters>
-VITE_BACKEND_URL=
+VITE_BACKEND_URL=https://api.inqilabtradingcorporation.com.bd
 VITE_SITE_URL=https://inqilabtradingcorporation.com.bd
 cloud_name=<Cloudinary cloud name>
 api_key=<Cloudinary API key>

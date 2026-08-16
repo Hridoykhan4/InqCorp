@@ -29,9 +29,10 @@ services:
     build:
       context: ./Anher-Frontend
       dockerfile: Dockerfile
-      args:
-        VITE_BACKEND_URL: ${VITE_BACKEND_URL:-}
-        VITE_SITE_URL: ${VITE_SITE_URL:-https://inqilabtradingcorporation.com.bd}
+    environment:
+      - BACKEND_UPSTREAM=http://backend:5000
+      - VITE_BACKEND_URL=
+      - VITE_SITE_URL=${VITE_SITE_URL:-https://inqilabtradingcorporation.com.bd}
     expose:
       - "80"
     depends_on:

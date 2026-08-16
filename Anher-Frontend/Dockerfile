@@ -8,11 +8,10 @@ RUN npm ci
 
 COPY . .
 
-# Vite env vars must be passed at build time
-ARG VITE_BACKEND_URL
-ARG VITE_SITE_URL
-ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
-ENV VITE_SITE_URL=$VITE_SITE_URL
+# Compile stable placeholders into the Vite bundle. The nginx entrypoint
+# replaces them with Coolify runtime values when the container starts.
+ENV VITE_BACKEND_URL=__ITC_BACKEND_URL__
+ENV VITE_SITE_URL=__ITC_SITE_URL__
 
 RUN npm run build
 
@@ -21,6 +20,8 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/40-runtime-config.sh /docker-entrypoint.d/40-runtime-config.sh
+RUN chmod +x /docker-entrypoint.d/40-runtime-config.sh
 
 EXPOSE 80
 
