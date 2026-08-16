@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import gsap from 'gsap'
+import { usePageScrollLock } from '../components/usePageScrollLock'
 
 const PARTICLE_COUNT = 12
 const angleFor = (index) => (index / PARTICLE_COUNT) * Math.PI * 2 + (index % 3 === 0 ? .2 : 0)
@@ -20,22 +21,20 @@ export const Preloader = () => {
   const progressRef = useRef(null)
   const fillRef = useRef(null)
   const particleRefs = useRef([])
+  usePageScrollLock(!finished)
 
   useEffect(() => {
     const escape = window.setTimeout(() => {
       setFinished(true)
-      document.body.style.overflow = ''
     }, 6000)
     return () => window.clearTimeout(escape)
   }, [])
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden'
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
     if (reduced) {
       const timer = window.setTimeout(() => {
         setFinished(true)
-        document.body.style.overflow = ''
       }, 500)
       return () => window.clearTimeout(timer)
     }
@@ -70,7 +69,6 @@ export const Preloader = () => {
       const timeline = gsap.timeline({
         onComplete: () => {
           setFinished(true)
-          document.body.style.overflow = ''
         },
       })
 
@@ -100,7 +98,6 @@ export const Preloader = () => {
 
     return () => {
       context.revert()
-      document.body.style.overflow = ''
     }
   }, [])
 

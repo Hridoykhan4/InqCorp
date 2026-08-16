@@ -5,6 +5,7 @@ import { faChevronLeft, faChevronRight, faExpand, faXmark } from '@fortawesome/f
 import { SeoManager } from '../SEO/SeoManager'
 import { FALLBACK_GALLERY } from '../data/siteData'
 import { usePageEntrance } from '../components/usePageEntrance'
+import { usePageScrollLock } from '../components/usePageScrollLock'
 
 export const Gallery = () => {
   const { gallery = [], contentStatus } = useOutletContext() || {}
@@ -12,6 +13,7 @@ export const Gallery = () => {
   const [active, setActive] = useState(null)
   const pageRef = useRef(null)
   usePageEntrance(pageRef, [])
+  usePageScrollLock(active !== null)
 
   const close = useCallback(() => setActive(null), [])
   const previous = useCallback(() => setActive((index) => (index - 1 + images.length) % images.length), [images.length])
@@ -25,11 +27,8 @@ export const Gallery = () => {
       if (event.key === 'ArrowRight') next()
     }
     document.addEventListener('keydown', onKeyDown)
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
     return () => {
       document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = previousOverflow
     }
   }, [active, close, previous, next])
 

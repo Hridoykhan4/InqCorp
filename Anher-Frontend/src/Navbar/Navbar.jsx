@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faBars, faChevronDown, faPenToSquare, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { getCategoryHref, getCategoryList } from '../config/navigation'
 import { capitalizeWords } from '../Functions/functions'
+import { usePageScrollLock } from '../components/usePageScrollLock'
 
 const NAV_ITEMS = [
   { label: 'Home', path: '/' },
@@ -24,6 +25,7 @@ export const Navbar = ({ categories = [] }) => {
   const admin = useSelector((state) => state.hvac.users)
   const categoryList = getCategoryList(categories)
   const isDashboard = location.pathname.startsWith('/dashboard')
+  usePageScrollLock(mobileOpen)
 
   const isActive = (path) => path === '/' ? location.pathname === '/' : location.pathname.startsWith(path)
 
@@ -49,12 +51,6 @@ export const Navbar = ({ categories = [] }) => {
       document.removeEventListener('keydown', onKeyDown)
     }
   }, [])
-
-  useEffect(() => {
-    const previous = document.body.style.overflow
-    if (mobileOpen) document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = previous }
-  }, [mobileOpen])
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-brand-border/80 bg-white/90 backdrop-blur-xl">

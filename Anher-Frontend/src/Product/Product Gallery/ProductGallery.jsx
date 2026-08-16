@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faTimes, faExpand } from '@fortawesome/free-solid-svg-icons'
 import 'aos/dist/aos.css'
+import { usePageScrollLock } from '../../components/usePageScrollLock'
 
 /**
  * ProductGallery - Professional product image gallery with lightbox
@@ -19,6 +20,7 @@ export const ProductGallery = ({ item }) => {
     const [isDragging, setIsDragging] = useState(false)
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
     const lightboxRef = useRef(null)
+    usePageScrollLock(isLightboxOpen)
 
     // Configuration - can be customized
     const config = {
@@ -49,18 +51,11 @@ export const ProductGallery = ({ item }) => {
         setIsLightboxOpen(true)
         setZoomLevel(1)
         setPanPosition({ x: 0, y: 0 })
-        document.body.style.overflow = 'hidden'
     }
 
     const closeLightbox = () => {
         setIsLightboxOpen(false)
-        document.body.style.overflow = ''
     }
-
-    // Always restore overflow on unmount (navigation away while lightbox open)
-    useEffect(() => {
-        return () => { document.body.style.overflow = '' }
-    }, [])
 
     // Keyboard navigation for lightbox
     useEffect(() => {
@@ -68,7 +63,6 @@ export const ProductGallery = ({ item }) => {
             if (!isLightboxOpen) return
             if (e.key === 'Escape') {
                 setIsLightboxOpen(false)
-                document.body.style.overflow = ''
             }
             if (e.key === 'ArrowLeft') setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
             if (e.key === 'ArrowRight') setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))

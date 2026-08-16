@@ -11,6 +11,7 @@ import { ScrollTop } from '../Custom Hooks/ScrollTop'
 import Footer from '../Footer/Footer'
 import { Preloader } from '../Preloader/Preloader'
 import { ContactDock } from '../components/ContactDock'
+import { clearPageScrollLocks } from '../components/usePageScrollLock'
 import {
   FALLBACK_CATEGORIES,
   FALLBACK_GALLERY,
@@ -42,7 +43,7 @@ export const Root = () => {
   const [contentStatus, setContentStatus] = useState('loading')
 
   useEffect(() => {
-    document.body.style.overflow = ''
+    clearPageScrollLocks()
   }, [location.pathname])
 
   useEffect(() => {
