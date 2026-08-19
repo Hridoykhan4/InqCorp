@@ -137,7 +137,7 @@ const AdminDashboard = () => {
               ['Products have image, copy and specs', readiness === 100],
               ['Homepage has a public update', banners.length > 0],
               ['Gallery has operation photos', gallery.length >= 4],
-              ['Public price ticker is configured', priceList.length > 0],
+              ['Live material rates are configured', priceList.length > 0],
             ].map(([label, ready]) => (
               <div key={label} className="flex items-center gap-3">
                 <FontAwesomeIcon icon={ready ? faCircleCheck : faTriangleExclamation} className={ready ? 'text-emerald-600' : 'text-amber-500'} />
@@ -176,7 +176,7 @@ const AdminDashboard = () => {
             ))}
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link to="/dashboard/pricelist" className="inline-flex items-center gap-2 rounded-xl bg-brand-wash px-3 py-2 text-[10px] font-black text-brand-primary"><FontAwesomeIcon icon={faTag} /> Price ticker</Link>
+            <Link to="/dashboard/live-rates" className="inline-flex items-center gap-2 rounded-xl bg-brand-wash px-3 py-2 text-[10px] font-black text-brand-primary"><FontAwesomeIcon icon={faTag} /> Live Material Rates</Link>
             <Link to="/dashboard/banners" className="inline-flex items-center gap-2 rounded-xl bg-[#f8f0df] px-3 py-2 text-[10px] font-black text-[#93691d]"><FontAwesomeIcon icon={faPhotoFilm} /> Public updates</Link>
           </div>
         </article>

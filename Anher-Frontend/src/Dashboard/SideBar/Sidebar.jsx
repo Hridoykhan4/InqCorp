@@ -5,6 +5,7 @@ import {
   faAward,
   faBookOpen,
   faBoxesStacked,
+  faChartLine,
   faGlobe,
   faHouse,
   faLayerGroup,
@@ -13,7 +14,6 @@ import {
   faPhotoFilm,
   faPhotoVideo,
   faRightFromBracket,
-  faTag,
   faUserCircle,
   faWandMagicSparkles,
   faXmark,
@@ -29,11 +29,16 @@ const GROUPS = [
     ],
   },
   {
+    label: 'Live rates',
+    items: [
+      { to: '/dashboard/live-rates', label: 'Live Material Rates', icon: faChartLine },
+    ],
+  },
+  {
     label: 'Catalogue',
     items: [
       { to: '/dashboard/products', label: 'Products', icon: faBoxesStacked },
       { to: '/dashboard/categories', label: 'Categories', icon: faLayerGroup },
-      { to: '/dashboard/pricelist', label: 'Price ticker', icon: faTag },
       { to: '/dashboard/catalogue', label: 'PDF catalogues', icon: faBookOpen },
     ],
   },

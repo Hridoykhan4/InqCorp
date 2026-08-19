@@ -104,8 +104,8 @@ export const DashboardPriceList = () => {
             {/* Page header */}
             <div className="mb-6 flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-black text-gray-800">Price List</h1>
-                    <p className="text-sm text-gray-500 mt-0.5">Manage today's product prices — shown live on the homepage</p>
+                    <h1 className="text-2xl font-black text-gray-800">Live Material Rates</h1>
+                    <p className="text-sm text-gray-500 mt-0.5">Manage today's material rates — shown live on the homepage ticker</p>
                 </div>
                 <button
                     onClick={openAdd}

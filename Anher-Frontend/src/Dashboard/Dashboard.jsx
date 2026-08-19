@@ -12,7 +12,7 @@ const TITLES = {
   '/dashboard/queries': ['Enquiries', 'Review customer and project requirements'],
   '/dashboard/banners': ['Public updates', 'Control the live homepage update slider'],
   '/dashboard/catalogue': ['Catalogues', 'Publish direct-view and downloadable files'],
-  '/dashboard/pricelist': ['Price ticker', 'Update the public material-rate ticker'],
+  '/dashboard/live-rates': ['Live Material Rates', 'Full control of the homepage live material-rate ticker'],
   '/dashboard/gallery': ['Gallery', 'Manage public operations photography'],
   '/dashboard/blog': ['Articles', 'Manage published articles'],
   '/dashboard/certificate': ['Certificates', 'Manage company documents'],
