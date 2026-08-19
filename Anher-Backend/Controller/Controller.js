@@ -20,11 +20,10 @@ const getProducts = async (req, res) => {
 
     try {
         const data = await Products.find({}).sort({ createdAt: 1 }).lean()
-        res.send(data)
+        return res.send(data)
     } catch (error) {
-        res.send({
-            "message": error.message
-        })
+        console.error("Get products error:", error.message)
+        return res.status(500).send({ message: "Products could not be loaded" })
     }
 
 
@@ -82,13 +81,12 @@ const getCategories = async (req, res) => {
 
         const data = await Categories.find({})
         if (data) {
-            res.send(data)
+            return res.send(data)
         }
 
     } catch (error) {
-        res.send({
-            "message": error.message
-        })
+        console.error("Get categories error:", error.message)
+        return res.status(500).send({ message: "Categories could not be loaded" })
     }
 
 
@@ -197,24 +195,36 @@ const addProduct = async (req, res) => {
 
 
     try {
-        const files = req.files; // multer.fields gives an object: { images: [...], pdf: [...] }
+        const files = req.files || [];
         const infoString = req.body.info;
 
         if (!infoString) {
             return res.status(400).send({ message: "Missing info data" });
         }
 
-        const info = JSON.parse(infoString);
+        let info;
+        try {
+            info = JSON.parse(infoString);
+        } catch {
+            return res.status(400).send({ message: "Invalid product data" });
+        }
+
+        const requiredFields = ['name', 'model', 'description', 'category'];
+        if (requiredFields.some(field => typeof info[field] !== 'string' || !info[field].trim())) {
+            return res.status(400).send({ message: "Name, model, description and category are required" });
+        }
+        requiredFields.forEach(field => { info[field] = info[field].trim(); });
 
 
         const imageFiles = files.filter(f => f.fieldname === 'images');
+        if (!imageFiles.length) {
+            return res.status(400).send({ message: "At least one product image is required" });
+        }
+        if (await Products.exists({ model: info.model })) {
+            return res.status(409).send({ message: "A product with this model already exists" });
+        }
         const imageUrls = await uploadImages(imageFiles);
         info.imageUrl = imageUrls;
-        const pdfFile = files?.pdf?.[0] || null;
-
-
-
-
         // Handle PDFs
         // Find all fields starting with 'pdf_'
         const pdfFiles = files.filter(f => f.fieldname.startsWith('pdf_'));
@@ -241,6 +251,9 @@ const addProduct = async (req, res) => {
         }
     } catch (error) {
         console.error("Upload error:", error);
+        if (error?.code === 11000) {
+            return res.status(409).send({ message: "A product with this model already exists" });
+        }
         return res.status(500).send({ message: error.message });
     }
 };
@@ -402,7 +415,26 @@ const updateProduct = async (req, res) => {
             return res.status(400).send({ message: "Missing info data" });
         }
 
-        const info = JSON.parse(infoString);
+        let info;
+        try {
+            info = JSON.parse(infoString);
+        } catch {
+            return res.status(400).send({ message: "Invalid product data" });
+        }
+
+        const requiredFields = ['name', 'model', 'description', 'category'];
+        if (requiredFields.some(field => typeof info[field] !== 'string' || !info[field].trim())) {
+            return res.status(400).send({ message: "Name, model, description and category are required" });
+        }
+        requiredFields.forEach(field => { info[field] = info[field].trim(); });
+
+        const currentProduct = await Products.findById(req.params.id).select('_id').lean();
+        if (!currentProduct) {
+            return res.status(404).send({ message: "Product not found" });
+        }
+        if (await Products.exists({ model: info.model, _id: { $ne: req.params.id } })) {
+            return res.status(409).send({ message: "A product with this model already exists" });
+        }
 
         // --- Handle Images ---
         // Get new image files
@@ -461,10 +493,13 @@ const updateProduct = async (req, res) => {
         const updatedProduct = await Products.findByIdAndUpdate(
             req.params.id,
             info,
-            { new: true }
+            { new: true, runValidators: true }
         );
+        if (!updatedProduct) {
+            return res.status(404).send({ message: "Product not found" });
+        }
         const products = await Products.find({}).sort({ createdAt: 1 }).lean();
-        if (updateProduct && products) {
+        if (products) {
             return res.status(200).send({
                 message: "Product updated successfully",
                 data: products,
@@ -479,6 +514,9 @@ const updateProduct = async (req, res) => {
 
     } catch (error) {
         console.error("Update Error:", error);
+        if (error?.code === 11000) {
+            return res.status(409).send({ message: "A product with this model already exists" });
+        }
         return res.status(500).send({ message: error.message });
     }
 };
@@ -842,27 +880,25 @@ const updateCategory = async (req, res) => {
     }
 };
 const deleteProduct = async (req, res) => {
-
-    const { id } = req.body
-
-    const del = await Products.deleteOne({ _id: id })
     try {
-        if (del) {
-            const data = await Products.find({}).lean()
-            res.status(200).send({
-                "message": "Product Deleted Successfully",
-                data: data
-            })
-        } else {
-            res.status(403).send({
-                "message": "Couldn't Delete it"
-            })
+        const { id } = req.body
+        if (!id) {
+            return res.status(400).send({ message: "Product id is required" })
         }
 
-    } catch (error) {
-        res.send(error.message)
-    }
+        const del = await Products.deleteOne({ _id: id })
+        if (!del.deletedCount) {
+            return res.status(404).send({ message: "Product not found" })
+        }
 
+        const data = await Products.find({}).sort({ createdAt: 1 }).lean()
+        return res.status(200).send({
+            "message": "Product Deleted Successfully",
+            data: data
+        })
+    } catch (error) {
+        return res.status(400).send({ message: error.message })
+    }
 }
 
 const deleteBlog = async (req, res) => {

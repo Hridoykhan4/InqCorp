@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useOutletContext, useSearchParams } from 'react-router-dom'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faDownload, faMagnifyingGlass, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faDownload, faMagnifyingGlass, faPenToSquare, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { ProductUpload } from '../Dashboard/FileUpload/ProductUpload'
+import { ProductUpdate } from '../Dashboard/Update/ProductUpdate'
 import { SeoManager } from '../SEO/SeoManager'
 import { usePageEntrance } from '../components/usePageEntrance'
 
@@ -37,6 +38,8 @@ export const AllProducts = () => {
   const [selected, setSelected] = useState([])
   const pageRef = useRef(null)
   usePageEntrance(pageRef, [isDashboard])
+  const productsAvailable = !isDashboard || contentStatus === 'live'
+  const visibleProducts = useMemo(() => productsAvailable ? products : [], [products, productsAvailable])
 
   useEffect(() => {
     const next = {}
@@ -48,13 +51,13 @@ export const AllProducts = () => {
 
   const categoryNames = useMemo(() => {
     const values = categories.map((item) => item?.name).filter(Boolean)
-    if (!values.length) products.forEach((item) => item?.category && values.push(item.category))
+    if (!values.length) visibleProducts.forEach((item) => item?.category && values.push(item.category))
     return ['All', ...new Set(values)]
-  }, [categories, products])
+  }, [categories, visibleProducts])
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase()
-    const result = products.filter((item) => {
+    const result = visibleProducts.filter((item) => {
       const matchCategory = category === 'All' || item?.category === category
       const haystack = `${item?.name || ''} ${item?.model || ''} ${item?.category || ''} ${item?.description || ''}`.toLowerCase()
       return matchCategory && (!query || haystack.includes(query))
@@ -64,7 +67,7 @@ export const AllProducts = () => {
     if (sort === 'name-desc') result.sort((a, b) => (b.name || '').localeCompare(a.name || ''))
     if (sort === 'category') result.sort((a, b) => (a.category || '').localeCompare(b.category || ''))
     return result
-  }, [products, search, category, sort])
+  }, [visibleProducts, search, category, sort])
 
   const removeSelected = async () => {
     if (!selected.length) return
@@ -96,6 +99,11 @@ export const AllProducts = () => {
     anchor.download = 'itc-products.json'
     anchor.click()
     URL.revokeObjectURL(href)
+  }
+
+  const openProductEditor = (id) => {
+    const toggle = document.getElementById(`ProductUpdate-${id}`)
+    if (toggle) toggle.checked = true
   }
 
   return (
@@ -130,9 +138,9 @@ export const AllProducts = () => {
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
               <div><p className="eyebrow">Dashboard</p><h1 className="mt-2 text-3xl font-black text-brand-ink">Products</h1></div>
               <div className="flex flex-wrap gap-2">
-                <button type="button" onClick={exportProducts} className="btn-brand-outline gap-2"><FontAwesomeIcon icon={faDownload} /> Export</button>
+                <button type="button" onClick={exportProducts} disabled={!productsAvailable} className="btn-brand-outline gap-2 disabled:cursor-not-allowed disabled:opacity-50"><FontAwesomeIcon icon={faDownload} /> Export</button>
                 {selected.length > 0 && <button type="button" onClick={removeSelected} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-red-700 px-5 text-sm font-bold text-white"><FontAwesomeIcon icon={faTrash} /> Delete ({selected.length})</button>}
-                <label htmlFor="my_modal_4" className="btn-brand cursor-pointer gap-2"><FontAwesomeIcon icon={faPlus} /> Add product</label>
+                {productsAvailable && <label htmlFor="my_modal_4" className="btn-brand cursor-pointer gap-2"><FontAwesomeIcon icon={faPlus} /> Add product</label>}
               </div>
             </div>
           )}
@@ -165,7 +173,8 @@ export const AllProducts = () => {
                 {filtered.slice(0, limit).map((item) => {
                   const checked = selected.includes(item._id)
                   return (
-                    <article key={item._id || item.model} className={`product-card group flex min-h-full flex-col ${checked ? 'ring-2 ring-brand-primary ring-offset-2' : ''}`}>
+                    <Fragment key={item._id || item.model}>
+                      <article className={`product-card group flex min-h-full flex-col ${checked ? 'ring-2 ring-brand-primary ring-offset-2' : ''}`}>
                       <div className="relative aspect-[16/10] overflow-hidden bg-brand-surface">
                         <img src={imageOf(item) || '/images/itc-stone-chips.webp'} alt={item.name} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" onError={(event) => { event.currentTarget.src = '/images/itc-stone-chips.webp' }} />
                         <span className="absolute left-4 top-4 rounded-full bg-white/92 px-3 py-1.5 text-[9px] font-black uppercase tracking-[.15em] text-brand-primary shadow backdrop-blur">{item.category}</span>
@@ -178,16 +187,25 @@ export const AllProducts = () => {
                         <p className="mt-3 line-clamp-3 text-sm leading-6 text-brand-muted">{item.description}</p>
                         <div className="mt-auto flex items-center justify-between gap-3 pt-6">
                           <Link to={`/products/${encodeURIComponent(item.model)}`} className="inline-flex items-center gap-2 text-xs font-extrabold text-brand-primary">View details <FontAwesomeIcon icon={faArrowRight} className="transition group-hover:translate-x-1" /></Link>
+                          {isDashboard && <button type="button" onClick={() => openProductEditor(item._id)} aria-label={`Edit ${item.name || item.model}`} className="inline-flex min-h-9 items-center gap-2 rounded-full border border-brand-border bg-white px-4 text-xs font-extrabold text-brand-ink transition hover:border-brand-primary hover:text-brand-primary"><FontAwesomeIcon icon={faPenToSquare} /> Edit</button>}
                           {!isDashboard && <Link to={`/contact?product=${encodeURIComponent(item.name)}`} className="rounded-full border border-brand-border px-3 py-2 text-[10px] font-extrabold text-brand-ink hover:border-brand-primary">Get quote</Link>}
                         </div>
                       </div>
-                    </article>
+                      </article>
+                      {isDashboard && <ProductUpdate item={item} />}
+                    </Fragment>
                   )
                 })}
               </div>
 
               {limit < filtered.length && <div className="mt-10 text-center"><button type="button" onClick={() => setLimit((value) => value + 12)} className="btn-brand-outline">Load more materials</button></div>}
             </>
+          ) : isDashboard && !productsAvailable ? (
+            <div className="mt-8 rounded-[2rem] border border-dashed border-brand-border bg-[#fbfaf7] px-6 py-20 text-center">
+              <span className="loading loading-spinner loading-lg text-brand-primary" />
+              <h2 className="mt-5 text-2xl font-black text-brand-ink">{contentStatus === 'loading' ? 'Loading live products' : 'Products are temporarily unavailable'}</h2>
+              <p className="mt-2 text-sm text-brand-muted">{contentStatus === 'loading' ? 'The dashboard is connecting to the catalogue.' : 'Reconnect the API before making catalogue changes.'}</p>
+            </div>
           ) : (
             <div className="mt-8 rounded-[2rem] border border-dashed border-brand-border bg-[#fbfaf7] px-6 py-20 text-center">
               <FontAwesomeIcon icon={faMagnifyingGlass} className="mx-auto text-3xl text-brand-accent/55" />
@@ -199,7 +217,7 @@ export const AllProducts = () => {
         </div>
       </section>
 
-      {isDashboard && <ProductUpload />}
+      {isDashboard && productsAvailable && <ProductUpload />}
     </main>
   )
 }

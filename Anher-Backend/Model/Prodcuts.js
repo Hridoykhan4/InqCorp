@@ -7,6 +7,7 @@ const ProductSchema = new mongoose.Schema({
     description: { type: String, required: true, trim: true },
     imageUrl: { type: [String], default: [] },
     parameter: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    packingData: { type: [mongoose.Schema.Types.Mixed], default: [] },
     pdf: { type: mongoose.Schema.Types.Mixed, default: {} },
 }, { timestamps: true })
 

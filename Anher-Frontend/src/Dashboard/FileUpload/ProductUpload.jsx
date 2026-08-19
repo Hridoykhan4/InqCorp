@@ -1,10 +1,12 @@
 import axios from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router';
 import Swal from 'sweetalert2';
 import { capitalizeWords } from '../../Functions/functions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
+
+const API_BASE = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
 
 export const ProductUpload = () => {
     const [images, setImages] = useState([]);
@@ -22,10 +24,15 @@ export const ProductUpload = () => {
     const { categories, setProducts } = useOutletContext();
     const fileInputRef = useRef();
     const pdfInputRef = useRef(); // ✅ PDF ref to reset later
+    const imagePreviewUrls = useMemo(() => images.map((file) => URL.createObjectURL(file)), [images]);
+
+    useEffect(() => () => {
+        imagePreviewUrls.forEach((url) => URL.revokeObjectURL(url));
+    }, [imagePreviewUrls]);
 
     const handleFileChange = (e) => {
-        const incoming = Array.from(e.target.files);
-        // Accumulate instead of replace — add unlimited images across multiple picks.
+        const incoming = Array.from(e.target.files || []);
+        // Accumulate instead of replacing earlier selections.
         setImages((prev) => {
             const seen = new Set(prev.map((f) => `${f.name}_${f.size}`));
             const merged = [...prev];
@@ -83,8 +90,24 @@ export const ProductUpload = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!images.length || !model || !description || !category || !parameter) {
+        if (!images.length || !name.trim() || !model.trim() || !description.trim() || !category) {
             Swal.fire({ icon: "error", title: "Missing required fields" });
+            return;
+        }
+
+        const partialPdf = pdfs.find((pdf) => (pdf.key.trim() && !pdf.file) || (!pdf.key.trim() && pdf.file));
+        if (partialPdf) {
+            Swal.fire({
+                icon: "warning",
+                title: "Incomplete PDF entry",
+                text: "Each PDF needs both a type and a file.",
+            });
+            return;
+        }
+
+        const pdfKeys = pdfs.filter((pdf) => pdf.key.trim()).map((pdf) => pdf.key.trim());
+        if (new Set(pdfKeys).size !== pdfKeys.length) {
+            Swal.fire({ icon: "warning", title: "Duplicate PDF type", text: "Use a unique type for each PDF." });
             return;
         }
 
@@ -93,24 +116,26 @@ export const ProductUpload = () => {
         // Append each PDF with a unique key
         pdfs.forEach((pdf) => {
             if (pdf.file && pdf.key) {
-                formData.append(`pdf_${pdf.key}`, pdf.file);
+                formData.append(`pdf_${pdf.key.trim()}`, pdf.file);
             }
         });
         if (pdfFile) {
             formData.append('pdf', pdfFile); // ✅ Key matches multer field
         }
 
-        const transformedParameter = parameter?.map(({ key, value }) => ({ [key]: value }));
+        const transformedParameter = parameter
+            .filter(({ key, value }) => key.trim() && value.trim())
+            .map(({ key, value }) => ({ [key.trim()]: value.trim() }));
 
 
         const info = {
-            name,
-            model,
-            description,
+            name: name.trim(),
+            model: model.trim(),
+            description: description.trim(),
             category,
             parameter: transformedParameter,
 
-            pdf: pdfs.filter(p => p.key).map(pdf => ({ [pdf.key]: "" }))
+            pdf: pdfs.filter(p => p.key.trim()).map(pdf => ({ [pdf.key.trim()]: "" }))
         };
 
 
@@ -119,11 +144,13 @@ export const ProductUpload = () => {
         setLoading(true);
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/addProduct`, formData);
+            const res = await axios.post(`${API_BASE}/api/addProduct`, formData);
 
             if (res.status === 200) {
                 setProducts(res.data.data);
                 Swal.fire({ icon: "success", title: "Uploaded Successfully" });
+                const modalToggle = document.getElementById('my_modal_4');
+                if (modalToggle) modalToggle.checked = false;
             }
 
             // Reset
@@ -135,8 +162,8 @@ export const ProductUpload = () => {
             setCategory('');
             setParameter([{ key: '', value: '' }]);
 
-            setPdfs([{ key: '', value: '' }])
-            fileInputRef.current.value = null;
+            setPdfs([{ key: '', file: null }])
+            if (fileInputRef.current) fileInputRef.current.value = null;
             if (pdfInputRef.current) pdfInputRef.current.value = null;
 
         } catch (err) {
@@ -144,7 +171,7 @@ export const ProductUpload = () => {
             console.log('Error', err);
 
 
-            Swal.fire({ icon: "error", title: "Error uploading", text: err.response.data?.message || err.message });
+            Swal.fire({ icon: "error", title: "Error uploading", text: err?.response?.data?.message || err.message });
         } finally {
             setLoading(false);
         }
@@ -233,7 +260,7 @@ export const ProductUpload = () => {
                                         Click to add images
                                     </span>
                                     <span className='text-xs text-gray-400'>
-                                        Add as many as you want — selections stack up
+                                        Multiple selections are kept together
                                     </span>
                                     <input
                                         id='productImages'
@@ -254,7 +281,7 @@ export const ProductUpload = () => {
                                                 className='group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-white'
                                             >
                                                 <img
-                                                    src={URL.createObjectURL(file)}
+                                                    src={imagePreviewUrls[idx]}
                                                     alt={file.name}
                                                     className='h-full w-full object-cover'
                                                 />
@@ -316,7 +343,7 @@ export const ProductUpload = () => {
                         </div>
 
                         <button
-                            disabled={(!model || !description || !category || !images.length || loading)}
+                            disabled={(!name.trim() || !model.trim() || !description.trim() || !category || !images.length || loading)}
                             onClick={handleSubmit}
                             className='btn btn-secondary w-full'>
                             Upload {loading && <span className="loading loading-spinner loading-sm"></span>}

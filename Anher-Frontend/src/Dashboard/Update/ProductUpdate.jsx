@@ -7,6 +7,8 @@ import { capitalizeWords } from '../../Functions/functions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilePdf, faXmark } from '@fortawesome/free-solid-svg-icons';
 
+const API_BASE = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '');
+
 export const ProductUpdate = ({ item }) => {
     const [images, setImages] = useState([]);
     const [pdfs, setPdfs] = useState([{ key: '', file: null }]);
@@ -108,7 +110,7 @@ export const ProductUpdate = ({ item }) => {
 
     // ----------- Submit -----------
     const handleSubmit = async () => {
-        if (!images.length || !name || !model || !description || !category) {
+        if (!images.length || !name.trim() || !model.trim() || !description.trim() || !category) {
             Swal.fire({ icon: "error", title: "Missing required fields" });
             return;
         }
@@ -120,6 +122,15 @@ export const ProductUpdate = ({ item }) => {
                 title: "Incomplete PDF entry",
                 text: "Each new PDF needs both a key (e.g. dataSheet) and a file. Remove empty rows or complete them.",
             });
+            return;
+        }
+
+        const pdfKeys = [
+            ...existingPdfs.map((pdf) => pdf.key.trim()),
+            ...pdfs.filter((pdf) => pdf.key.trim()).map((pdf) => pdf.key.trim()),
+        ];
+        if (new Set(pdfKeys).size !== pdfKeys.length) {
+            Swal.fire({ icon: "warning", title: "Duplicate PDF type", text: "Use a unique type for each PDF." });
             return;
         }
         const formData = new FormData();
@@ -136,7 +147,7 @@ export const ProductUpdate = ({ item }) => {
         // PDFs: new uploads
         pdfs.forEach(pdf => {
             if (pdf.key && pdf.file) {
-                formData.append(`pdf_${pdf.key}`, pdf.file);
+                formData.append(`pdf_${pdf.key.trim()}`, pdf.file);
             }
         });
 
@@ -157,13 +168,13 @@ export const ProductUpdate = ({ item }) => {
         // PDFs for info
         const pdfInfo = [
             ...existingPdfs.map(pdf => ({ [pdf.key]: pdf.url })),
-            ...pdfs.filter(pdf => pdf.key).map(pdf => ({ [pdf.key]: "" }))
+            ...pdfs.filter(pdf => pdf.key.trim()).map(pdf => ({ [pdf.key.trim()]: "" }))
         ];
 
         const info = {
-            name,
-            model,
-            description,
+            name: name.trim(),
+            model: model.trim(),
+            description: description.trim(),
             category,
             parameter: transformedParameter,
             packingData: transformedPackingData,
@@ -175,7 +186,7 @@ export const ProductUpdate = ({ item }) => {
 
         try {
             const res = await axios.put(
-                `${import.meta.env.VITE_BACKEND_URL}/api/updateProduct/${item._id}`,
+                `${API_BASE}/api/updateProduct/${item._id}`,
                 formData
             );
             if (res.status === 200) {
@@ -215,7 +226,7 @@ export const ProductUpdate = ({ item }) => {
         });
     }
 
-    const hanldeClose = () => {
+    const handleClose = () => {
         setImages(item.imageUrl || []);
         setName(item.name || '');
         setModel(item.model || '');
@@ -259,14 +270,14 @@ export const ProductUpdate = ({ item }) => {
                 <div className='relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl animate-rise'>
                     <button
                         type='button'
-                        onClick={hanldeClose}
-                        className='modal-action absolute -top-6 right-4 rounded-full bg-white shadow hover:bg-gray-100 p-3'
+                        onClick={handleClose}
+                        className='absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full border border-brand-border bg-white shadow hover:bg-gray-100'
                         aria-label='Close product update'
                     >
                         <FontAwesomeIcon icon={faXmark} size='lg' />
                     </button>
 
-                    <div className='mb-6 border-b border-brand-border pb-4'>
+                    <div className='mb-6 border-b border-brand-border pb-4 pr-12'>
                         <h2 className='text-xl font-bold text-brand-ink'>Update Product</h2>
                         <p className='mt-2 text-sm text-brand-muted'>Edit product details, upload images, and keep your product data dashboard-ready.</p>
                     </div>
@@ -422,7 +433,7 @@ export const ProductUpdate = ({ item }) => {
                             </div>
                         </div>
 
-                        <button onClick={handleSubmit} className='btn btn-primary w-full'>
+                        <button type='button' onClick={handleSubmit} disabled={loading} className='btn btn-primary w-full'>
                             {loading ? 'Updating...' : 'Save Changes'}
                         </button>
                     </section>

@@ -115,13 +115,13 @@ export const Root = () => {
         if (key === 'country') setCountry(list)
         if (key === 'priceList') setPriceList(list)
 
-        if (key === 'products' && list.length) {
+        if (key === 'products') {
           setProducts(list)
           liveCoreData = true
         }
-        if (key === 'categories' && list.length) setCategories(list)
-        if (key === 'businessProducts' && list.length) setBusinessProducts(list)
-        if (key === 'gallery' && list.length) setGallery(list)
+        if (key === 'categories') setCategories(list)
+        if (key === 'businessProducts') setBusinessProducts(list)
+        if (key === 'gallery') setGallery(list)
       }
 
       setContentStatus(liveCoreData ? 'live' : 'fallback')
