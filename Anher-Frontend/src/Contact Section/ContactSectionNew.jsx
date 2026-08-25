@@ -5,7 +5,7 @@ import { faArrowRight, faCheck, faClock, faEnvelope, faLocationDot, faPhone } fr
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { socket } from '../Socket/socket'
 import { SeoManager } from '../SEO/SeoManager'
-import { SEO_CONFIG } from '../SEO/seo'
+import { breadcrumbSchema, SEO_CONFIG } from '../SEO/seo'
 import { COMPANY, postalAddressSchema } from '../SEO/companyInfo'
 import { usePageEntrance } from '../components/usePageEntrance'
 
@@ -71,7 +71,10 @@ const ContactSection = () => {
         description="Contact ITC for sand, stone chips, boulder and construction aggregate supply planning across Bangladesh."
         path="/contact"
         keywords="Inqilab Trading Corporation contact, sand supplier quote, stone chips delivery Bangladesh"
-        structuredData={{ '@context': 'https://schema.org', '@type': 'ContactPage', name: 'Contact Inqilab Trading Corporation', url: `${SEO_CONFIG.siteUrl}/contact`, mainEntity: { '@type': 'Organization', name: COMPANY.legalName, email: COMPANY.email, telephone: COMPANY.phoneTel, address: postalAddressSchema } }}
+        structuredData={[
+          { '@context': 'https://schema.org', '@type': 'ContactPage', name: 'Contact Inqilab Trading Corporation', url: `${SEO_CONFIG.siteUrl}/contact`, mainEntity: { '@type': 'Organization', name: COMPANY.legalName, email: COMPANY.email, telephone: COMPANY.phoneTel, address: postalAddressSchema } },
+          breadcrumbSchema([['Contact', '/contact']]),
+        ]}
       />
 
       <section className="bg-[#fbfaf7] pb-16 pt-8 sm:pt-11">

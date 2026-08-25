@@ -1,17 +1,19 @@
 import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useOutletContext } from 'react-router-dom'
+import ModalImage from 'react-modal-image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowRight,
   faCheck,
   faEnvelope,
+  faFileShield,
   faLocationDot,
   faPhone,
   faQuoteLeft,
   faTruck,
 } from '@fortawesome/free-solid-svg-icons'
 import { SeoManager } from '../SEO/SeoManager'
-import { SEO_CONFIG } from '../SEO/seo'
+import { breadcrumbSchema, SEO_CONFIG } from '../SEO/seo'
 import { COMPANY, postalAddressSchema } from '../SEO/companyInfo'
 import { Reveal } from '../components/Reveal'
 import { usePageEntrance } from '../components/usePageEntrance'
@@ -37,6 +39,7 @@ const BUYER_QUESTIONS = [
 
 export const About = () => {
   const pageRef = useRef(null)
+  const { certificate = [] } = useOutletContext() || {}
   usePageEntrance(pageRef, [])
 
   return (
@@ -46,7 +49,10 @@ export const About = () => {
         description="Meet Inqilab Trading Corporation, a Dhaka-based construction aggregate supply company coordinating sand, stone chips, boulder and filling materials across Bangladesh."
         path="/about"
         keywords="about Inqilab Trading Corporation, ITC Bangladesh, Kawsar Alam, construction aggregate supplier"
-        structuredData={{ '@context': 'https://schema.org', '@type': 'Organization', name: SEO_CONFIG.siteName, legalName: COMPANY.legalName, url: `${SEO_CONFIG.siteUrl}/about`, email: COMPANY.email, telephone: COMPANY.phoneTel, address: postalAddressSchema, areaServed: 'BD' }}
+        structuredData={[
+          { '@context': 'https://schema.org', '@type': 'Organization', name: SEO_CONFIG.siteName, legalName: COMPANY.legalName, url: `${SEO_CONFIG.siteUrl}/about`, email: COMPANY.email, telephone: COMPANY.phoneTel, address: postalAddressSchema, areaServed: 'BD' },
+          breadcrumbSchema([['About', '/about']]),
+        ]}
       />
 
       <section className="relative overflow-hidden bg-[#f7f5ef] py-7 sm:py-10 lg:py-14">
@@ -97,7 +103,7 @@ export const About = () => {
 
       <nav className="sticky top-[76px] z-20 border-y border-brand-border bg-white/94 backdrop-blur-xl" aria-label="About page sections">
         <div className="container-page no-scrollbar flex gap-1 overflow-x-auto py-2">
-          {[['What buyers need', '#buyers'], ['How supply works', '#process'], ['Material ranges', '#ranges'], ['Contact ITC', '#about-contact']].map(([label, href]) => <a key={href} href={href} className="shrink-0 rounded-full px-4 py-2 text-xs font-extrabold text-brand-muted transition hover:bg-brand-wash hover:text-brand-primary">{label}</a>)}
+          {[['What buyers need', '#buyers'], ['How supply works', '#process'], ['Material ranges', '#ranges'], ...(certificate.length ? [['Licenses', '#licenses']] : []), ['Contact ITC', '#about-contact']].map(([label, href]) => <a key={href} href={href} className="shrink-0 rounded-full px-4 py-2 text-xs font-extrabold text-brand-muted transition hover:bg-brand-wash hover:text-brand-primary">{label}</a>)}
         </div>
       </nav>
 
@@ -160,19 +166,54 @@ export const About = () => {
         </div>
       </section>
 
+      {certificate.length > 0 && (
+        <section id="licenses" className="scroll-mt-32 section-page bg-[#f4f6f8]">
+          <div className="container-page">
+            <Reveal className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+              <div>
+                <p className="eyebrow"><FontAwesomeIcon icon={faFileShield} className="mr-2" />Licenses &amp; documents</p>
+                <h2 className="mt-4 text-3xl font-black tracking-[-.04em] text-brand-ink sm:text-5xl">Registered, licensed and verifiable.</h2>
+              </div>
+              <p className="max-w-md text-sm leading-7 text-brand-muted">Trade licenses and company documents are published here so buyers can verify ITC before committing a project.</p>
+            </Reveal>
+
+            <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {certificate.map((item, index) => {
+                const image = Array.isArray(item?.imageUrl) ? item.imageUrl[0] : item?.imageUrl
+                if (!image) return null
+                return (
+                  <Reveal key={item?._id || index} delay={index * 70}>
+                    <figure className="group overflow-hidden rounded-[1.5rem] border border-brand-border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                      <div className="aspect-[4/3] overflow-hidden bg-brand-surface">
+                        <ModalImage small={image} large={image} alt={item?.name || 'ITC license document'} className="h-full w-full cursor-zoom-in object-cover transition duration-500 group-hover:scale-105" hideDownload hideZoom />
+                      </div>
+                      <figcaption className="flex items-center gap-3 p-4">
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-primary/8 text-xs text-brand-primary"><FontAwesomeIcon icon={faFileShield} /></span>
+                        <p className="line-clamp-2 text-sm font-black text-brand-ink">{item?.name || 'Company document'}</p>
+                      </figcaption>
+                    </figure>
+                  </Reveal>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section id="about-contact" className="scroll-mt-32 pb-16 sm:pb-24">
         <div className="container-page">
-          <Reveal className="grid items-center gap-7 overflow-hidden rounded-[1.8rem] bg-[#12243b] p-6 text-white sm:p-9 lg:grid-cols-[1fr_auto] lg:p-11">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[.18em] text-[#e2bd70]">Have a requirement?</p>
+          <Reveal className="relative grid items-center gap-7 overflow-hidden rounded-[1.8rem] border border-brand-border bg-[#f7f5ef] p-6 text-brand-ink shadow-[0_28px_70px_-48px_rgba(19,35,58,.35)] sm:p-9 lg:grid-cols-[1fr_auto] lg:p-11">
+            <div className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(199,150,60,.18),transparent_68%)]" aria-hidden="true" />
+            <div className="relative">
+              <p className="text-[10px] font-black uppercase tracking-[.18em] text-brand-accent">Have a requirement?</p>
               <h2 className="mt-3 text-2xl font-black tracking-[-.035em] sm:text-4xl">Send the material, quantity and delivery location.</h2>
-              <div className="mt-5 flex flex-col gap-3 text-xs font-semibold text-white/62 sm:flex-row sm:flex-wrap sm:gap-5">
-                <a href={`tel:${COMPANY.phoneTel}`} className="inline-flex items-center gap-2"><FontAwesomeIcon icon={faPhone} className="text-[#e2bd70]" />{COMPANY.phone}</a>
-                <a href={`mailto:${COMPANY.email}`} className="inline-flex items-center gap-2"><FontAwesomeIcon icon={faEnvelope} className="text-[#e2bd70]" />{COMPANY.email}</a>
-                <span className="inline-flex items-center gap-2"><FontAwesomeIcon icon={faTruck} className="text-[#e2bd70]" />Project delivery coordination</span>
+              <div className="mt-5 flex flex-col gap-3 text-xs font-semibold text-brand-muted sm:flex-row sm:flex-wrap sm:gap-5">
+                <a href={`tel:${COMPANY.phoneTel}`} className="inline-flex items-center gap-2 transition hover:text-brand-primary"><FontAwesomeIcon icon={faPhone} className="text-brand-accent" />{COMPANY.phone}</a>
+                <a href={`mailto:${COMPANY.email}`} className="inline-flex items-center gap-2 transition hover:text-brand-primary"><FontAwesomeIcon icon={faEnvelope} className="text-brand-accent" />{COMPANY.email}</a>
+                <span className="inline-flex items-center gap-2"><FontAwesomeIcon icon={faTruck} className="text-brand-accent" />Project delivery coordination</span>
               </div>
             </div>
-            <Link to="/contact" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-black text-[#12243b]">Request a quote <FontAwesomeIcon icon={faArrowRight} /></Link>
+            <Link to="/contact" className="btn-brand relative gap-2">Request a quote <FontAwesomeIcon icon={faArrowRight} /></Link>
           </Reveal>
         </div>
       </section>

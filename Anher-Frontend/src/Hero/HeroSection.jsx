@@ -55,8 +55,13 @@ export const HeroSection = () => {
   const { banners = [], priceList = [], products = [] } = useOutletContext() || {}
   const sectionRef = useRef(null)
   const panelRef = useRef(null)
+  const videoRef = useRef(null)
   const [active, setActive] = useState(0)
   const typedWord = useTypewriter()
+
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) videoRef.current?.pause()
+  }, [])
 
   const slides = banners.filter((item) => firstImage(item)).length
     ? banners.filter((item) => firstImage(item))
@@ -102,26 +107,27 @@ export const HeroSection = () => {
   return (
     <section ref={sectionRef} className="relative isolate flex min-h-[calc(100svh-76px)] flex-col overflow-hidden bg-[#f8f7f3] pt-[76px]">
       <div className="absolute inset-0 -z-20 overflow-hidden" aria-hidden="true">
-        <video className="h-full w-full object-cover opacity-25" src="/hero-video.mp4" poster="/hero-poster.jpg" autoPlay muted loop playsInline preload="metadata" />
+        <video ref={videoRef} className="h-full w-full scale-[1.02] object-cover" src="/hero-video.mp4" poster="/hero-poster.jpg" autoPlay muted loop playsInline preload="metadata" />
       </div>
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,255,255,.98)_0%,rgba(255,255,255,.9)_48%,rgba(248,247,243,.74)_100%)]" aria-hidden="true" />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_82%_18%,rgba(199,150,60,.13),transparent_32%)]" aria-hidden="true" />
+      {/* Light wash: strong behind the headline for legibility, fading out so the video stays clearly visible */}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(251,250,247,.9)_0%,rgba(251,250,247,.86)_58%,rgba(251,250,247,.55)_100%)] lg:bg-[linear-gradient(90deg,rgba(251,250,247,.96)_0%,rgba(251,250,247,.9)_36%,rgba(251,250,247,.55)_58%,rgba(251,250,247,.14)_100%)]" aria-hidden="true" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_82%_18%,rgba(199,150,60,.12),transparent_34%)]" aria-hidden="true" />
 
       <div className="container-page grid flex-1 items-center gap-12 py-14 lg:grid-cols-[.92fr_1.08fr] lg:gap-16 lg:py-16">
         <div className="max-w-2xl">
-          <div data-hero-item className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-white/90 px-4 py-2 shadow-sm backdrop-blur">
+          <div data-hero-item className="inline-flex items-center gap-2 rounded-full border border-brand-border bg-white/92 px-4 py-2 shadow-sm backdrop-blur">
             <span className="h-2 w-2 animate-pulse rounded-full bg-brand-accent" />
             <span className="text-[10px] font-black uppercase tracking-[.2em] text-brand-primary">Inqilab Trading Corporation</span>
           </div>
 
-          <h1 data-hero-item className="mt-6 text-[clamp(2.9rem,6.5vw,6rem)] font-black leading-[.95] tracking-[-.055em] text-brand-ink">
+          <h1 data-hero-item className="mt-6 text-[clamp(2.9rem,6.5vw,6rem)] font-black leading-[.95] tracking-[-.055em] text-brand-ink [text-shadow:0_2px_18px_rgba(255,255,255,.9)]">
             Build with
             <span className="mt-1 block text-brand-primary">
               {typedWord}<span className="hero-cursor text-brand-accent">|</span>
             </span>
           </h1>
 
-          <p data-hero-item className="mt-6 max-w-xl text-base leading-8 text-brand-muted sm:text-lg">
+          <p data-hero-item className="mt-6 max-w-xl text-base font-medium leading-8 text-brand-ink/80 [text-shadow:0_1px_12px_rgba(255,255,255,.9)] sm:text-lg">
             Sand, stone chips, boulder and filling materials—matched to the job, coordinated clearly and supplied across Bangladesh.
           </p>
 
@@ -134,7 +140,7 @@ export const HeroSection = () => {
             </button>
           </div>
 
-          <div data-hero-item className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-brand-muted sm:text-sm">
+          <div data-hero-item className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-brand-ink/75 [text-shadow:0_1px_10px_rgba(255,255,255,.9)] sm:text-sm">
             {['Quality-checked materials', 'Direct coordination', 'Nationwide delivery'].map((item) => (
               <span key={item} className="inline-flex items-center gap-2"><FontAwesomeIcon icon={faCheckCircle} className="text-brand-accent" />{item}</span>
             ))}
@@ -144,16 +150,14 @@ export const HeroSection = () => {
         <div ref={panelRef} className="relative mx-auto w-full max-w-[660px]">
           <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border-[8px] border-white bg-brand-surface shadow-[0_34px_90px_-45px_rgba(19,35,58,.5)] sm:border-[10px]">
             <img key={`${current?._id || current?.title}-${active}`} src={firstImage(current) || FALLBACK_BANNER.imageUrl[0]} alt={current?.title || 'ITC update'} className="hero-banner-image h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0d203a]/90 via-[#0d203a]/22 to-transparent" />
-
             <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-white/92 px-3.5 py-2 text-[10px] font-black uppercase tracking-[.15em] text-brand-primary shadow backdrop-blur sm:left-7 sm:top-7">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" /> Latest update
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
-              <p className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.18em] text-[#e7c477]"><FontAwesomeIcon icon={faLocationDot} />{current?.region || 'Bangladesh'}</p>
-              <h2 className="mt-3 max-w-xl text-2xl font-black leading-tight tracking-[-.025em] sm:text-4xl">{current?.title || FALLBACK_BANNER.title}</h2>
-              {current?.description && <p className="mt-3 max-w-lg text-sm leading-6 text-white/75 sm:text-base">{current.description}</p>}
+            <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/70 bg-white/92 p-5 shadow-[0_18px_40px_-24px_rgba(19,35,58,.45)] backdrop-blur-md sm:inset-x-6 sm:bottom-6 sm:p-6">
+              <p className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.18em] text-brand-accent"><FontAwesomeIcon icon={faLocationDot} />{current?.region || 'Bangladesh'}</p>
+              <h2 className="mt-2 max-w-xl text-xl font-black leading-tight tracking-[-.025em] text-brand-ink sm:text-3xl">{current?.title || FALLBACK_BANNER.title}</h2>
+              {current?.description && <p className="mt-2 line-clamp-2 max-w-lg text-sm leading-6 text-brand-muted">{current.description}</p>}
             </div>
           </div>
 

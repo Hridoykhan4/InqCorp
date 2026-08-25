@@ -309,7 +309,7 @@ export const ProductUpdate = ({ item }) => {
                                         <p className='text-sm font-medium text-brand-ink'>Current Images</p>
                                         <span className='text-xs text-gray-500'>Preview only</span>
                                     </div>
-                                    <div className='mt-3 grid grid-cols-3 gap-3'>
+                                    <div className='mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3'>
                                         {images?.map((img, i) => (
                                             <div key={i} className='relative overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm'>
                                                 <img

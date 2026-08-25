@@ -117,22 +117,20 @@ const uploadLogo = async (req, res) => {
         const imageUrl = await uploadImage(files)
 
 
-        const newLogo = new Logo({ name, imageUrl })
-        const result = newLogo.save()
-
-        if (result) {
-            return res.send({
-                message: 'Logo Updated Successfully',
-                data: imageUrl
-            })
+        if (!imageUrl || !imageUrl.length) {
+            return res.status(400).send({ message: 'No logo image was received' })
         }
 
-        return res.status(401).send({
-            message: 'Logo Upload Failed'
+        const newLogo = new Logo({ name, imageUrl })
+        await newLogo.save()
+
+        return res.send({
+            message: 'Logo Updated Successfully',
+            data: imageUrl
         })
 
     } catch (error) {
-        return res.send({
+        return res.status(500).send({
             message: error.message
         })
     }

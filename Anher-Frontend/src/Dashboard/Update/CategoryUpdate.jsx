@@ -141,7 +141,7 @@ export const UpdateCategory = ({ item }) => {
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-4 sm:grid-cols-2">
                             <div className="space-y-2">
                                 <p className="text-sm font-semibold text-brand-ink">Category Image</p>
                                 {imagePreview && (

@@ -48,6 +48,12 @@ export const SeoManager = ({
 }) => {
   const location = useLocation();
 
+  // Serialise once so a fresh object/array literal on every render does not
+  // re-run the effect and re-inject the JSON-LD scripts.
+  const serializedSchemas = JSON.stringify(
+    Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : []
+  );
+
   useEffect(() => {
     const currentPath = path || `${location.pathname}${location.search}`;
     const canonicalUrl = getAbsoluteUrl(currentPath);
@@ -134,11 +140,7 @@ export const SeoManager = ({
     );
     previousScripts.forEach((script) => script.remove());
 
-    const schemaItems = Array.isArray(structuredData)
-      ? structuredData
-      : structuredData
-        ? [structuredData]
-        : [];
+    const schemaItems = JSON.parse(serializedSchemas);
 
     schemaItems.forEach((item) => {
       const script = document.createElement("script");
@@ -147,7 +149,7 @@ export const SeoManager = ({
       script.text = JSON.stringify(item);
       document.head.appendChild(script);
     });
-  }, [description, image, keywords, location.pathname, location.search, path, robots, structuredData, title, type]);
+  }, [description, image, keywords, location.pathname, location.search, path, robots, serializedSchemas, title, type]);
 
   return null;
 };

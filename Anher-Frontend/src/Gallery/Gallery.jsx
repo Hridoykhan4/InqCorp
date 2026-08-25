@@ -3,6 +3,7 @@ import { Link, useOutletContext } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faExpand, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { SeoManager } from '../SEO/SeoManager'
+import { breadcrumbSchema } from '../SEO/seo'
 import { FALLBACK_GALLERY } from '../data/siteData'
 import { usePageEntrance } from '../components/usePageEntrance'
 import { usePageScrollLock } from '../components/usePageScrollLock'
@@ -38,6 +39,8 @@ export const Gallery = () => {
         title="Operations Gallery — Inqilab Trading Corporation"
         description="See ITC aggregate sourcing, quality inspection, loading and coordinated site delivery for projects across Bangladesh."
         path="/gallery"
+        keywords="ITC gallery, Inqilab Trading Corporation projects, sand delivery Bangladesh, stone chips loading, construction material supply photos"
+        structuredData={breadcrumbSchema([['Gallery', '/gallery']])}
       />
 
       <section className="border-b border-brand-border bg-[#fbfaf7] py-8 sm:py-11">

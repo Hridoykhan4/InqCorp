@@ -41,9 +41,8 @@ const getLogo = async (req, res) => {
             })
 
         } else {
-            res.status(403).send({
-                message: 'No Logo Found'
-            })
+            // A missing logo is a normal state for a fresh install, not an auth failure.
+            res.send({ data: null, message: 'No Logo Found' })
         }
 
     } catch (error) {

@@ -4,8 +4,8 @@
   "description": "Bangladesh's trusted supplier of premium construction aggregates — Fine Sand, Stone Chips & Boulder All Over Bangladesh.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#050d1f",
-  "theme_color": "#1B3A8A",
+  "background_color": "#fbfaf7",
+  "theme_color": "#173b67",
   "icons": [
     {
       "src": "/inqcorpLogo.jpeg",

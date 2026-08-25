@@ -139,9 +139,9 @@ export const DashboardCatalogue = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
 
-                <div className="absolute inset-x-3 bottom-3 rounded-lg bg-slate-900/80 px-3 py-2 text-white text-xs font-semibold flex items-center justify-between backdrop-blur-sm">
+                <div className="absolute inset-x-3 bottom-3 rounded-lg border border-brand-border bg-white/92 px-3 py-2 text-brand-ink text-xs font-semibold flex items-center justify-between backdrop-blur-sm">
                   <span className="flex items-center gap-1.5">
-                    <FontAwesomeIcon icon={faEye} className="text-amber-300" />
+                    <FontAwesomeIcon icon={faEye} className="text-brand-accent" />
                     Click to view
                   </span>
                 </div>
@@ -155,7 +155,7 @@ export const DashboardCatalogue = () => {
               </div>
 
               {/* Action Buttons - Visible on Hover */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100">
+              <div className="absolute inset-0 bg-white/0 group-hover:bg-white/85 group-hover:backdrop-blur-sm transition-colors duration-300 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100">
                 <div className="flex flex-col gap-2 w-[80%] max-w-[180px]">
                   {catalogue.pdfUrl && (
                     <button

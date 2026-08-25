@@ -7,6 +7,7 @@ import { faArrowRight, faDownload, faMagnifyingGlass, faPenToSquare, faPlus, faT
 import { ProductUpload } from '../Dashboard/FileUpload/ProductUpload'
 import { ProductUpdate } from '../Dashboard/Update/ProductUpdate'
 import { SeoManager } from '../SEO/SeoManager'
+import { breadcrumbSchema } from '../SEO/seo'
 import { usePageEntrance } from '../components/usePageEntrance'
 
 const API_BASE = (import.meta.env.VITE_BACKEND_URL || '').replace(/\/+$/, '')
@@ -114,7 +115,8 @@ export const AllProducts = () => {
             title="Construction Aggregate Catalogue — Sand, Stone Chips & Boulder"
             description="Browse ITC construction aggregates: screened plaster sand, river sand, graded stone chips, natural boulder and filling materials with nationwide supply coordination."
             path="/all-products"
-            keywords="sand supplier Bangladesh, stone chips Bangladesh, boulder supplier, aggregate catalogue, construction materials Dhaka"
+            keywords="sand supplier Bangladesh, stone chips Bangladesh, boulder supplier, aggregate catalogue, construction materials Dhaka, plaster sand price, river sand price, stone chips price bd, filling sand supplier"
+            structuredData={breadcrumbSchema([['Materials', '/all-products']])}
           />
           <section className="overflow-hidden border-b border-brand-border bg-[#fbfaf7] py-8 sm:py-11">
             <div className="container-page grid items-end gap-7 lg:grid-cols-[1fr_auto]">

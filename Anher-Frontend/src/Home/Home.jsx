@@ -11,20 +11,13 @@ const TestimonialsSlider = lazy(() => import("../Testimonial Slider/TestimonialS
 const CompanyStats = lazy(() => import("../Stats/CompanyStats"));
 const CategoryShowcase = lazy(() => import("../Category Showcase/CategoryShowcase"));
 import { SeoManager } from "../SEO/SeoManager";
-import {
-  getAbsoluteUrl,
-  SEO_CONFIG,
-  localBusinessStructuredData,
-  websiteStructuredData,
-  organizationStructuredData,
-} from "../SEO/seo";
-const productOfferSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: SEO_CONFIG.siteName,
-  url: SEO_CONFIG.siteUrl,
-  areaServed: "Bangladesh",
-  image: getAbsoluteUrl("/inqcorpLogo.jpeg"),
+import { organizationStructuredData } from "../SEO/seo";
+
+// LocalBusiness + WebSite schemas are emitted statically in index.html, so the
+// homepage only adds one Organization node (brand aliases + product offers)
+// instead of duplicating them at runtime.
+const homeOrganizationSchema = {
+  ...organizationStructuredData,
   makesOffer: [
     {
       "@type": "Offer",
@@ -61,12 +54,7 @@ export const Home = () => {
         description="Inqilab Trading Corporation (ITC) coordinates quality-checked sand, stone chips, boulder and filling materials for projects across Bangladesh."
         path="/"
         keywords="inqilab, inqilab corporation, inqilab trading, inqilab trading corporation, inqilab group, inqilab bd, ITC, Kawsar Anher, ইনকিলাব, ইনকিলাব ট্রেডিং, sand supplier Bangladesh, stone chips Bangladesh, fine sand Bangladesh, coarse sand Bangladesh, boulder supplier bd, construction aggregate Bangladesh, building materials Bangladesh"
-        structuredData={[
-          localBusinessStructuredData,
-          websiteStructuredData,
-          organizationStructuredData,
-          productOfferSchema,
-        ]}
+        structuredData={[homeOrganizationSchema]}
       />
 
       <HeroSection />

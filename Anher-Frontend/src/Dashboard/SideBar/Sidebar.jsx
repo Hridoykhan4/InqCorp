@@ -49,7 +49,7 @@ const GROUPS = [
       { to: '/dashboard/gallery', label: 'Gallery', icon: faPhotoVideo },
       { to: '/dashboard/services', label: 'Services', icon: faWandMagicSparkles },
       { to: '/dashboard/blog', label: 'Articles', icon: faNewspaper },
-      { to: '/dashboard/certificate', label: 'Certificates', icon: faAward },
+      { to: '/dashboard/certificate', label: 'Licenses', icon: faAward },
       { to: '/dashboard/country', label: 'Regions', icon: faGlobe },
     ],
   },

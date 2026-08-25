@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare, faDownload, faFilePdf, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { SeoManager } from '../SEO/SeoManager'
+import { breadcrumbSchema } from '../SEO/seo'
 import { FALLBACK_CATALOGUES } from '../data/siteData'
 import { usePageEntrance } from '../components/usePageEntrance'
 
@@ -40,7 +41,8 @@ export const Catelogue = () => {
         title="Product Catalogues | Inqilab Trading Corporation"
         description="View or download ITC construction material catalogues directly."
         path="/catalogue"
-        keywords="ITC catalogue, Inqilab Trading Corporation catalogue, aggregate catalogue Bangladesh"
+        keywords="ITC catalogue, Inqilab Trading Corporation catalogue, aggregate catalogue Bangladesh, sand stone chips price list pdf"
+        structuredData={breadcrumbSchema([['Catalogue', '/catalogue']])}
       />
 
       <section className="border-b border-brand-border bg-white py-8 sm:py-11">
@@ -64,12 +66,12 @@ export const Catelogue = () => {
             const image = imageOf(catalogue) || '/images/itc-site-delivery.webp'
             return (
               <article data-page-reveal key={catalogue?._id || `${catalogue?.title}-${index}`} className="grid overflow-hidden rounded-[1.75rem] border border-brand-border bg-white shadow-[0_28px_80px_-58px_rgba(19,35,58,.48)] md:grid-cols-[.4fr_.6fr]">
-                <div className="relative min-h-[260px] overflow-hidden bg-brand-primary sm:min-h-[320px]">
-                  <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-72" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b203b]/95 via-[#0b203b]/45 to-[#0b203b]/10" />
-                  <div className="absolute inset-x-0 bottom-0 p-7 text-white sm:p-10">
-                    <img src="/inqcorpLogo.jpeg" alt="ITC" className="h-14 w-14 rounded-xl bg-white object-contain p-1.5 shadow-lg" />
-                    <p className="mt-6 text-[10px] font-black uppercase tracking-[.2em] text-[#e7c477]">Official material catalogue</p>
+                <div className="relative min-h-[260px] overflow-hidden bg-brand-surface sm:min-h-[320px]">
+                  <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/96 via-white/55 to-white/5" />
+                  <div className="absolute inset-x-0 bottom-0 p-7 text-brand-ink sm:p-10">
+                    <img src="/inqcorpLogo.jpeg" alt="ITC" className="h-14 w-14 rounded-xl border border-brand-border bg-white object-contain p-1.5 shadow-lg" />
+                    <p className="mt-6 text-[10px] font-black uppercase tracking-[.2em] text-brand-accent">Official material catalogue</p>
                     <p className="mt-2 text-2xl font-black leading-tight">Inqilab Trading Corporation</p>
                   </div>
                 </div>

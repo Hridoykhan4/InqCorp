@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight, faCheck, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { SeoManager } from '../SEO/SeoManager'
 import { COMPANY } from '../SEO/companyInfo'
-import { getAbsoluteUrl, stripHtml, truncate } from '../SEO/seo'
+import { breadcrumbSchema, getAbsoluteUrl, stripHtml, truncate } from '../SEO/seo'
 
 const imagesOf = (item) => {
   const images = Array.isArray(item?.imageUrl) ? item.imageUrl.filter(Boolean) : [item?.imageUrl].filter(Boolean)
@@ -45,15 +45,19 @@ export const Product = () => {
         keywords={`${item.name}, ${item.category}, construction aggregates Bangladesh, Inqilab Trading Corporation`}
         image={images[0]}
         type="product"
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'Product',
-          name: item.name,
-          sku: item.model,
-          category: item.category,
-          description: truncate(stripHtml(item.description || '')),
-          image: images.map((image) => getAbsoluteUrl(image)),
-        }}
+        structuredData={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: item.name,
+            sku: item.model,
+            category: item.category,
+            description: truncate(stripHtml(item.description || '')),
+            image: images.map((image) => getAbsoluteUrl(image)),
+            brand: { '@type': 'Brand', name: 'Inqilab Trading Corporation' },
+          },
+          breadcrumbSchema([['Materials', '/all-products'], [item.name || item.model, `/products/${item.model}`]]),
+        ]}
       />
 
       <section className="border-b border-brand-border bg-[#fbfaf7] py-6">

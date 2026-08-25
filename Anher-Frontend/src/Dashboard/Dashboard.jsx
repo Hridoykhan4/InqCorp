@@ -15,7 +15,7 @@ const TITLES = {
   '/dashboard/live-rates': ['Live Material Rates', 'Full control of the homepage live material-rate ticker'],
   '/dashboard/gallery': ['Gallery', 'Manage public operations photography'],
   '/dashboard/blog': ['Articles', 'Manage published articles'],
-  '/dashboard/certificate': ['Certificates', 'Manage company documents'],
+  '/dashboard/certificate': ['Licenses', 'Manage trade licenses and company documents'],
   '/dashboard/country': ['Regions', 'Manage regional content'],
   '/dashboard/services': ['Services', 'Manage service content'],
 }

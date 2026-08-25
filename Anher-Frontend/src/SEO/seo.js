@@ -11,9 +11,9 @@ export const SEO_CONFIG = {
   defaultDescription:
     "Inqilab Trading Corporation (ITC) — Bangladesh's trusted supplier of premium construction aggregates nationwide. Fine Sand, Medium Sand, Coarse Sand, Stone Chips (5–20mm) & Boulder. Call +880 1718 427 703.",
   defaultKeywords:
-    "inqilab, inqilab corporation, inqilab trading, inqilab trading corporation, inqilab group, inqilab bd, inqilab bangladesh, ইনকিলাব, ইনকিলাব ট্রেডিং, ইনকিলাব ট্রেডিং কর্পোরেশন, ITC, ITC bangladesh, kawsar anher, Kawsar Alam, sand supplier bangladesh, stone chips bangladesh, construction aggregate bangladesh, fine sand bangladesh, coarse sand bangladesh, boulder supplier, building materials bangladesh, বালি সরবরাহকারী বাংলাদেশ",
+    "inqilab, inqilab corporation, inqilab trading, inqilab trading corporation, iniqilab corporation, inquilab corporation, inquilab trading corporation, inqilab group, inqilab bd, inqilab bangladesh, ইনকিলাব, ইনকিলাব ট্রেডিং, ইনকিলাব ট্রেডিং কর্পোরেশন, ITC, ITC bangladesh, itc trading, kawsar anher, Kawsar Alam, sand supplier bangladesh, sand supplier dhaka, stone chips supplier bangladesh, stone chips price bangladesh, construction aggregate bangladesh, construction materials supplier bangladesh, fine sand bangladesh, coarse sand bangladesh, plaster sand, river sand supplier, boulder supplier bangladesh, filling sand, crushed stone dust, building materials bangladesh, বালি সরবরাহকারী বাংলাদেশ, পাথর সরবরাহকারী, নির্মাণ সামগ্রী",
   defaultImage: "/inqcorpLogo.jpeg",
-  themeColor: "#1B3A8A",
+  themeColor: "#fbfaf7",
   locale: "en_BD",
   contact: {
     phone: COMPANY.phone,
@@ -51,7 +51,7 @@ export const organizationStructuredData = {
   "@type": "Organization",
   name: "Inqilab Trading Corporation",
   legalName: COMPANY.legalName,
-  alternateName: ["Inqilab", "Inqilab Corporation", "Inqilab Trading", "Inqilab Group", "ITC", "ITC Bangladesh", "Kawsar Anher", "ইনকিলাব", "ইনকিলাব ট্রেডিং কর্পোরেশন"],
+  alternateName: ["Inqilab", "Inqilab Corporation", "Inqilab Trading", "Iniqilab Corporation", "Inquilab Corporation", "Inquilab Trading Corporation", "Inqilab Group", "ITC", "ITC Bangladesh", "Kawsar Anher", "ইনকিলাব", "ইনকিলাব ট্রেডিং কর্পোরেশন"],
   url: SEO_CONFIG.siteUrl,
   email: COMPANY.email,
   telephone: COMPANY.phoneTel,
@@ -103,6 +103,22 @@ export const localBusinessStructuredData = {
     "Building Materials",
   ],
 };
+
+// BreadcrumbList schema for sub-pages — helps Google understand the site
+// hierarchy and show sitelinks under brand searches.
+export const breadcrumbSchema = (crumbs) => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SEO_CONFIG.siteUrl },
+    ...crumbs.map(([name, path], index) => ({
+      "@type": "ListItem",
+      position: index + 2,
+      name,
+      item: getAbsoluteUrl(path),
+    })),
+  ],
+});
 
 export const websiteStructuredData = {
   "@context": "https://schema.org",

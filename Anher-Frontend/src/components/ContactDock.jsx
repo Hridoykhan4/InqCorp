@@ -20,7 +20,7 @@ export const ContactDock = () => {
         <path d="M8.4 8.3c.5 3.4 2.4 5.3 5.8 5.8" />
         <path d="m8.4 8.3 1.7-.5.8 2-1.2 1M14.2 14.1l.5-1.7-2-.8-1 1.2" />
       </svg>
-      <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full bg-brand-ink px-3 py-2 text-[11px] font-extrabold shadow-lg group-hover:block sm:block sm:opacity-0 sm:transition sm:group-hover:opacity-100">Chat with ITC</span>
+      <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-full border border-brand-border bg-white px-3 py-2 text-[11px] font-extrabold text-brand-ink shadow-lg group-hover:block sm:block sm:opacity-0 sm:transition sm:group-hover:opacity-100">Chat with ITC</span>
     </a>
   )
 }

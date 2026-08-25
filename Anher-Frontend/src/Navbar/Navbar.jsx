@@ -113,11 +113,7 @@ export const Navbar = ({ categories = [] }) => {
 
         <div className="flex items-center gap-2">
           <Link to="/contact?subject=Today%27s%20delivered%20rate" className="hidden min-h-11 items-center rounded-full bg-brand-primary px-5 text-xs font-extrabold text-white shadow-[0_12px_24px_-15px_rgba(23,59,103,.9)] transition hover:-translate-y-0.5 sm:inline-flex">Get today’s rate</Link>
-          {admin?.token && isDashboard ? (
-            <label htmlFor="dashboard-drawer" className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-brand-border bg-white text-brand-ink lg:hidden" aria-label="Open dashboard menu"><FontAwesomeIcon icon={faBars} /></label>
-          ) : (
-            <button type="button" onClick={() => setMobileOpen(true)} className="grid h-11 w-11 place-items-center rounded-full border border-brand-border bg-white text-brand-ink lg:hidden" aria-label="Open menu"><FontAwesomeIcon icon={faBars} /></button>
-          )}
+          <button type="button" onClick={() => setMobileOpen(true)} className="grid h-11 w-11 place-items-center rounded-full border border-brand-border bg-white text-brand-ink lg:hidden" aria-label="Open menu"><FontAwesomeIcon icon={faBars} /></button>
         </div>
       </div>
 
